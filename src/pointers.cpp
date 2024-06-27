@@ -33,9 +33,6 @@ namespace big
 		if (!this->m_hwnd)
 			throw std::runtime_error("Failed to find the game's window.");
 
-		LOG(INFO) << m_resolution->x;
-		LOG(INFO) << m_resolution->y;
-
 		g_pointers = this;
 	}
 

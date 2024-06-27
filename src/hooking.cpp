@@ -15,7 +15,9 @@ namespace big
 		m_swapchain_present_hook("SwapChainPresent", g_pointers->m_swapchain_methods[hooks::swapchain_present_index], &hooks::swapchain_present),
 		m_swapchain_resizebuffers_hook("SwapChainResizeBuffers", g_pointers->m_swapchain_methods[hooks::swapchain_resizebuffers_index], &hooks::swapchain_resizebuffers),
 		m_set_cursor_pos_hook("SetCursorPos", memory::module("user32.dll").get_export("SetCursorPos").as<void*>(), &hooks::set_cursor_pos),
-		m_convert_thread_to_fiber_hook("ConvertThreadToFiber", memory::module("kernel32.dll").get_export("ConvertThreadToFiber").as<void*>(), &hooks::convert_thread_to_fiber)
+		m_convert_thread_to_fiber_hook("ConvertThreadToFiber", memory::module("kernel32.dll").get_export("ConvertThreadToFiber").as<void*>(), &hooks::convert_thread_to_fiber),
+		m_ignore_material_hook("Ignore Material", g_pointers->m_ignore_material, &hooks::material_handler),
+		m_unlock_equipment_hook("Unlock Equipment", g_pointers->m_equipment_unlock, &hooks::equipment_crafting)
 	{
 		g_hooking = this;
 	}
@@ -36,12 +38,18 @@ namespace big
 		m_set_cursor_pos_hook.enable();
 		m_convert_thread_to_fiber_hook.enable();
 
+		m_ignore_material_hook.enable();
+		m_unlock_equipment_hook.enable();
+
 		m_enabled = true;
 	}
 
 	void hooking::disable()
 	{
 		m_enabled = false;
+
+		m_ignore_material_hook.disable();
+		m_unlock_equipment_hook.disable();
 
 		m_convert_thread_to_fiber_hook.disable();
 		m_set_cursor_pos_hook.disable();

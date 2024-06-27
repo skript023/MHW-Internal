@@ -19,6 +19,9 @@ namespace big
 
 		static LRESULT wndproc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam);
 		static BOOL set_cursor_pos(int x, int y);
+
+		static int __fastcall material_handler(uint32_t a1, int a2);
+		static bool __fastcall equipment_crafting(__int64 a1);
 	};
 
 	struct minhook_keepalive
@@ -46,6 +49,9 @@ namespace big
 		detour_hook m_swapchain_present_hook;
 		detour_hook m_swapchain_resizebuffers_hook;
 		detour_hook m_set_cursor_pos_hook;
+
+		detour_hook m_ignore_material_hook;
+		detour_hook m_unlock_equipment_hook;
 	};
 
 	inline hooking* g_hooking{};
