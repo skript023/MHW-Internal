@@ -6,7 +6,7 @@ namespace big
 	{
 	public:
 		static void features();
-		static void player_skill_event();
+		static void player_event();
 		static void script_func();
 	};
 }

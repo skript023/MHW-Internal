@@ -12,6 +12,13 @@ namespace big
 		nlohmann::json default_options;
 		nlohmann::json options;
 	public:
+		struct player
+		{
+			bool invulnerable = false;
+			bool inf_stamina = false;
+
+			NLOHMANN_DEFINE_TYPE_INTRUSIVE(player, invulnerable, inf_stamina);
+		} player;
 		struct crafting
 		{
 			bool ignore_material = false;
@@ -151,6 +158,6 @@ namespace big
 			return true;
 		}
 
-		NLOHMANN_DEFINE_TYPE_INTRUSIVE(settings, crafting, window);
+		NLOHMANN_DEFINE_TYPE_INTRUSIVE(settings, crafting, window, player);
 	};
 }

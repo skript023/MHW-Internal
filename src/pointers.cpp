@@ -37,6 +37,31 @@ namespace big
 			m_reveal_monster = ptr.as<void*>();
 		});
 		
+		main_batch.add("Critical Boost", "F3 0F 10 88 A8 07 00 00", [this](memory::handle ptr)
+		{
+			m_critical_boost = ptr.as<void*>();
+		});
+		
+		main_batch.add("Player State", "E8 EB 6C 2C FF", [this](memory::handle ptr)
+		{
+			m_player_state = ptr.as<void*>();
+		});
+		
+		main_batch.add("Player Anim", "E8 2E 08 00 00 44", [this](memory::handle ptr)
+		{
+			m_player_anim = ptr.as<void*>();
+		});
+		
+		main_batch.add("Player Health", "E8 6C 26 D3 00", [this](memory::handle ptr)
+		{
+			m_player_health = ptr.as<void*>();
+		});
+		
+		main_batch.add("Player Health", "F3 0F 5D C2 F3 0F 11 41 6C", [this](memory::handle ptr)
+		{
+			m_player_stamina = ptr.as<void*>();
+		});
+		
 		main_batch.run(memory::module(nullptr));
 
 		this->m_hwnd = FindWindow(WINDOW_CLASS, WINDOW_NAME);

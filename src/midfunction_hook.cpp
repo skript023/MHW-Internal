@@ -38,7 +38,8 @@ namespace big
 
         // Allocate memory for new code
         m_new_code_address = VirtualAlloc(nullptr, m_new_code.size() + 5, MEM_COMMIT | MEM_RESERVE, PAGE_EXECUTE_READWRITE);
-        if (!m_new_code_address) {
+        if (!m_new_code_address) 
+        {
             throw std::runtime_error("Failed to allocate memory for hook.");
         }
 

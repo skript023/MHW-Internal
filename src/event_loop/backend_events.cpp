@@ -8,7 +8,7 @@ namespace big
 		
 	}
 
-	void backend_events::player_skill_event()
+	void backend_events::player_event()
 	{
 		while (true)
 		{
