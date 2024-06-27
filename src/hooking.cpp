@@ -86,7 +86,7 @@ namespace big
 				return true;
 		}
 
-		return CallWindowProc(g_hooking->m_og_wndproc, hwnd, msg, wparam, lparam);
+		return CallWindowProcW(g_hooking->m_og_wndproc, hwnd, msg, wparam, lparam);
 	}
 
 	BOOL hooks::set_cursor_pos(int x, int y)

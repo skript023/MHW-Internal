@@ -9,7 +9,7 @@ namespace big
 		NONE,
 
 		PLAYER_MENU,
-		PLAYER_STAT,
+		CRAFTING,
 		ITEM_MANAGER,
 
 		SETTING,
@@ -35,7 +35,7 @@ namespace big
 			{tabs::PLAYER_MENU, { "Player", player_menu::render_menu, {
 				
 			}}},
-			{tabs::PLAYER_STAT, { "Player Stat", crafting::render_menu, {
+			{tabs::CRAFTING, { "Crafting", crafting::render_menu, {
 				
 			}}},
 			{tabs::ITEM_MANAGER, { "Item Manager", nullptr, {

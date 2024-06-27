@@ -14,16 +14,16 @@ namespace big
 	public:
 		struct player
 		{
-			bool invulnerable = false;
-			bool inf_stamina = false;
+			bool invulnerable = true;
+			bool inf_stamina = true;
 			bool reveal_monster = false;
 
 			NLOHMANN_DEFINE_TYPE_INTRUSIVE(player, invulnerable, inf_stamina, reveal_monster);
 		} player;
 		struct crafting
 		{
-			bool ignore_material = false;
-			bool unlock_equipment = false;
+			bool ignore_material = true;
+			bool unlock_equipment = true;
 
 			NLOHMANN_DEFINE_TYPE_INTRUSIVE(crafting, ignore_material, unlock_equipment);
 		} crafting;

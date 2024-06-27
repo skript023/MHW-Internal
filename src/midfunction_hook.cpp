@@ -58,6 +58,7 @@ namespace big
 
         // Patch the target address with the jump
         m_patch = std::make_unique<byte_patching>(m_target_address, jmp_newmem);
+        LOG(INFO) << (uintptr_t)m_new_code_address;
     }
     std::vector<byte> mid_function_hook::floatToBytes(float value)
     {

@@ -10,11 +10,14 @@ namespace big
 		m_reveal_monster(g_pointers->m_reveal_monster, { 0xC7, 0x84, 0x24, 0xA8, 0x01, 0x00, 0x00 }, 100.f),
 		m_critical_boost(g_pointers->m_critical_boost, { 0xC7, 0x84, 0x24, 0xA8, 0x07, 0x00, 0x00 }, 990.f),
 		/*byte patching*/
-		m_player_state(g_pointers->m_player_state, { 90, 90, 90, 90, 90 }),
-		m_player_anim(g_pointers->m_player_anim, { 90, 90, 90, 90, 90 }),
-		m_player_health(g_pointers->m_player_health, { 90, 90, 90, 90, 90 }),
-		m_player_stamina(g_pointers->m_player_stamina, { 90, 90, 90, 90 })
+		m_player_state(g_pointers->m_player_state, { 0x90, 0x90, 0x90, 0x90, 0x90 }),
+		m_player_anim(g_pointers->m_player_anim, { 0x90, 0x90, 0x90, 0x90, 0x90 }),
+		m_player_health(g_pointers->m_player_health, { 0x90, 0x90, 0x90, 0x90, 0x90 }),
+		m_player_stamina(g_pointers->m_player_stamina, { 0x90, 0x90, 0x90, 0x90 })
 	{
+		m_player_stamina.apply();
+		m_reveal_monster.apply();
+
 		g_hook_manager = this;
 	}
 
