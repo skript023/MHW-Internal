@@ -81,7 +81,7 @@ namespace big
 				m_console_out.open("CONOUT$", std::ios_base::out | std::ios_base::app);
 			}
 
-			m_file_path /= "Scarlet Nexus Trainer";
+			m_file_path /= FOLDER;
 			std::filesystem::path m_backup_path = m_file_path;
 			m_backup_path /= "Backup";
 			try
@@ -106,8 +106,8 @@ namespace big
 				}
 
 				m_event_file_path = m_file_path;
-				m_file_path /= "Scarlet Nexus.log";
-				m_event_file_path /= "Scarlet Nexusvents.log";
+				m_file_path /= LOG_FILENAME ".log";
+				m_event_file_path /= LOG_FILENAME " Events.log";
 
 				if (std::filesystem::exists(m_file_path))
 				{
@@ -115,8 +115,8 @@ namespace big
 					auto timet = to_time_t(file_time);
 					auto local_time = std::localtime(&timet);
 
-					auto bigbase_timestamp = std::format("{:0>2}-{:0>2}-{}-{:0>2}-{:0>2}-{:0>2} BigBaseV2.log", local_time->tm_mon + 1, local_time->tm_mday, local_time->tm_year + 1900, local_time->tm_hour, local_time->tm_min, local_time->tm_sec);
-					auto gta_events_timestamp = std::format("{:0>2}-{:0>2}-{}-{:0>2}-{:0>2}-{:0>2} GTAEvents.log", local_time->tm_mon + 1, local_time->tm_mday, local_time->tm_year + 1900, local_time->tm_hour, local_time->tm_min, local_time->tm_sec);
+					auto bigbase_timestamp = std::format("{:0>2}-{:0>2}-{}-{:0>2}-{:0>2}-{:0>2} {}.log", local_time->tm_mon + 1, local_time->tm_mday, local_time->tm_year + 1900, local_time->tm_hour, local_time->tm_min, local_time->tm_sec, LOG_FILENAME);
+					auto gta_events_timestamp = std::format("{:0>2}-{:0>2}-{}-{:0>2}-{:0>2}-{:0>2} MHWEvents.log", local_time->tm_mon + 1, local_time->tm_mday, local_time->tm_year + 1900, local_time->tm_hour, local_time->tm_min, local_time->tm_sec);
 
 					std::filesystem::copy_file(m_file_path, m_backup_path / bigbase_timestamp);
 					if (std::filesystem::exists(m_event_file_path) && !std::filesystem::is_empty(m_event_file_path))

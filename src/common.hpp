@@ -50,8 +50,8 @@
 
 #include <nlohmann/json.hpp>
 
-#include "settings.hpp"
-#include "logger.hpp"
+#define FOLDER "Monter Hunter World Trainer"
+#define LOG_FILENAME "Monster Hunter World"
 
 #define MOD_NAME "Ellohim Private Menu"
 
@@ -60,6 +60,12 @@
 #define DISTANCE_SPAWN 10
 
 #define CUSTOM_HUD "Madang Hese Udud Hese Teu Boga Duit Wuhan Kontol"
+
+#define WINDOW_CLASS nullptr
+#define WINDOW_NAME "MONSTER HUNTER: WORLD(421740)"
+
+#include "settings.hpp"
+#include "logger.hpp"
 
 namespace big
 {

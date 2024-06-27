@@ -101,7 +101,7 @@ namespace big
 	void renderer::imgui_init()
 	{
 		auto file_path = std::filesystem::path(std::getenv("appdata"));
-		file_path /= "Ellohim";
+		file_path /= FOLDER;
 		if (!std::filesystem::exists(file_path))
 		{
 			std::filesystem::create_directory(file_path);

@@ -17,7 +17,7 @@ DWORD APIENTRY main_thread(LPVOID)
 {
 	using namespace big;
 
-	while (!FindWindow(nullptr, "MONSTER HUNTER: WORLD(421740)"))
+	while (!FindWindow(WINDOW_CLASS, WINDOW_NAME))
 		std::this_thread::sleep_for(1s);
 
 	benchmark initialization_benchmark("Initialization");

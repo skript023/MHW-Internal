@@ -29,7 +29,7 @@ namespace big
 		
 		main_batch.run(memory::module(nullptr));
 
-		this->m_hwnd = FindWindow(nullptr, "MONSTER HUNTER: WORLD(421740)");
+		this->m_hwnd = FindWindow(WINDOW_CLASS, WINDOW_NAME);
 		if (!this->m_hwnd)
 			throw std::runtime_error("Failed to find the game's window.");
 
