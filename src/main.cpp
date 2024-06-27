@@ -12,7 +12,7 @@
 
 #include "services/gui/gui_service.hpp"
 #include "services/notification/notification_service.hpp"
-#include <midfunc_hook_manager.hpp>
+#include <hook_manager.hpp>
 
 DWORD APIENTRY main_thread(LPVOID)
 {
@@ -58,14 +58,14 @@ DWORD APIENTRY main_thread(LPVOID)
 		LOG(HACKER) << "Service registered.";
 
 		g_script_mgr.add_script(std::make_unique<script>(&gui::script_func));
-		g_script_mgr.add_script(std::make_unique<script>(&backend_events::player_skill_event));
+		g_script_mgr.add_script(std::make_unique<script>(&backend_events::player_event));
 		g_script_mgr.add_script(std::make_unique<script>(&backend_events::script_func));
 		LOG(HACKER) << "Scripts registered.";
 
 		g_hooking->enable();
 		LOG(HACKER) << "Hooking enabled.";
 
-		auto midfunc_hook_mgr_instance = std::make_unique<midfunc_hook_manager>();
+		auto midfunc_hook_mgr_instance = std::make_unique<hook_manager>();
 		LOG(HACKER) << "Midfunction hook registered.";
 
 		initialization_benchmark.get_runtime();

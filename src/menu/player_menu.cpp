@@ -3,7 +3,7 @@
 #include "player_menu.h"
 #include "settings.hpp"
 #include "utility/mhw.hpp"
-#include <midfunc_hook_manager.hpp>
+#include <hook_manager.hpp>
 
 namespace big
 {

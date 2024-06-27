@@ -1,6 +1,6 @@
 #pragma once
 #include "menu/player_menu.h"
-#include "menu/player_stats.h"
+#include "menu/crafting.h"
 #include "menu/setting_menu.h"
 
 namespace big
@@ -35,7 +35,7 @@ namespace big
 			{tabs::PLAYER_MENU, { "Player", player_menu::render_menu, {
 				
 			}}},
-			{tabs::PLAYER_STAT, { "Player Stat", player_stat::render_menu, {
+			{tabs::PLAYER_STAT, { "Player Stat", crafting::render_menu, {
 				
 			}}},
 			{tabs::ITEM_MANAGER, { "Item Manager", nullptr, {

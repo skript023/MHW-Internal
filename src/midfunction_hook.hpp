@@ -16,14 +16,7 @@ namespace big
 
         void restore() const;
 
-        ~mid_function_hook() 
-        {
-            restore();
-            if (m_new_code_address) 
-            {
-                VirtualFree(m_new_code_address, 0, MEM_RELEASE);
-            }
-        }
+        ~mid_function_hook();
 
     private:
         void initialize();

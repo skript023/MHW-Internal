@@ -3,9 +3,11 @@
 
 namespace big
 {
-	class player_stat
+	class crafting
 	{
 	public:
 		static void render_menu();
+	private:
+		static void reveal_monster();
 	};
 }
