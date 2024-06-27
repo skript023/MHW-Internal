@@ -20,7 +20,7 @@ namespace big
 		void post_reset(IDXGISwapChain* this_);
 		void merge_icon_with_latest_font(float font_size, bool FontDataOwnedByAtlas = false);
 
-		void wndproc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam);
+		bool wndproc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam);
 	public:
 		ImFont* m_font = nullptr;
 		ImFont* m_monospace_font = nullptr;

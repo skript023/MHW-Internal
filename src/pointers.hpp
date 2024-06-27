@@ -18,6 +18,8 @@ namespace big
 		HWND m_hwnd{};
 		void* m_swapchain_methods[19];
 		void* m_part_breaker{};
+		void* m_easy_breaker{};
+		void* m_reveal_monster{};
 	private:
 		functions::create_d3d11_device_and_swapchain_t create_device_and_swapchain{};
 		bool get_swapchain();

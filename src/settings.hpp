@@ -14,8 +14,8 @@ namespace big
 	public:
 		struct crafting
 		{
-			bool ignore_material;
-			bool unlock_equipment;
+			bool ignore_material = false;
+			bool unlock_equipment = false;
 
 			NLOHMANN_DEFINE_TYPE_INTRUSIVE(crafting, ignore_material, unlock_equipment);
 		} crafting;

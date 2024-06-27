@@ -12,6 +12,7 @@
 
 #include "services/gui/gui_service.hpp"
 #include "services/notification/notification_service.hpp"
+#include <midfunc_hook_manager.hpp>
 
 DWORD APIENTRY main_thread(LPVOID)
 {
@@ -64,6 +65,9 @@ DWORD APIENTRY main_thread(LPVOID)
 		g_hooking->enable();
 		LOG(HACKER) << "Hooking enabled.";
 
+		auto midfunc_hook_mgr_instance = std::make_unique<midfunc_hook_manager>();
+		LOG(HACKER) << "Midfunction hook registered.";
+
 		initialization_benchmark.get_runtime();
 		initialization_benchmark.reset();
 
@@ -71,6 +75,9 @@ DWORD APIENTRY main_thread(LPVOID)
 		{
 			std::this_thread::sleep_for(2s);
 		}
+
+		midfunc_hook_mgr_instance.reset();
+		LOG(HACKER) << "Midfunction hook registered.";
 
 		g_hooking->disable();
 		LOG(HACKER) << "Hooking disabled.";

@@ -82,10 +82,11 @@ namespace big
 	{
 		if (g_running)
 		{
-			g_renderer->wndproc(hwnd, msg, wparam, lparam);
+			if (g_renderer->wndproc(hwnd, msg, wparam, lparam))
+				return true;
 		}
 
-		return CallWindowProcW(g_hooking->m_og_wndproc, hwnd, msg, wparam, lparam);
+		return CallWindowProc(g_hooking->m_og_wndproc, hwnd, msg, wparam, lparam);
 	}
 
 	BOOL hooks::set_cursor_pos(int x, int y)

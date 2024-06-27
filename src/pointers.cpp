@@ -27,6 +27,16 @@ namespace big
 			m_part_breaker = ptr.as<void*>();
 		});
 		
+		main_batch.add("Easy Part Breaker", "F3 0F 10 41 10 C3", [this](memory::handle ptr)
+		{
+			m_easy_breaker = ptr.as<void*>();
+		});
+		
+		main_batch.add("Show All Monster", "F3 0F 10 77 28 48", [this](memory::handle ptr)
+		{
+			m_reveal_monster = ptr.as<void*>();
+		});
+		
 		main_batch.run(memory::module(nullptr));
 
 		this->m_hwnd = FindWindow(WINDOW_CLASS, WINDOW_NAME);
