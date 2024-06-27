@@ -13,6 +13,10 @@ namespace big
 		if (ImGui::Checkbox("Reveal Monster", &g_settings->player.reveal_monster))
 			reveal_monster();
 
+		ImGui::Checkbox("Ignore Material", &g_settings->crafting.ignore_material);
+
+		ImGui::Checkbox("Unlock Equipment", &g_settings->crafting.unlock_equipment);
+
 		ImGui::EndGroup();
 	}
 	void crafting::reveal_monster()
