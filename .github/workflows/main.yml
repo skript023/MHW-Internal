@@ -1,0 +1,45 @@
+name: CI
+
+on:
+  push: 
+    branches: 
+      - main
+  pull_request: 
+    branches: 
+      - main
+      
+jobs:
+  build:
+    runs-on: windows-2022
+  
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Check CMake version
+        run: cmake --version
+
+      - name: Setup MSVC environment
+        uses: ilammy/msvc-dev-cmd@v1
+        with:
+          arch: amd64
+
+      - name: Generate CMake project
+        run: cmake -D CMAKE_BUILD_TYPE=Release -S. -Bbuild -G Ninja
+
+      - name: Build 64bit release DLL
+        run: cmake --build ./build --config Release --target ScarletNexus --
+
+      - name: Check if DLL got built
+        run: if (-Not (Test-Path -path "build/ScarletNexus.dll")) {throw 1}
+
+      - name: Rename DLL to ScarletNexus-dev-{GITHUB_SHA}.dll
+        run: |
+          del ScarletNexus-dev-*.dll
+          ren ScarletNexus.dll ScarletNexus-dev-${{github.sha}}.dll
+        working-directory: build/
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: binary
+          path: build/ScarletNexus-dev-*.dll
