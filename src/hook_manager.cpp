@@ -17,11 +17,11 @@ namespace big
 		m_player_stamina(g_pointers->m_player_stamina, { 0x90, 0x90, 0x90, 0x90 })
 	{	
 		/*mid function hook*/
-		m_easy_breaker.apply();
+		/*m_easy_breaker.apply();
 		m_part_breaker.apply();
 		m_reveal_monster.apply();
 		m_maxed_effect_set.apply();
-		m_maxed_attribute.apply();
+		m_maxed_attribute.apply();*/
 		/*byte patching*/
 		m_player_stamina.apply();
 

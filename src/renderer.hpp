@@ -20,7 +20,7 @@ namespace big
 		void post_reset(IDXGISwapChain* this_);
 		void merge_icon_with_latest_font(float font_size, bool FontDataOwnedByAtlas = false);
 
-		bool wndproc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam);
+		void wndproc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam);
 	public:
 		ImFont* m_font = nullptr;
 		ImFont* m_monospace_font = nullptr;
@@ -32,5 +32,5 @@ namespace big
 		ID3D11RenderTargetView* m_d3d_render_target = nullptr;
 	};
 
-	inline renderer *g_renderer{};
+	inline renderer* g_renderer{};
 }

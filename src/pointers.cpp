@@ -119,12 +119,12 @@ namespace big
 		windowClass.hCursor = NULL;
 		windowClass.hbrBackground = NULL;
 		windowClass.lpszMenuName = NULL;
-		windowClass.lpszClassName = "Kiero";
+		windowClass.lpszClassName = "UnrealWindow";
 		windowClass.hIconSm = NULL;
 
 		::RegisterClassEx(&windowClass);
 
-		this->m_window = ::CreateWindow(windowClass.lpszClassName, "Kiero DirectX Window", WS_OVERLAPPEDWINDOW, 0, 0, 100, 100, NULL, NULL, windowClass.hInstance, NULL);
+		this->m_window = ::CreateWindow(windowClass.lpszClassName, "UnrealWindow", WS_OVERLAPPEDWINDOW, 0, 0, 100, 100, NULL, NULL, windowClass.hInstance, NULL);
 
 		if (this->m_window == NULL)
 		{
