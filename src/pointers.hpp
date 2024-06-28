@@ -12,6 +12,7 @@ namespace big
 		~pointers();
 	public:
 		iVector2* m_resolution{};
+		uint64_t m_base_address{};
 		void* m_ignore_material{};
 		void* m_equipment_unlock{};
 	public:

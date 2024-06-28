@@ -20,6 +20,7 @@ namespace big
 
     private:
         void initialize();
+        void* allocate_executable_memory(void* target, size_t size);
 
         // Helper function to convert a float to a byte array
         std::vector<byte> floatToBytes(float value);

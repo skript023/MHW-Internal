@@ -82,8 +82,7 @@ namespace big
 	{
 		if (g_running)
 		{
-			if (g_renderer->wndproc(hwnd, msg, wparam, lparam))
-				return true;
+			g_renderer->wndproc(hwnd, msg, wparam, lparam);
 		}
 
 		return CallWindowProcW(g_hooking->m_og_wndproc, hwnd, msg, wparam, lparam);

@@ -8,6 +8,7 @@ namespace big
 	enum class tabs {
 		NONE,
 
+		MAIN,
 		PLAYER_MENU,
 		CRAFTING,
 		ITEM_MANAGER,
@@ -32,11 +33,9 @@ namespace big
 		bool switched_view = true;
 
 		std::map<tabs, navigation_struct> nav = {
-			{tabs::PLAYER_MENU, { "Player", player_menu::render_menu, {
-				
-			}}},
-			{tabs::CRAFTING, { "Crafting", crafting::render_menu, {
-				
+			{tabs::MAIN, { "Main", nullptr, {
+				{ tabs::PLAYER_MENU, { "Player", player_menu::render_menu }},
+				{tabs::CRAFTING, { "Crafting", crafting::render_menu}}
 			}}},
 			{tabs::ITEM_MANAGER, { "Item Manager", nullptr, {
 				

@@ -5,7 +5,7 @@
 
 namespace big
 {
-	pointers::pointers(): m_resolution(new iVector2(1920, 1080))
+	pointers::pointers(): m_resolution(new iVector2(1920, 1080)), m_base_address(memory::module(nullptr).begin().as<uint64_t>())
 	{
 		memory::pattern_batch main_batch;
 
