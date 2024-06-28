@@ -9,20 +9,17 @@ namespace big
 {
 	void player_menu::render_menu()
 	{
-		if (ImGui::BeginTabItem("Player"))
-		{
-			ImGui::BeginGroup();
+		ImGui::BeginGroup();
 
-			if (ImGui::Checkbox("Invulnerable", &g_settings->player.invulnerable))
-				player_menu::invulnerable();
+		if (ImGui::Checkbox("Invulnerable", &g_settings->player.invulnerable))
+			player_menu::invulnerable();
 
-			if (ImGui::Checkbox("Inf Stamina", &g_settings->player.inf_stamina))
-				player_menu::infinite_stamina();
+		if (ImGui::Checkbox("Inf Stamina", &g_settings->player.inf_stamina))
+			player_menu::infinite_stamina();
 
-			ImGui::EndGroup();
+		ImGui::EndGroup();
 
-			ImGui::EndTabItem();
-		}
+		ImGui::EndTabItem();
 	}
     void player_menu::invulnerable()
 	{

@@ -53,7 +53,7 @@ DWORD APIENTRY main_thread(LPVOID)
 		auto hooking_instance = std::make_unique<hooking>();
 		LOG(HACKER) << "Hooking initialized.";
 
-		//auto gui_service_instance = std::make_unique<gui_service>();
+		auto gui_service_instance = std::make_unique<gui_service>();
 		auto notification_instance = std::make_unique<notification_service>();
 		LOG(HACKER) << "Service registered.";
 
@@ -90,7 +90,7 @@ DWORD APIENTRY main_thread(LPVOID)
 		LOG(HACKER) << "Scripts unregistered.";
 
 		notification_instance.reset();
-		//gui_service_instance.reset();
+		gui_service_instance.reset();
 		LOG(HACKER) << "Service unregistered.";
 
 		hooking_instance.reset();
