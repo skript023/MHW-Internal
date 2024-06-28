@@ -12,6 +12,8 @@ namespace big
 		mid_function_hook m_easy_breaker;
 		mid_function_hook m_part_breaker;
 		mid_function_hook m_reveal_monster;
+		mid_function_hook m_maxed_effect_set;
+		mid_function_hook m_maxed_attribute;
 	public:
 		byte_patching m_player_state;
 		byte_patching m_player_anim;

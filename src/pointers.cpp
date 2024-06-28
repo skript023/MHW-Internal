@@ -79,7 +79,17 @@ namespace big
 		
 		main_batch.add("High Rank EXP Mult", "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 41 54 41 56 41 57 48 83 EC 20 48 8B F9 8B F2 48 83 C1 08", [this](memory::handle ptr)
 		{
-			m_highrank_exp = ptr.sub(24).as<void*>();
+			m_highrank_exp = ptr.as<void*>();
+		});
+		
+		main_batch.add("Maxed Set Effect", "0F B6 48 31 00 8C D3 80 00 00 00", [this](memory::handle ptr)
+		{
+			m_maxed_effect_set = ptr.as<void*>();
+		});
+		
+		main_batch.add("Maxed Armor Attribute", "43 0F B6 44 34 31", [this](memory::handle ptr)
+		{
+			m_maxed_attribute = ptr.as<void*>();
 		});
 		
 		main_batch.run(memory::module(nullptr));
