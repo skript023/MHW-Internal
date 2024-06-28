@@ -73,7 +73,9 @@ DWORD APIENTRY main_thread(LPVOID)
 
 		while (g_running)
 		{
-			std::this_thread::sleep_for(2s);
+			g_script_mgr.tick();
+
+			std::this_thread::sleep_for(1s);
 		}
 
 		midfunc_hook_mgr_instance.reset();

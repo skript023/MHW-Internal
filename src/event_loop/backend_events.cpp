@@ -1,5 +1,6 @@
 #include "backend_events.hpp"
 #include "script.hpp"
+#include <menu/player_menu.h>
 
 namespace big
 {
@@ -14,7 +15,7 @@ namespace big
 		{
 			TRY_CLAUSE
 			{
-				
+				player_menu::critical_boost();
 			}
 			EXCEPT_CLAUSE
 			script::get_current()->yield();

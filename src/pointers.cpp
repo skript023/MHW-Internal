@@ -37,9 +37,9 @@ namespace big
 			m_reveal_monster = ptr.as<void*>();
 		});
 		
-		main_batch.add("Critical Boost", "F3 0F 10 88 A8 07 00 00", [this](memory::handle ptr)
+		main_batch.add("Critical Boost", "48 8B 05 ? ? ? ? F3 0F 10 88 ? ? ? ? 0F 2F C1 77 03 0F 28 C1", [this](memory::handle ptr)
 		{
-			m_critical_boost = ptr.as<void*>();
+			m_critical_boost = ptr.add(3).rip().as<uintptr_t**>();
 		});
 		
 		main_batch.add("Player State", "E8 EB 6C 2C FF", [this](memory::handle ptr)
@@ -60,6 +60,21 @@ namespace big
 		main_batch.add("Player Health", "F3 0F 5D C2 F3 0F 11 41 6C", [this](memory::handle ptr)
 		{
 			m_player_stamina = ptr.as<void*>();
+		});
+		
+		main_batch.add("Consumable", "48 89 5C 24 ? 89 4C 24 08 55 56 57 41 56 41 57 48 8B EC 48 83 EC 30", [this](memory::handle ptr)
+		{
+			m_consumable = ptr.as<void*>();
+		});
+		
+		main_batch.add("Consumable Use", "41 80 F8 01 75 03 89", [this](memory::handle ptr)
+		{
+			m_use_item = ptr.as<void*>();
+		});
+		
+		main_batch.add("High Rank EXP Mult", "41 57 48 83 EC 20 48 8B F1 41 0F B6 F8 48 83 C1 08", [this](memory::handle ptr)
+		{
+			m_highrank_exp = ptr.sub(24).as<void*>();
 		});
 		
 		main_batch.run(memory::module(nullptr));

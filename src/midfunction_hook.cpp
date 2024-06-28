@@ -36,14 +36,6 @@ namespace big
         m_original_bytes = std::make_unique<byte[]>(5);  // Assuming 5 bytes for the jump
         memcpy(m_original_bytes.get(), m_target_address, 5);
 
-        // Calculate the return address where the original function should resume
-        uintptr_t return_address = (uintptr_t)m_target_address + 5;
-
-        // Add the return jump to the end of the new code
-        m_new_code.push_back(0xE9); // Add the jmp opcode
-        uintptr_t relative_offset = return_address - ((uintptr_t)m_new_code.data() + m_new_code.size() + 4);
-        m_new_code.insert(m_new_code.end(), (byte*)&relative_offset, (byte*)&relative_offset + 4);
-
         // Allocate memory for new code near target address
         m_new_code_address = allocate_executable_memory(m_target_address, m_new_code.size() + 0x1024);
 
@@ -54,6 +46,15 @@ namespace big
 
         // Copy the new code to allocated memory
         memcpy(m_new_code_address, m_new_code.data(), m_new_code.size());
+
+        // Add jump back to the original function after new code execution
+        uintptr_t return_address = (uintptr_t)m_target_address + 5;
+        byte* jump_back_location = (byte*)m_new_code_address + m_new_code.size();
+        jump_back_location[0] = 0xE9; // jmp opcode
+
+        // Calculate relative offset for jump back to the original code
+        uintptr_t relative_offset = return_address - ((uintptr_t)jump_back_location + 5);
+        memcpy(jump_back_location + 1, &relative_offset, 4);
 
         // Prepare the jump to the new code
         uintptr_t relative_address = (uintptr_t)m_new_code_address - ((uintptr_t)m_target_address + 5);

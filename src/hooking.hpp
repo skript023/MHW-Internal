@@ -22,6 +22,9 @@ namespace big
 
 		static int __fastcall material_handler(uint32_t a1, int a2);
 		static bool __fastcall equipment_crafting(__int64 a1);
+		static void __fastcall consumable(__int64 a1, int a2, DWORD* a3);
+		static void __fastcall use_item(__int64* rcx, unsigned char r8l);
+		static __int64 __fastcall highrank_experience(__int64 a1, unsigned int a2, char a3);
 	};
 
 	struct minhook_keepalive
@@ -52,6 +55,9 @@ namespace big
 
 		detour_hook m_ignore_material_hook;
 		detour_hook m_unlock_equipment_hook;
+		detour_hook m_consumable_hook;
+		detour_hook m_use_item_hook;
+		detour_hook m_highrank_mult_hook;
 	};
 
 	inline hooking* g_hooking{};

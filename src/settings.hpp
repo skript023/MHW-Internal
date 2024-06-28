@@ -17,9 +17,11 @@ namespace big
 			bool invulnerable = true;
 			bool inf_stamina = true;
 			bool reveal_monster = false;
+			bool inf_item = false;
 
-			NLOHMANN_DEFINE_TYPE_INTRUSIVE(player, invulnerable, inf_stamina, reveal_monster);
+			NLOHMANN_DEFINE_TYPE_INTRUSIVE(player, invulnerable, inf_stamina, reveal_monster, inf_item);
 		} player;
+
 		struct crafting
 		{
 			bool ignore_material = true;

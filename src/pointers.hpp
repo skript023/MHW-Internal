@@ -21,11 +21,14 @@ namespace big
 		void* m_part_breaker{};
 		void* m_easy_breaker{};
 		void* m_reveal_monster{};
-		void* m_critical_boost{};
+		uintptr_t** m_critical_boost{};
 		void* m_player_state{};
 		void* m_player_anim{};
 		void* m_player_health{};
 		void* m_player_stamina{};
+		void* m_consumable{};
+		void* m_use_item{};
+		void* m_highrank_exp{};
 	private:
 		functions::create_d3d11_device_and_swapchain_t create_device_and_swapchain{};
 		bool get_swapchain();

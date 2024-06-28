@@ -25,6 +25,7 @@ namespace big
         // Helper function to convert a float to a byte array
         std::vector<byte> floatToBytes(float value);
 
+        void* m_value;
         void* m_target_address;
         std::unique_ptr<byte[]> m_original_bytes;
         void* m_new_code_address;

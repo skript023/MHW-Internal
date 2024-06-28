@@ -7,9 +7,11 @@ namespace big
 	{
 	public:
 		static void render_menu();
-	private:
+	public:
 		static void invulnerable();
 
 		static void infinite_stamina();
+
+		static void critical_boost();
 	};
 }

@@ -17,7 +17,10 @@ namespace big
 		m_set_cursor_pos_hook("SetCursorPos", memory::module("user32.dll").get_export("SetCursorPos").as<void*>(), &hooks::set_cursor_pos),
 		m_convert_thread_to_fiber_hook("ConvertThreadToFiber", memory::module("kernel32.dll").get_export("ConvertThreadToFiber").as<void*>(), &hooks::convert_thread_to_fiber),
 		m_ignore_material_hook("Ignore Material", g_pointers->m_ignore_material, &hooks::material_handler),
-		m_unlock_equipment_hook("Unlock Equipment", g_pointers->m_equipment_unlock, &hooks::equipment_crafting)
+		m_unlock_equipment_hook("Unlock Equipment", g_pointers->m_equipment_unlock, &hooks::equipment_crafting),
+		m_consumable_hook("Consumable", g_pointers->m_consumable, &hooks::consumable),
+		m_use_item_hook("Use Item", g_pointers->m_use_item, &hooks::use_item),
+		m_highrank_mult_hook("Highrank EXP Mult", g_pointers->m_highrank_exp, &hooks::highrank_experience)
 	{
 		g_hooking = this;
 	}
@@ -40,6 +43,9 @@ namespace big
 
 		m_ignore_material_hook.enable();
 		m_unlock_equipment_hook.enable();
+		m_consumable_hook.enable();
+		m_use_item_hook.enable();
+		m_highrank_mult_hook.enable();
 
 		m_enabled = true;
 	}
@@ -48,6 +54,9 @@ namespace big
 	{
 		m_enabled = false;
 
+		m_highrank_mult_hook.disable();
+		m_consumable_hook.disable();
+		m_use_item_hook.disable();
 		m_ignore_material_hook.disable();
 		m_unlock_equipment_hook.disable();
 

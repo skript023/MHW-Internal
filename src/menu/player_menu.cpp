@@ -45,4 +45,11 @@ namespace big
 			g_hook_manager->m_player_stamina.restore();
 		}
 	}
+	void player_menu::critical_boost()
+	{
+		auto addr = (*g_pointers->m_critical_boost);
+		LOG(INFO) << "Addr : 0x" << std::hex << addr;
+		*(float*)((uintptr_t)addr + 0x7A8) = 990.f;
+		LOG(INFO) << "Addr : 0x" << std::hex << ((uintptr_t)addr + 0x7A8);
+	}
 }
