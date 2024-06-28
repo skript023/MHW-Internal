@@ -9,15 +9,20 @@ namespace big
 {
 	void player_menu::render_menu()
 	{
-        ImGui::BeginGroup();
+		if (ImGui::BeginTabItem("Player"))
+		{
+			ImGui::BeginGroup();
 
-        if (ImGui::Checkbox("Invulnerable", &g_settings->player.invulnerable))
-			player_menu::invulnerable();
+			if (ImGui::Checkbox("Invulnerable", &g_settings->player.invulnerable))
+				player_menu::invulnerable();
 
-        if (ImGui::Checkbox("Inf Stamina", &g_settings->player.inf_stamina))
-			player_menu::infinite_stamina();
+			if (ImGui::Checkbox("Inf Stamina", &g_settings->player.inf_stamina))
+				player_menu::infinite_stamina();
 
-        ImGui::EndGroup();
+			ImGui::EndGroup();
+
+			ImGui::EndTabItem();
+		}
 	}
     void player_menu::invulnerable()
 	{
@@ -48,8 +53,6 @@ namespace big
 	void player_menu::critical_boost()
 	{
 		auto addr = (*g_pointers->m_critical_boost);
-		LOG(INFO) << "Addr : 0x" << std::hex << addr;
 		*(float*)((uintptr_t)addr + 0x7A8) = 990.f;
-		LOG(INFO) << "Addr : 0x" << std::hex << ((uintptr_t)addr + 0x7A8);
 	}
 }

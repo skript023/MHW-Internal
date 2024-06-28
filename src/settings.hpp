@@ -18,8 +18,10 @@ namespace big
 			bool inf_stamina = true;
 			bool reveal_monster = false;
 			bool inf_item = false;
+			int hr_ex_mult = 1;
+			int mr_ex_mult = 1;
 
-			NLOHMANN_DEFINE_TYPE_INTRUSIVE(player, invulnerable, inf_stamina, reveal_monster, inf_item);
+			NLOHMANN_DEFINE_TYPE_INTRUSIVE(player, invulnerable, inf_stamina, reveal_monster, inf_item, hr_ex_mult);
 		} player;
 
 		struct crafting

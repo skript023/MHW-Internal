@@ -20,7 +20,8 @@ namespace big
 		m_unlock_equipment_hook("Unlock Equipment", g_pointers->m_equipment_unlock, &hooks::equipment_crafting),
 		m_consumable_hook("Consumable", g_pointers->m_consumable, &hooks::consumable),
 		m_use_item_hook("Use Item", g_pointers->m_use_item, &hooks::use_item),
-		m_highrank_mult_hook("Highrank EXP Mult", g_pointers->m_highrank_exp, &hooks::highrank_experience)
+		m_master_rank_mult_hook("Master Rank EXP Mult", g_pointers->m_master_rank_exp, &hooks::master_rank_experience),
+		m_highrank_mult_hook("High Rank EXP Mult", g_pointers->m_highrank_exp, &hooks::high_rank_experience)
 	{
 		g_hooking = this;
 	}
@@ -46,6 +47,7 @@ namespace big
 		m_consumable_hook.enable();
 		m_use_item_hook.enable();
 		m_highrank_mult_hook.enable();
+		m_master_rank_mult_hook.enable();
 
 		m_enabled = true;
 	}
@@ -54,6 +56,7 @@ namespace big
 	{
 		m_enabled = false;
 
+		m_master_rank_mult_hook.disable();
 		m_highrank_mult_hook.disable();
 		m_consumable_hook.disable();
 		m_use_item_hook.disable();
@@ -91,10 +94,11 @@ namespace big
 	{
 		if (g_running)
 		{
-			g_renderer->wndproc(hwnd, msg, wparam, lparam);
+			if (g_renderer->wndproc(hwnd, msg, wparam, lparam))
+				return true;
 		}
 
-		return CallWindowProcW(g_hooking->m_og_wndproc, hwnd, msg, wparam, lparam);
+		return CallWindowProc(g_hooking->m_og_wndproc, hwnd, msg, wparam, lparam);
 	}
 
 	BOOL hooks::set_cursor_pos(int x, int y)

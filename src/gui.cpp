@@ -86,9 +86,15 @@ namespace big
 	void gui::dx_on_opened()
 	{
 		ImGui::PushStyleColor(ImGuiCol_WindowBg, ImGui::ColorConvertU32ToFloat4(g_settings->window.color));
-		navigation::header();
-		navigation::render_menu();
-		navigation::active_view();
+		if (ImGui::Begin("Monster Hunter World"))
+		{
+			ImGui::BeginTabBar("Tabbar");
+			player_menu::render_menu();
+			crafting::render_menu();
+			setting_menu::render_menu();
+			ImGui::EndTabBar();
+		}
+		ImGui::End();
 		ImGui::PopStyleColor();
 	}
 

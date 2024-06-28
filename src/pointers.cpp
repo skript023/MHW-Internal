@@ -72,7 +72,12 @@ namespace big
 			m_use_item = ptr.as<void*>();
 		});
 		
-		main_batch.add("High Rank EXP Mult", "41 57 48 83 EC 20 48 8B F1 41 0F B6 F8 48 83 C1 08", [this](memory::handle ptr)
+		main_batch.add("Master Rank EXP Mult", "41 57 48 83 EC 20 48 8B F1 41 0F B6 F8 48 83 C1 08", [this](memory::handle ptr)
+		{
+			m_master_rank_exp = ptr.sub(24).as<void*>();
+		});
+		
+		main_batch.add("High Rank EXP Mult", "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 41 54 41 56 41 57 48 83 EC 20 48 8B F9 8B F2 48 83 C1 08", [this](memory::handle ptr)
 		{
 			m_highrank_exp = ptr.sub(24).as<void*>();
 		});
@@ -185,5 +190,41 @@ namespace big
 		::UnregisterClass(windowClass.lpszClassName, windowClass.hInstance);
 
 		return true;
+	}
+	void pointers::window_focus()
+	{
+		bool window_focus = false;
+
+		while (window_focus == false)
+		{
+			DWORD forground_process_id;
+			GetWindowThreadProcessId(GetForegroundWindow(), &forground_process_id);
+			if (GetCurrentProcessId() == forground_process_id) 
+			{
+
+				m_process_id = GetCurrentProcessId();
+				m_handle = GetCurrentProcess();
+				m_hwnd = GetForegroundWindow();
+
+				RECT TempRect;
+				GetWindowRect(m_hwnd, &TempRect);
+				m_resolution->x = TempRect.right - TempRect.left;
+				m_resolution->y = TempRect.bottom - TempRect.top;
+
+				char TempTitle[MAX_PATH];
+				GetWindowText(m_hwnd, TempTitle, sizeof(TempTitle));
+				m_title = TempTitle;
+
+				char TempClassName[MAX_PATH];
+				GetClassName(m_hwnd, TempClassName, sizeof(TempClassName));
+				m_classname = TempClassName;
+
+				char TempPath[MAX_PATH];
+				GetModuleFileNameExA(m_handle, NULL, TempPath, sizeof(TempPath));
+				m_path = TempPath;
+
+				window_focus = true;
+			}
+		}
 	}
 }

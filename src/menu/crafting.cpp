@@ -8,16 +8,21 @@ namespace big
 {
 	void crafting::render_menu()
 	{
-		ImGui::BeginGroup();
+		if (ImGui::BeginTabItem("Crafting"))
+		{
+			ImGui::BeginGroup();
 
-		if (ImGui::Checkbox("Reveal Monster", &g_settings->player.reveal_monster))
-			reveal_monster();
+			if (ImGui::Checkbox("Reveal Monster", &g_settings->player.reveal_monster))
+				reveal_monster();
 
-		ImGui::Checkbox("Ignore Material", &g_settings->crafting.ignore_material);
+			ImGui::Checkbox("Ignore Material", &g_settings->crafting.ignore_material);
 
-		ImGui::Checkbox("Unlock Equipment", &g_settings->crafting.unlock_equipment);
+			ImGui::Checkbox("Unlock Equipment", &g_settings->crafting.unlock_equipment);
 
-		ImGui::EndGroup();
+			ImGui::EndGroup();
+
+			ImGui::EndTabItem();
+		}
 	}
 	void crafting::reveal_monster()
 	{

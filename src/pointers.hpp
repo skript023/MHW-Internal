@@ -11,13 +11,14 @@ namespace big
 		explicit pointers();
 		~pointers();
 	public:
+		HWND m_hwnd{};
+		void* m_swapchain_methods[19];
+	public:
 		iVector2* m_resolution{};
 		uint64_t m_base_address{};
 		void* m_ignore_material{};
 		void* m_equipment_unlock{};
 	public:
-		HWND m_hwnd{};
-		void* m_swapchain_methods[19];
 		void* m_part_breaker{};
 		void* m_easy_breaker{};
 		void* m_reveal_monster{};
@@ -28,15 +29,22 @@ namespace big
 		void* m_player_stamina{};
 		void* m_consumable{};
 		void* m_use_item{};
+		void* m_master_rank_exp{};
 		void* m_highrank_exp{};
 	private:
 		functions::create_d3d11_device_and_swapchain_t create_device_and_swapchain{};
 		bool get_swapchain();
+		void window_focus();
 		bool swapchain_found = false;
 		HWND m_window;
 		IDXGISwapChain* m_swapchain = nullptr;
 		ID3D11Device* m_d3d_device = nullptr;
 		ID3D11DeviceContext* m_d3d_context = nullptr;
+		DWORD m_process_id;
+		HANDLE m_handle;
+		LPCSTR m_title;
+		LPCSTR m_classname;
+		LPCSTR m_path;
 	public:
 		inline DWORD get_process_id(LPCSTR ProcessName)
 		{
