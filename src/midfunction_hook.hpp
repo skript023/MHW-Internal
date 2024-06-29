@@ -9,6 +9,9 @@ namespace big
         // Constructor with vector of bytes
         mid_function_hook(void* target_address, std::vector<byte> new_code);
 
+        // Constructor with nop bytes
+        mid_function_hook(void* target_address, std::vector<byte> new_code, int nop);
+
         // Constructor with float data
         mid_function_hook(void* target_address, const std::vector<byte>& new_code, float data);
 
@@ -25,6 +28,7 @@ namespace big
         // Helper function to convert a float to a byte array
         std::vector<byte> floatToBytes(float value);
 
+        int m_nop;
         void* m_value;
         void* m_target_address;
         std::unique_ptr<byte[]> m_original_bytes;

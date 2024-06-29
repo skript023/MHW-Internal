@@ -23,5 +23,6 @@ namespace big
         std::unique_ptr<byte[]> m_original_bytes;
         std::size_t m_size;
         DWORD m_old_protect;
+        bool m_is_applied;
     };
 }

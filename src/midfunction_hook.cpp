@@ -7,6 +7,11 @@ namespace big
     {
         initialize();
     }
+    mid_function_hook::mid_function_hook(void* target_address, std::vector<byte> new_code, int nop)
+        : m_target_address(target_address), m_new_code(new_code), m_nop(nop)
+    {
+        initialize();
+    }
     mid_function_hook::mid_function_hook(void* target_address, const std::vector<byte>& new_code, float data)
         : m_target_address(target_address)
     {
@@ -67,6 +72,11 @@ namespace big
             (byte)((relative_address >> 16) & 0xFF),
             (byte)((relative_address >> 24) & 0xFF)
         };
+
+        if (m_nop)
+        {
+            jmp_newmem.insert(jmp_newmem.end(), m_nop, 0x90);
+        }
 
         LOG(HACKER) << "Return address: " << "0x" << std::hex << return_address;
         LOG(HACKER) << "Jump address: " << "0x" << std::hex << relative_address;

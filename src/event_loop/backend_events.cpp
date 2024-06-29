@@ -1,6 +1,6 @@
 #include "backend_events.hpp"
 #include "script.hpp"
-#include <menu/player_menu.h>
+#include <features/player.hpp>
 
 namespace big
 {
@@ -15,7 +15,13 @@ namespace big
 		{
 			TRY_CLAUSE
 			{
-				player_menu::critical_boost();
+				player::critical_boost();
+				player::infinite_stamina();
+				player::invulnerable();
+				player::easy_part_breaker();
+				player::part_breaker();
+				player::max_armor_skill();
+				player::max_stat_bonus();
 			}
 			EXCEPT_CLAUSE
 			script::get_current()->yield();

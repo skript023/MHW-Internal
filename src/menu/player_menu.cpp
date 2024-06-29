@@ -3,7 +3,6 @@
 #include "player_menu.h"
 #include "settings.hpp"
 #include "utility/mhw.hpp"
-#include <hook_manager.hpp>
 
 namespace big
 {
@@ -11,45 +10,41 @@ namespace big
 	{
 		ImGui::BeginGroup();
 
-		if (ImGui::Checkbox("Invulnerable", &g_settings->player.invulnerable))
-			player_menu::invulnerable();
+		ImGui::Checkbox("Invulnerable", &g_settings->player.invulnerable);
 
-		if (ImGui::Checkbox("Inf Stamina", &g_settings->player.inf_stamina))
-			player_menu::infinite_stamina();
+		ImGui::Checkbox("Inf Stamina", &g_settings->player.inf_stamina);
+
+		ImGui::EndGroup();
+
+		ImGui::SameLine(200.f);
+
+		ImGui::BeginGroup();
+
+		ImGui::Checkbox("Part Breaker", &g_settings->player.part_breaker);
+
+		ImGui::Checkbox("Easy Part Breaker", &g_settings->player.easy_part_breaker);
+
+		ImGui::EndGroup();
+		
+		ImGui::BeginGroup();
+
+		ImGui::Checkbox("Maxed Stat Set", &g_settings->player.maxed_stat_set);
+
+		ImGui::Checkbox("Maxed Armor Effect", &g_settings->player.maxed_armor_effect);
+
+		ImGui::EndGroup();
+
+		ImGui::Separator();
+
+		ImGui::BeginGroup();
+
+		ImGui::InputFloat("Critical Boost", &g_settings->player.critical_boost, 1.f, 1000.f);
+		ImGui::InputInt("MR EXP Mult", &g_settings->player.mr_ex_mult, 1, 1000);
+		ImGui::InputInt("HR EXP Mult", &g_settings->player.hr_ex_mult, 1, 1000);
 
 		ImGui::EndGroup();
 
 		ImGui::EndTabItem();
 	}
-    void player_menu::invulnerable()
-	{
-		if (g_settings->player.invulnerable)
-		{
-			g_hook_manager->m_player_anim.apply();
-			g_hook_manager->m_player_state.apply();
-			g_hook_manager->m_player_health.apply();
-		}
-		else
-		{
-			g_hook_manager->m_player_anim.restore();
-			g_hook_manager->m_player_state.restore();
-			g_hook_manager->m_player_health.restore();
-		}
-	}
-	void player_menu::infinite_stamina()
-	{
-		if (g_settings->player.inf_stamina)
-		{
-			g_hook_manager->m_player_stamina.apply();
-		}
-		else
-		{
-			g_hook_manager->m_player_stamina.restore();
-		}
-	}
-	void player_menu::critical_boost()
-	{
-		auto addr = (*g_pointers->m_critical_boost);
-		*(float*)((uintptr_t)addr + 0x7A8) = 990.f;
-	}
+    
 }

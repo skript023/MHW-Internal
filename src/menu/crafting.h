@@ -6,8 +6,11 @@ namespace big
 	class crafting
 	{
 	public:
+		crafting() = delete;
+		~crafting() = delete;
+
 		static void render_menu();
-	private:
+	public:
 		static void reveal_monster();
 	};
 }

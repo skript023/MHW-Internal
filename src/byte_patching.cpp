@@ -17,16 +17,26 @@ namespace big
     }
     void byte_patching::apply() const
     {
+        if (m_is_applied)
+            return;
+
         DWORD oldProtect;
         VirtualProtect(m_address, m_size, PAGE_EXECUTE_READWRITE, &oldProtect);
         memcpy(m_address, m_value.get(), m_size);
         VirtualProtect(m_address, m_size, oldProtect, &oldProtect);
+
+        memset(const_cast<bool*>(&m_is_applied), true, sizeof(bool));
     }
     void byte_patching::restore() const
     {
+        if (!m_is_applied)
+            return;
+
         DWORD oldProtect;
         VirtualProtect(m_address, m_size, PAGE_EXECUTE_READWRITE, &oldProtect);
         memcpy(m_address, m_original_bytes.get(), m_size);
         VirtualProtect(m_address, m_size, oldProtect, &oldProtect);
+
+        memset(const_cast<bool*>(&m_is_applied), false, sizeof(bool));
     }
 }
