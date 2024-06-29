@@ -8,9 +8,9 @@ namespace big
     public:
         template <typename... Args>
         mid_function_hook(void* target_address, std::vector<byte> new_code, Args... args)
-            : m_target_address(target_address), m_new_code(new_code)
+            : m_target_address(target_address), m_new_code(new_code), m_nop(0), m_is_nop(false)
         {
-            add_args_to_new_code(args...);
+            (add_args_to_new_code(std::forward<Args>(args)), ...);
             initialize();
         }
 
