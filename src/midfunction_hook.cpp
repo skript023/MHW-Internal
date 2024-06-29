@@ -2,24 +2,6 @@
 
 namespace big
 {
-	mid_function_hook::mid_function_hook(void* target_address, std::vector<byte> new_code)
-        : m_target_address(target_address), m_new_code(new_code)
-    {
-        initialize();
-    }
-    mid_function_hook::mid_function_hook(void* target_address, std::vector<byte> new_code, int nop)
-        : m_target_address(target_address), m_new_code(new_code), m_nop(nop)
-    {
-        initialize();
-    }
-    mid_function_hook::mid_function_hook(void* target_address, const std::vector<byte>& new_code, float data)
-        : m_target_address(target_address)
-    {
-        std::vector<byte> floatBytes = floatToBytes(data);
-        m_new_code = new_code;
-        m_new_code.insert(m_new_code.end(), floatBytes.begin(), floatBytes.end());
-        initialize();
-    }
     mid_function_hook::~mid_function_hook()
     {
         restore();
@@ -73,15 +55,18 @@ namespace big
             (byte)((relative_address >> 24) & 0xFF)
         };
 
-        if (m_nop)
+        if (m_is_nop && m_nop > 0)
         {
             jmp_newmem.insert(jmp_newmem.end(), m_nop, 0x90);
+
+            m_nop = 0;
+            m_is_nop = false;
         }
 
-        LOG(HACKER) << "Return address: " << "0x" << std::hex << return_address;
+        /*LOG(HACKER) << "Return address: " << "0x" << std::hex << return_address;
         LOG(HACKER) << "Jump address: " << "0x" << std::hex << relative_address;
         LOG(HACKER) << "Allocated address: " << "0x" << std::hex << m_new_code_address;
-        LOG(HACKER) << "Target address: " << "0x" << std::hex << m_target_address;
+        LOG(HACKER) << "Target address: " << "0x" << std::hex << m_target_address;*/
 
         // Patch the original function with the jump to the new code
         m_patch = std::make_unique<byte_patching>(m_target_address, jmp_newmem);
@@ -112,6 +97,12 @@ namespace big
         throw std::runtime_error("Failed to allocate memory near target address.");
     }
     std::vector<byte> mid_function_hook::floatToBytes(float value)
+    {
+        std::vector<byte> bytes(sizeof(value));
+        memcpy(bytes.data(), &value, sizeof(value));
+        return bytes;
+    }
+    std::vector<byte> mid_function_hook::intToBytes(int value)
     {
         std::vector<byte> bytes(sizeof(value));
         memcpy(bytes.data(), &value, sizeof(value));
