@@ -27,5 +27,7 @@ namespace big
 		static void max_stat_bonus();
 
 		static void max_armor_skill();
+
+		static void max_sharpness();
 	};
 }

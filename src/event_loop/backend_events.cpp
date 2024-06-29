@@ -22,6 +22,7 @@ namespace big
 				player::part_breaker();
 				player::max_armor_skill();
 				player::max_stat_bonus();
+				player::max_sharpness();
 			}
 			EXCEPT_CLAUSE
 			script::get_current()->yield();

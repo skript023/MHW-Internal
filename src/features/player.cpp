@@ -79,4 +79,15 @@ namespace big
 			g_hook_manager->m_maxed_effect_set.restore();
 		}
 	}
+	void player::max_sharpness()
+	{
+		if (g_settings->player.max_sharpness)
+		{
+			g_hook_manager->m_max_sharpness.apply();
+		}
+		else
+		{
+			g_hook_manager->m_max_sharpness.restore();
+		}
+	}
 }

@@ -17,6 +17,7 @@ namespace big
 			bool invulnerable = true;
 			bool inf_stamina = true;
 			bool reveal_monster = false;
+			bool max_sharpness = false;
 			bool easy_part_breaker = false;
 			bool maxed_stat_set = false;
 			bool maxed_armor_effect = false;
@@ -26,7 +27,19 @@ namespace big
 			int mr_ex_mult = 1;
 			float critical_boost = 1.25f;
 
-			NLOHMANN_DEFINE_TYPE_INTRUSIVE(player, invulnerable, inf_stamina, reveal_monster, inf_item, hr_ex_mult, critical_boost, easy_part_breaker, part_breaker, maxed_stat_set, maxed_armor_effect);
+			NLOHMANN_DEFINE_TYPE_INTRUSIVE(player, 
+				invulnerable, 
+				inf_stamina, 
+				reveal_monster, 
+				inf_item, 
+				hr_ex_mult, 
+				critical_boost, 
+				easy_part_breaker, 
+				part_breaker, 
+				maxed_stat_set, 
+				maxed_armor_effect,
+				max_sharpness
+			);
 		} player;
 
 		struct crafting

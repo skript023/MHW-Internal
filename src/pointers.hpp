@@ -33,6 +33,7 @@ namespace big
 		void* m_highrank_exp{};
 		void* m_maxed_effect_set{};
 		void* m_maxed_attribute{};
+		void* m_max_sharpness{};
 	private:
 		functions::create_d3d11_device_and_swapchain_t create_device_and_swapchain{};
 		bool get_swapchain();

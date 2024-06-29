@@ -92,6 +92,11 @@ namespace big
 			m_maxed_attribute = ptr.as<void*>();
 		});
 		
+		main_batch.add("Max Sharpness", "8B B9 F8 20 00 00", [this](memory::handle ptr)
+		{
+			m_max_sharpness = ptr.as<void*>();
+		});
+		
 		main_batch.run(memory::module(nullptr));
 
 		this->m_hwnd = FindWindow(WINDOW_CLASS, WINDOW_NAME);

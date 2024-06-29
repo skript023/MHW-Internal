@@ -14,6 +14,7 @@ namespace big
 		mid_function_hook m_reveal_monster;
 		mid_function_hook m_maxed_effect_set;
 		mid_function_hook m_maxed_attribute;
+		mid_function_hook m_max_sharpness;
 	public:
 		byte_patching m_player_state;
 		byte_patching m_player_anim;
