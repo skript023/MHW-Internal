@@ -14,6 +14,8 @@ namespace big
 
 		ImGui::Checkbox("Inf Stamina", &g_settings->player.inf_stamina);
 
+		ImGui::Checkbox("Max Sharpness", &g_settings->player.max_sharpness);
+
 		ImGui::EndGroup();
 
 		ImGui::SameLine(200.f);
