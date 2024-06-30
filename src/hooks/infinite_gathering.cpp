@@ -6,6 +6,11 @@ namespace big
 	{
 		if (g_settings->player.inf_gathering)
 		{
+			if (*(DWORD64*)(a1 + 0xD0) != 0)
+			{
+				return g_hooking->m_inf_gathering_hook.get_original<decltype(&infinite_gathering)>()(a1, a2);
+			}
+
 			auto temp = *(DWORD64*)(a1 + 0xC8);
 			*(DWORD64*)(a1 + 0xC8) = 0;
 			*(DWORD64*)(a1 + 0xD0) = temp;
