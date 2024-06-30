@@ -97,6 +97,41 @@ namespace big
 			m_max_sharpness = ptr.as<void*>();
 		});
 		
+		main_batch.add("Great Sword Instant Charges", "89 B3 58 23 00 00 C6", [this](memory::handle ptr)
+		{
+			m_gs_inst_chrgs = ptr.as<void*>();
+		});
+		
+		main_batch.add("Inf Frostcraft", "F3 0F 5C C1 0F 2F C2 72", [this](memory::handle ptr)
+		{
+			m_inf_frostcraft = ptr.as<void*>();
+		});
+		
+		main_batch.add("Frostcraft Recharge Drawn", "F3 0F 59 04 C8 F3 0F 58", [this](memory::handle ptr)
+		{
+			m_frostcraft_drawn = ptr.as<void*>();
+		});
+		
+		main_batch.add("Frostcraft Recharge Heat", "F3 0F 59 84 C8 34 07 00 00", [this](memory::handle ptr)
+		{
+			m_frostcraft_heat = ptr.as<void*>();
+		});
+		
+		main_batch.add("Inf Gathering", "40 53 48 83 EC 30 80 B9 ? ? ? ? ? 48 8B DA F2 0F 10 05", [this](memory::handle ptr)
+		{
+			m_inf_gathering = ptr.as<void*>();
+		});
+		
+		main_batch.add("Mount Reset", "F3 0F 10 81 70 C1 01 00 C3", [this](memory::handle ptr)
+		{
+			m_mount_reset = ptr.as<void*>();
+		});
+		
+		main_batch.add("Inf Reset", "73 06 F3 0F 11 51 38", [this](memory::handle ptr)
+		{
+			m_inf_mount = ptr.as<void*>();
+		});
+		
 		main_batch.run(memory::module(nullptr));
 
 		this->m_hwnd = FindWindow(WINDOW_CLASS, WINDOW_NAME);

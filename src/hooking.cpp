@@ -22,7 +22,8 @@ namespace big
 		m_consumable_hook("Consumable", g_pointers->m_consumable, &hooks::consumable),
 		m_use_item_hook("Use Item", g_pointers->m_use_item, &hooks::use_item),
 		m_master_rank_mult_hook("Master Rank EXP Mult", g_pointers->m_master_rank_exp, &hooks::master_rank_experience),
-		m_highrank_mult_hook("High Rank EXP Mult", g_pointers->m_highrank_exp, &hooks::high_rank_experience)
+		m_highrank_mult_hook("High Rank EXP Mult", g_pointers->m_highrank_exp, &hooks::high_rank_experience),
+		m_inf_gathering_hook("High Rank EXP Mult", g_pointers->m_inf_gathering, &hooks::high_rank_experience)
 	{
 		g_hooking = this;
 	}
@@ -50,6 +51,7 @@ namespace big
 		m_use_item_hook.enable();
 		m_highrank_mult_hook.enable();
 		m_master_rank_mult_hook.enable();
+		m_inf_gathering_hook.enable();
 
 		m_enabled = true;
 	}
@@ -58,6 +60,7 @@ namespace big
 	{
 		m_enabled = false;
 
+		m_inf_gathering_hook.disable();
 		m_master_rank_mult_hook.disable();
 		m_highrank_mult_hook.disable();
 		m_consumable_hook.disable();

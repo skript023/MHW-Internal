@@ -20,9 +20,6 @@ namespace big
     }
     void mid_function_hook::initialize()
     {
-        m_original_bytes = std::make_unique<byte[]>(5);  // Assuming 5 bytes for the jump
-        memcpy(m_original_bytes.get(), m_target_address, 5);
-
         // Allocate memory for new code near target address
         m_new_code_address = allocate_executable_memory(m_target_address, m_new_code.size() + 0x1024);
 
@@ -55,6 +52,7 @@ namespace big
             (byte)((relative_address >> 24) & 0xFF)
         };
 
+        // Add nop if is nop true
         if (m_is_nop && m_nop > 0)
         {
             jmp_newmem.insert(jmp_newmem.end(), m_nop, 0x90);
@@ -63,11 +61,6 @@ namespace big
             m_is_nop = false;
         }
 
-        /*LOG(HACKER) << "Return address: " << "0x" << std::hex << return_address;
-        LOG(HACKER) << "Jump address: " << "0x" << std::hex << relative_address;
-        LOG(HACKER) << "Allocated address: " << "0x" << std::hex << m_new_code_address;
-        LOG(HACKER) << "Target address: " << "0x" << std::hex << m_target_address;*/
-
         // Patch the original function with the jump to the new code
         m_patch = std::make_unique<byte_patching>(m_target_address, jmp_newmem);
     }
@@ -75,11 +68,11 @@ namespace big
     {
         SYSTEM_INFO sysInfo;
         GetSystemInfo(&sysInfo);
-        uintptr_t startAddress = (uintptr_t)target - 0x7FFFFF00;  // 2GB lower
-        uintptr_t endAddress = (uintptr_t)target + 0x7FFFFF00;    // 2GB higher
+        uintptr_t start = (uintptr_t)target - 0x7FFFFF00;  // 2GB lower
+        uintptr_t end = (uintptr_t)target + 0x7FFFFF00;    // 2GB higher
 
-        uintptr_t address = startAddress;
-        while (address < endAddress)
+        uintptr_t address = start;
+        while (address < end)
         {
             if (address > (uintptr_t)target)
             {

@@ -90,4 +90,26 @@ namespace big
 			g_hook_manager->m_max_sharpness.restore();
 		}
 	}
+	void player::mount_reset()
+	{
+		if (g_settings->player.mount_reset)
+		{
+			g_hook_manager->m_mount_reset.apply();
+		}
+		else
+		{
+			g_hook_manager->m_mount_reset.restore();
+		}
+	}
+	void player::inf_mount()
+	{
+		if (g_settings->player.inf_mount)
+		{
+			g_hook_manager->m_inf_mount.apply();
+		}
+		else
+		{
+			g_hook_manager->m_inf_mount.restore();
+		}
+	}
 }

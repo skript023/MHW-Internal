@@ -34,6 +34,13 @@ namespace big
 		void* m_maxed_effect_set{};
 		void* m_maxed_attribute{};
 		void* m_max_sharpness{};
+		void* m_gs_inst_chrgs{};
+		void* m_inf_frostcraft{};
+		void* m_frostcraft_drawn{};
+		void* m_frostcraft_heat{};
+		void* m_inf_gathering{};
+		void* m_mount_reset{};
+		void* m_inf_mount{};
 	private:
 		functions::create_d3d11_device_and_swapchain_t create_device_and_swapchain{};
 		bool get_swapchain();

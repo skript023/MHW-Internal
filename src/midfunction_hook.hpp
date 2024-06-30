@@ -31,6 +31,11 @@ namespace big
                 std::vector<byte> floatBytes = floatToBytes(arg);
                 m_new_code.insert(m_new_code.end(), floatBytes.begin(), floatBytes.end());
             }
+            else if constexpr (std::is_same_v<T, float*>)
+            {
+                byte* data = reinterpret_cast<byte*>(&arg);
+                m_new_code.insert(m_new_code.end(), data, data + sizeof(float));
+            }
             else if constexpr (std::is_same_v<T, int>)
             {
                 if (m_is_nop)
@@ -42,6 +47,11 @@ namespace big
                     std::vector<byte> intBytes = intToBytes(arg);
                     m_new_code.insert(m_new_code.end(), intBytes.begin(), intBytes.end());
                 }
+            }
+            else if constexpr (std::is_same_v<T, int*>)
+            {
+                byte* data = reinterpret_cast<byte*>(&arg);
+                m_new_code.insert(m_new_code.end(), data, data + sizeof(int));
             }
             else if constexpr (std::is_same_v<T, bool>)
             {

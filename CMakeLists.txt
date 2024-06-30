@@ -41,7 +41,6 @@ source_group(TREE ${SRC_DIR} PREFIX "src" FILES ${SRC_MAIN} )
 target_include_directories(MHW PRIVATE 
     "${SRC_DIR}"
     "${json_SOURCE_DIR}/single_include"
-    "${gtav_classes_SOURCE_DIR}"
     "${imgui_SOURCE_DIR}"
 )
 

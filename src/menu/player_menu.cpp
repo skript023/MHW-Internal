@@ -14,7 +14,9 @@ namespace big
 
 		ImGui::Checkbox("Inf Stamina", &g_settings->player.inf_stamina);
 
-		ImGui::Checkbox("Max Sharpness", &g_settings->player.max_sharpness);
+		ImGui::Checkbox("Inf Mounting", &g_settings->player.inf_mount);
+
+		ImGui::Checkbox("Inf Gathering", &g_settings->player.inf_gathering);
 
 		ImGui::EndGroup();
 
@@ -26,13 +28,7 @@ namespace big
 
 		ImGui::Checkbox("Easy Part Breaker", &g_settings->player.easy_part_breaker);
 
-		ImGui::EndGroup();
-		
-		ImGui::BeginGroup();
-
-		ImGui::Checkbox("Maxed Stat Set", &g_settings->player.maxed_stat_set);
-
-		ImGui::Checkbox("Maxed Armor Effect", &g_settings->player.maxed_armor_effect);
+		ImGui::Checkbox("Reset Mounting", &g_settings->player.mount_reset);
 
 		ImGui::EndGroup();
 

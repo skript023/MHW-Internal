@@ -1,6 +1,7 @@
 #pragma once
-#include "menu/player_menu.h"
 #include "menu/crafting.h"
+#include "menu/player_menu.h"
+#include "menu/weapon_menu.h"
 #include "menu/setting_menu.h"
 
 namespace big
@@ -11,7 +12,7 @@ namespace big
 		MAIN,
 		PLAYER_MENU,
 		CRAFTING,
-		ITEM_MANAGER,
+		WEAPON,
 
 		SETTING,
 		GUI_SETTINGS,
@@ -33,12 +34,14 @@ namespace big
 		bool switched_view = true;
 
 		std::map<tabs, navigation_struct> nav = {
-			{tabs::MAIN, { "Main", nullptr, {
-				{ tabs::PLAYER_MENU, { "Player", player_menu::render_menu }},
-				{tabs::CRAFTING, { "Crafting", crafting::render_menu}}
+			{tabs::PLAYER_MENU, { "Player", player_menu::render_menu, {
+
 			}}},
-			{tabs::ITEM_MANAGER, { "Item Manager", nullptr, {
-				
+			{tabs::WEAPON, { "Weapon", weapon_menu::render_menu, {
+
+			}}},
+			{tabs::CRAFTING, { "Crafting", crafting::render_menu, {
+
 			}}},
 			{tabs::SETTING, { "Settings", nullptr, {
 				{ tabs::GUI_SETTINGS, { "Menu Settings", setting_menu::gui_settings}},

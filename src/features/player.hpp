@@ -29,5 +29,9 @@ namespace big
 		static void max_armor_skill();
 
 		static void max_sharpness();
+
+		static void mount_reset();
+
+		static void inf_mount();
 	};
 }

@@ -26,6 +26,7 @@ namespace big
 		static void __fastcall use_item(__int64* rcx, unsigned char r8l);
 		static __int64 __fastcall master_rank_experience(__int64 a1, unsigned int a2, char a3);
 		static __int64 __fastcall high_rank_experience(__int64 a1, int a2);
+		static __int64 __fastcall infinite_gathering(__int64 a1, __int64 a2);
 	};
 
 	struct minhook_keepalive
@@ -61,6 +62,7 @@ namespace big
 		detour_hook m_use_item_hook;
 		detour_hook m_master_rank_mult_hook;
 		detour_hook m_highrank_mult_hook;
+		detour_hook m_inf_gathering_hook;
 	};
 
 	inline hooking* g_hooking{};

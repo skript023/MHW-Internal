@@ -23,8 +23,13 @@ namespace big
 			bool maxed_armor_effect = false;
 			bool part_breaker = false;
 			bool inf_item = false;
+			bool inf_mount = false;
+			bool mount_reset = false;
+			bool inf_gathering = false;
+
 			int hr_ex_mult = 1;
 			int mr_ex_mult = 1;
+
 			float critical_boost = 1.25f;
 
 			NLOHMANN_DEFINE_TYPE_INTRUSIVE(player, 
@@ -38,9 +43,24 @@ namespace big
 				part_breaker, 
 				maxed_stat_set, 
 				maxed_armor_effect,
-				max_sharpness
+				max_sharpness,
+				inf_mount,
+				mount_reset,
+				inf_gathering
 			);
 		} player;
+
+		struct weapon
+		{
+			bool inst_chrgs_gs = false;
+			bool inf_frostcraft = false;
+			bool frostcraft_recharge = false;
+
+			float frostcraft_drawn = 1.5f;
+			float frostcraft_heat = 30.f;
+
+			NLOHMANN_DEFINE_TYPE_INTRUSIVE(weapon, inst_chrgs_gs, inf_frostcraft, frostcraft_recharge, frostcraft_drawn, frostcraft_heat);
+		} weapon;
 
 		struct crafting
 		{
@@ -181,6 +201,6 @@ namespace big
 			return true;
 		}
 
-		NLOHMANN_DEFINE_TYPE_INTRUSIVE(settings, crafting, window, player);
+		NLOHMANN_DEFINE_TYPE_INTRUSIVE(settings, crafting, window, player, weapon);
 	};
 }
