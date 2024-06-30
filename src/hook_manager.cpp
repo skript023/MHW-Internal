@@ -16,6 +16,7 @@ namespace big
 		m_frostcraft_drawn(g_pointers->m_frostcraft_drawn, { 0xF3, 0x0F, 0x59, 0x05 }, &g_settings->weapon.frostcraft_drawn),
 		m_frostcraft_heat(g_pointers->m_frostcraft_heat, { 0xF3, 0x0F, 0x59, 0x05 }, &g_settings->weapon.frostcraft_heat, true, 4),
 		m_mount_reset(g_pointers->m_mount_reset, { 0xC7 ,0x81 ,0x70 ,0xC1 ,0x01 ,0x00 ,0x00 ,0x00 ,0x00 ,0x00 ,0xF3 ,0x0F ,0x10 ,0x81 ,0x70 ,0xC1 ,0x01 ,0x00 }, true, 3),
+		m_research_exp(g_pointers->m_research_exp, { 0xF3 ,0x0F ,0x59 ,0x35 }, &g_settings->player.research_exp, std::vector<byte>{ 0xF3 ,0x0F ,0x58 ,0xC6 ,0x49 ,0xC1 ,0xEF ,0x05 }, true, 3),
 		/*byte patching*/
 		m_player_state(g_pointers->m_player_state, { 0x90, 0x90, 0x90, 0x90, 0x90 }),
 		m_player_anim(g_pointers->m_player_anim, { 0x90, 0x90, 0x90, 0x90, 0x90 }),
@@ -39,11 +40,14 @@ namespace big
 		m_inf_frostcraft.restore();
 		m_frostcraft_drawn.restore();
 		m_frostcraft_heat.restore();
+		m_mount_reset.restore();
+		m_research_exp.restore();
 		/*byte patching*/
 		m_player_anim.restore();
 		m_player_health.restore();
 		m_player_state.restore();
 		m_player_stamina.restore();
+		m_inf_mount.restore();
 
 		g_hook_manager = nullptr;
 	}

@@ -26,11 +26,13 @@ namespace big
 			bool inf_mount = false;
 			bool mount_reset = false;
 			bool inf_gathering = false;
+			bool research_exp_mult = false;
 
 			int hr_ex_mult = 1;
 			int mr_ex_mult = 1;
 
 			float critical_boost = 1.25f;
+			float research_exp = 2.f;
 
 			NLOHMANN_DEFINE_TYPE_INTRUSIVE(player, 
 				invulnerable, 
@@ -46,7 +48,8 @@ namespace big
 				max_sharpness,
 				inf_mount,
 				mount_reset,
-				inf_gathering
+				inf_gathering,
+				research_exp_mult
 			);
 		} player;
 

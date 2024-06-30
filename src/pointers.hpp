@@ -41,6 +41,7 @@ namespace big
 		void* m_inf_gathering{};
 		void* m_mount_reset{};
 		void* m_inf_mount{};
+		void* m_research_exp{};
 	private:
 		functions::create_d3d11_device_and_swapchain_t create_device_and_swapchain{};
 		bool get_swapchain();

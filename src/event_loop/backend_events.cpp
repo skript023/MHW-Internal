@@ -26,6 +26,7 @@ namespace big
 				player::max_sharpness();
 				player::mount_reset();
 				player::inf_mount();
+				player::research_exp();
 			}
 			EXCEPT_CLAUSE
 			script::get_current()->yield();

@@ -112,4 +112,15 @@ namespace big
 			g_hook_manager->m_inf_mount.restore();
 		}
 	}
+	void player::research_exp()
+	{
+		if (g_settings->player.research_exp_mult)
+		{
+			g_hook_manager->m_research_exp.apply();
+		}
+		else
+		{
+			g_hook_manager->m_research_exp.restore();
+		}
+	}
 }

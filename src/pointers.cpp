@@ -132,6 +132,11 @@ namespace big
 			m_inf_mount = ptr.as<void*>();
 		});
 		
+		main_batch.add("Reserch EXP Multiplier", "F3 0F 58 C6 49 C1 EF 05", [this](memory::handle ptr)
+		{
+			m_research_exp = ptr.as<void*>();
+		});
+		
 		main_batch.run(memory::module(nullptr));
 
 		this->m_hwnd = FindWindow(WINDOW_CLASS, WINDOW_NAME);

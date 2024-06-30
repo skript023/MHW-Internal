@@ -53,6 +53,11 @@ namespace big
                 byte* data = reinterpret_cast<byte*>(&arg);
                 m_new_code.insert(m_new_code.end(), data, data + sizeof(int));
             }
+            else if constexpr (std::is_same_v <T, std::vector<byte>>)
+            {
+                std::vector<byte> next(arg);
+                m_new_code.insert(m_new_code.end(), next.begin(), next.end());
+            }
             else if constexpr (std::is_same_v<T, bool>)
             {
                 m_is_nop = arg;

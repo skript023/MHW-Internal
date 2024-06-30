@@ -33,5 +33,7 @@ namespace big
 		static void mount_reset();
 
 		static void inf_mount();
+
+		static void research_exp();
 	};
 }

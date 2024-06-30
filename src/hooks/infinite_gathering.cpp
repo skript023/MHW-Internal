@@ -4,7 +4,7 @@ namespace big
 {
 	__int64 __fastcall hooks::infinite_gathering(__int64 a1, __int64 a2)
 	{
-		if (g_settings->crafting.inf_gathering)
+		if (g_settings->player.inf_gathering)
 		{
 			auto temp = *(DWORD64*)(a1 + 0xC8);
 			*(DWORD64*)(a1 + 0xC8) = 0;
