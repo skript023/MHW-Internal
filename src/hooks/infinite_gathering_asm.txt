@@ -1,0 +1,15 @@
+EXTERN g_infinite_gather_ret_addr: DQ
+
+.CODE
+	infinite_gather PROC
+		cmp qword ptr [rcx + 208], 00
+		jne label_1
+		mov rax,[rcx + 200]
+		mov rbx, 0
+		mov [rcx + 200], rbx
+		mov [rcx + 208], rax
+		mov rax, 0
+	label_1:
+		jmp g_infinite_gather_ret_addr
+	infinite_gather ENDP
+END

@@ -7,24 +7,24 @@ namespace big
     {
     public:
         template <typename... Args>
-        mid_function_hook(void* target_address, std::vector<byte> new_code, Args... args)
-            : m_target_address(target_address), m_new_code(new_code), m_nop(0), m_is_nop(false)
+        mid_function_hook(void* target_address, std::vector<byte> new_code, Args... args): 
+            m_target_address(target_address), m_new_code(new_code), m_nop_count(0), m_is_nop(false)
         {
-            (add_args_to_new_code(std::forward<Args>(args)), ...);
-            initialize();
+            (parse_args(std::forward<Args>(args)), ...);
         }
 
-        void apply() const;
+        void apply();
 
-        void restore() const;
+        void restore();
 
         ~mid_function_hook();
 
     private:
+        void allocate();
         void initialize();
         void* allocate_executable_memory(void* target, size_t size);
         template <typename T>
-        void add_args_to_new_code(T arg)
+        void parse_args(T arg)
         {
             if constexpr (std::is_same_v<T, float>)
             {
@@ -33,14 +33,15 @@ namespace big
             }
             else if constexpr (std::is_same_v<T, float*>)
             {
-                byte* data = reinterpret_cast<byte*>(&arg);
-                m_new_code.insert(m_new_code.end(), data, data + sizeof(float));
+                m_float_address = arg;
+
+                m_new_code.resize(m_new_code.size() + sizeof(float), 0x00);
             }
             else if constexpr (std::is_same_v<T, int>)
             {
                 if (m_is_nop)
                 {
-                    m_nop = arg; // Set NOP count if boolean flag is set
+                    m_nop_count = arg; // Set NOP count if boolean flag is set
                 }
                 else
                 {
@@ -50,12 +51,14 @@ namespace big
             }
             else if constexpr (std::is_same_v<T, int*>)
             {
-                byte* data = reinterpret_cast<byte*>(&arg);
-                m_new_code.insert(m_new_code.end(), data, data + sizeof(int));
+                m_int_address = arg;
+
+                m_new_code.resize(m_new_code.size() + sizeof(int), 0x00);
             }
             else if constexpr (std::is_same_v <T, std::vector<byte>>)
             {
                 std::vector<byte> next(arg);
+
                 m_new_code.insert(m_new_code.end(), next.begin(), next.end());
             }
             else if constexpr (std::is_same_v<T, bool>)
@@ -65,22 +68,28 @@ namespace big
             // Add more argument types as needed
         }
         template <typename T, typename... Args>
-        void add_args_to_new_code(T arg, Args... args)
+        void parse_args(T arg, Args... args)
         {
-            add_args_to_new_code(arg);
-            add_args_to_new_code(args...);
+            parse_args(arg);
+            parse_args(args...);
         }
         // Helper function to convert a float to a byte array
         std::vector<byte> floatToBytes(float value);
         std::vector<byte> intToBytes(int value);
 
-        int m_nop;
         bool m_is_nop;
+        bool m_is_applied;
+
+        int m_nop_count;
+
         void* m_value;
         void* m_target_address;
-        std::unique_ptr<byte[]> m_original_bytes;
-        void* m_new_code_address;
+        void* m_int_address = nullptr;
+        void* m_float_address = nullptr;
+        void* m_new_code_address = nullptr;
+
         std::vector<byte> m_new_code;
+        std::unique_ptr<byte[]> m_original_bytes;
         std::unique_ptr<byte_patching> m_patch;
     };
 }

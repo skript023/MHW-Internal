@@ -3,6 +3,8 @@
 #include "detour_hook.hpp"
 #include "vmt_hook.hpp"
 
+#include "class/fwddec.hpp"
+
 namespace big
 {
 	struct hooks
@@ -26,7 +28,8 @@ namespace big
 		static void __fastcall use_item(__int64* rcx, unsigned char r8l);
 		static __int64 __fastcall master_rank_experience(__int64 a1, unsigned int a2, char a3);
 		static __int64 __fastcall high_rank_experience(__int64 a1, int a2);
-		static __int64 __fastcall infinite_gathering(__int64 a1, __int64 a2);
+		static __int64 __fastcall infinite_gathering(Monster* a1, __int64 a2);
+		static void __fastcall research_experience(__int64 a1, unsigned int a2, float a3);
 	};
 
 	struct minhook_keepalive
@@ -63,6 +66,9 @@ namespace big
 		detour_hook m_master_rank_mult_hook;
 		detour_hook m_highrank_mult_hook;
 		detour_hook m_inf_gathering_hook;
+		detour_hook m_research_exp_hook;
+		detour_hook m_frostcraft_drawn_hook;
+		detour_hook m_frostcraft_sheathed_hook;
 	};
 
 	inline hooking* g_hooking{};

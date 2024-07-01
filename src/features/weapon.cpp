@@ -1,6 +1,11 @@
 #include "weapon.hpp"
 #include "hook_manager.hpp"
 
+float g_frostcraft_drawn;
+float g_frostcraft_sheathed;
+ bool g_is_frostcraft_drawn;
+ bool g_is_frostcraft_sheathed;
+
 namespace big
 {
 	void weapon::infinite_frostcraft()
@@ -16,16 +21,10 @@ namespace big
 	}
 	void weapon::frostcraft_recharge()
 	{
-		if (g_settings->weapon.frostcraft_recharge)
-		{
-			g_hook_manager->m_frostcraft_drawn.apply();
-			g_hook_manager->m_frostcraft_heat.apply();
-		}
-		else
-		{
-			g_hook_manager->m_frostcraft_drawn.restore();
-			g_hook_manager->m_frostcraft_heat.restore();
-		}
+		g_is_frostcraft_drawn = g_settings->weapon.frostcraft_recharge;
+		g_is_frostcraft_sheathed = g_settings->weapon.frostcraft_recharge;
+		g_frostcraft_drawn = g_settings->weapon.frostcraft_drawn;
+		g_frostcraft_sheathed = g_settings->weapon.frostcraft_heat;
 	}
 	void weapon::instant_charges_greater_sword()
 	{

@@ -3,6 +3,9 @@
 #include "pointers.hpp"
 #include "memory/all.hpp"
 
+uintptr_t g_frostcraft_drawn_ret_addr;
+uintptr_t g_frostcraft_sheathed_ret_addr;
+
 namespace big
 {
 	pointers::pointers(): m_resolution(new iVector2(1920, 1080)), m_base_address(memory::module(nullptr).begin().as<uint64_t>())
@@ -110,11 +113,13 @@ namespace big
 		main_batch.add("Frostcraft Recharge Drawn", "F3 0F 59 04 C8 F3 0F 58", [this](memory::handle ptr)
 		{
 			m_frostcraft_drawn = ptr.as<void*>();
+			g_frostcraft_drawn_ret_addr = (uintptr_t)ptr.as<void*>();
 		});
 		
 		main_batch.add("Frostcraft Recharge Heat", "F3 0F 59 84 C8 34 07 00 00", [this](memory::handle ptr)
 		{
 			m_frostcraft_heat = ptr.as<void*>();
+			g_frostcraft_sheathed_ret_addr = (uintptr_t)ptr.as<void*>();
 		});
 		
 		main_batch.add("Inf Gathering", "40 53 48 83 EC 30 80 B9 ? ? ? ? ? 48 8B DA F2 0F 10 05", [this](memory::handle ptr)
@@ -132,7 +137,7 @@ namespace big
 			m_inf_mount = ptr.as<void*>();
 		});
 		
-		main_batch.add("Reserch EXP Multiplier", "F3 0F 58 C6 49 C1 EF 05", [this](memory::handle ptr)
+		main_batch.add("Reserch EXP Multiplier", "48 89 5C 24 ? 55 56 57 41 55 41 57 48 83 EC 40 0F 29 74 24", [this](memory::handle ptr)
 		{
 			m_research_exp = ptr.as<void*>();
 		});

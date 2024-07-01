@@ -3,6 +3,9 @@
 #include "function_types.hpp"
 #include <class/vector.hpp>
 
+extern "C" uintptr_t g_frostcraft_drawn_ret_addr;
+extern "C" uintptr_t g_frostcraft_sheathed_ret_addr;
+
 namespace big
 {
 	class pointers

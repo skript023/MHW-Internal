@@ -20,10 +20,10 @@ namespace big
         if (m_is_applied)
             return;
 
-        DWORD oldProtect;
-        VirtualProtect(m_address, m_size, PAGE_EXECUTE_READWRITE, &oldProtect);
+        DWORD temp;
+        VirtualProtect(m_address, m_size, PAGE_EXECUTE_READWRITE, &temp);
         memcpy(m_address, m_value.get(), m_size);
-        VirtualProtect(m_address, m_size, oldProtect, &oldProtect);
+        VirtualProtect(m_address, m_size, temp, &temp);
 
         memset(const_cast<bool*>(&m_is_applied), true, sizeof(bool));
     }

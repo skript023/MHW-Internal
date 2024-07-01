@@ -17,10 +17,7 @@ namespace big
 		mid_function_hook m_max_sharpness;
 		mid_function_hook m_gs_inst_chrgs;
 		mid_function_hook m_inf_frostcraft;
-		mid_function_hook m_frostcraft_drawn;
-		mid_function_hook m_frostcraft_heat;
 		mid_function_hook m_mount_reset;
-		mid_function_hook m_research_exp;
 	public:
 		byte_patching m_player_state;
 		byte_patching m_player_anim;

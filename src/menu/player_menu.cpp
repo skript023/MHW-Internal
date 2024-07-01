@@ -36,13 +36,8 @@ namespace big
 
 		ImGui::BeginGroup();
 
-		ImGui::Checkbox("Research EXP", &g_settings->player.research_exp_mult);
-		if (g_settings->player.research_exp_mult)
-		{
-			ImGui::InputFloat("EXP Multiplier", &g_settings->player.research_exp, 1.f, 10.f);
-		}
-
 		ImGui::InputFloat("Critical Boost", &g_settings->player.critical_boost, 1.f, 1000.f);
+		ImGui::InputFloat("EXP Multiplier", &g_settings->player.research_exp, 1.f, 10.f);
 		ImGui::InputInt("MR EXP Mult", &g_settings->player.mr_ex_mult, 1, 1000);
 		ImGui::InputInt("HR EXP Mult", &g_settings->player.hr_ex_mult, 1, 1000);
 
