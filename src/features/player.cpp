@@ -32,7 +32,7 @@ namespace big
 	}
 	void player::critical_boost()
 	{
-		auto addr = (*g_pointers->m_critical_boost);
+		auto addr = (*g_pointers->m_player_stat);
 		*(float*)((uintptr_t)addr + 0x7A8) = g_settings->player.critical_boost;
 	}
 	void player::easy_part_breaker()

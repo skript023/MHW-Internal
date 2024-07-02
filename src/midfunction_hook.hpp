@@ -20,7 +20,6 @@ namespace big
         ~mid_function_hook();
 
     private:
-        void allocate();
         void initialize();
         void* allocate_executable_memory(void* target, size_t size);
         template <typename T>
@@ -86,6 +85,8 @@ namespace big
         void* m_target_address;
         void* m_int_address = nullptr;
         void* m_float_address = nullptr;
+        void* m_allocated_int = nullptr;
+        void* m_allocated_float = nullptr;
         void* m_new_code_address = nullptr;
 
         std::vector<byte> m_new_code;

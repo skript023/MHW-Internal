@@ -9,9 +9,6 @@
 
 #include <MinHook.h>
 
-extern "C" void frostcraft_drawn();
-extern "C" void frostcraft_sheathed();
-
 namespace big
 {
 	hooking::hooking() :
@@ -27,9 +24,7 @@ namespace big
 		m_master_rank_mult_hook("Master Rank EXP Mult", g_pointers->m_master_rank_exp, &hooks::master_rank_experience),
 		m_highrank_mult_hook("High Rank EXP Mult", g_pointers->m_highrank_exp, &hooks::high_rank_experience),
 		m_inf_gathering_hook("High Rank EXP Mult", g_pointers->m_inf_gathering, &hooks::infinite_gathering),
-		m_research_exp_hook("Research EXP Mult", g_pointers->m_research_exp, &hooks::research_experience),
-		m_frostcraft_drawn_hook("Frostcraft Recharge Rate", g_pointers->m_frostcraft_drawn, &frostcraft_drawn),
-		m_frostcraft_sheathed_hook("Frostcraft Recharge Rate", g_pointers->m_frostcraft_heat, &frostcraft_sheathed)
+		m_research_exp_hook("Research EXP Mult", g_pointers->m_research_exp, &hooks::research_experience)
 	{
 		g_hooking = this;
 	}
@@ -59,8 +54,6 @@ namespace big
 		m_master_rank_mult_hook.enable();
 		m_inf_gathering_hook.enable();
 		m_research_exp_hook.enable();
-		/*m_frostcraft_drawn_hook.enable();
-		m_frostcraft_sheathed_hook.enable();*/
 
 		m_enabled = true;
 	}
@@ -69,8 +62,6 @@ namespace big
 	{
 		m_enabled = false;
 
-		/*m_frostcraft_drawn_hook.disable();
-		m_frostcraft_sheathed_hook.disable();*/
 		m_research_exp_hook.disable();
 		m_inf_gathering_hook.disable();
 		m_master_rank_mult_hook.disable();
@@ -112,7 +103,8 @@ namespace big
 	{
 		if (g_running)
 		{
-			g_renderer->wndproc(hwnd, msg, wparam, lparam);
+			if (g_renderer->wndproc(hwnd, msg, wparam, lparam))
+				return true;
 		}
 
 		return CallWindowProc(g_hooking->m_og_wndproc, hwnd, msg, wparam, lparam);

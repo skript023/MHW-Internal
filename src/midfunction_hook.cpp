@@ -8,6 +8,9 @@ namespace big
     }
     void mid_function_hook::apply()
     {
+        if (m_allocated_float)
+            *(float*)m_allocated_float = *(float*)m_float_address;
+
         if (!m_new_code_address)
         {
             m_new_code_address = allocate_executable_memory(m_target_address, m_new_code.size() + 0x1024);
@@ -15,6 +18,29 @@ namespace big
             if (!m_new_code_address)
             {
                 throw std::runtime_error("Failed to allocate memory for hook.");
+            }
+
+            if (m_float_address)
+            {
+                m_allocated_float = allocate_executable_memory((void*)((uintptr_t)m_new_code_address + 1024), sizeof(float) + 1);
+                memcpy(m_allocated_float, m_float_address, sizeof(void*));
+
+                uintptr_t relative_float_address = (uintptr_t)m_allocated_float - ((uintptr_t)m_new_code_address + sizeof(uint64_t));
+                std::vector<byte> float_address_bytes = intToBytes(relative_float_address);
+                m_new_code[4] = (byte)(relative_float_address & 0xFF);
+                m_new_code[5] = (byte)((relative_float_address >> 8) & 0xFF);
+                m_new_code[6] = (byte)((relative_float_address >> 16) & 0xFF);
+                m_new_code[7] = (byte)((relative_float_address >> 24) & 0xFF);
+
+                LOG(INFO) << "Float address : " << std::hex << m_float_address;
+                LOG(INFO) << "Float rel address : " << std::hex << (uintptr_t)m_float_address - ((uintptr_t)m_new_code_address);
+            }
+
+            if (m_int_address)
+            {
+                uintptr_t relative_int_address = (uintptr_t)m_int_address - ((uintptr_t)m_new_code_address);
+                std::vector<byte> int_address_bytes = intToBytes(relative_int_address);
+                m_new_code.insert(m_new_code.end(), int_address_bytes.begin(), int_address_bytes.end());
             }
 
             // Copy the new code to allocated memory
@@ -65,15 +91,11 @@ namespace big
             VirtualFree(m_new_code_address, 0, MEM_RELEASE);
             m_new_code_address = nullptr;
         }
-    }
-    void mid_function_hook::allocate()
-    {
-        // Allocate memory for new code near target address
-        m_new_code_address = allocate_executable_memory(m_target_address, m_new_code.size() + 0x1024);
 
-        if (!m_new_code_address)
+        if (m_allocated_float)
         {
-            throw std::runtime_error("Failed to allocate memory for hook.");
+            VirtualFree(m_allocated_float, 0, MEM_RELEASE);
+            m_allocated_float = nullptr;
         }
     }
     void mid_function_hook::initialize()

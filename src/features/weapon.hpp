@@ -4,8 +4,8 @@
 
 extern "C" float g_frostcraft_drawn;
 extern "C" float g_frostcraft_sheathed;
-extern "C" bool g_is_frostcraft_drawn;
-extern "C" bool g_is_frostcraft_sheathed;
+//extern "C" bool g_is_frostcraft_drawn;
+//extern "C" bool g_is_frostcraft_sheathed;
 
 namespace big
 {

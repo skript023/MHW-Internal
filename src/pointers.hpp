@@ -3,9 +3,6 @@
 #include "function_types.hpp"
 #include <class/vector.hpp>
 
-extern "C" uintptr_t g_frostcraft_drawn_ret_addr;
-extern "C" uintptr_t g_frostcraft_sheathed_ret_addr;
-
 namespace big
 {
 	class pointers
@@ -25,7 +22,7 @@ namespace big
 		void* m_part_breaker{};
 		void* m_easy_breaker{};
 		void* m_reveal_monster{};
-		uintptr_t** m_critical_boost{};
+		uintptr_t** m_player_stat{};
 		void* m_player_state{};
 		void* m_player_anim{};
 		void* m_player_health{};
