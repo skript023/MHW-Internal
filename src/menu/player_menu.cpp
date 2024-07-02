@@ -30,6 +30,8 @@ namespace big
 
 		ImGui::Checkbox("Reset Mounting", &g_settings->player.mount_reset);
 
+		ImGui::Checkbox("Inf Item Use", &g_settings->player.inf_item);
+
 		ImGui::EndGroup();
 
 		ImGui::Separator();

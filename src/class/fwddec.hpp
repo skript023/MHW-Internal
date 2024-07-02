@@ -17,3 +17,10 @@ struct PlayerStat
 	float m_critical_boost; //0x7A8
 };
 static_assert(sizeof(PlayerStat) == 0x7AC);
+
+struct Consumeable
+{
+	uint64_t field_08; // corresponds to [rax + 0x08]
+	uint32_t field_0C; // corresponds to [rax + 0x0C]
+};
+static_assert(sizeof(Consumeable) == 0x10);

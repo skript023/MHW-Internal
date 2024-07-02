@@ -67,7 +67,7 @@ namespace big
 			m_consumable = ptr.as<void*>();
 		});
 		
-		main_batch.add("Consumable Use", "41 80 F8 01 75 03 89", [this](memory::handle ptr)
+		main_batch.add("Consumable Use", "89 51 0C 85 D2 75 09 41 80 F8 01 75 03 89 51 08", [this](memory::handle ptr)
 		{
 			m_use_item = ptr.as<void*>();
 		});

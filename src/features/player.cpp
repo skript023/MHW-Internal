@@ -114,7 +114,7 @@ namespace big
 	}
 	void player::inf_gathering()
 	{
-		*(unsigned short*)g_pointers->m_gathering_resource = g_settings->player.inf_gathering ? 0x9090 : 0xC8FF;
+		//*(unsigned short*)g_pointers->m_gathering_resource = g_settings->player.inf_gathering ? 0x9090 : 0xC8FF;
 	}
 	void player::inf_lucky_voucher()
 	{

@@ -39,6 +39,9 @@ namespace big
 		m_gs_inst_chrgs.restore();
 		m_inf_frostcraft.restore();
 		m_mount_reset.restore();
+		m_frostcraft_drawn.restore();
+		m_frostcraft_heat.restore();
+		m_lucky_voucher.restore();
 		/*byte patching*/
 		m_player_anim.restore();
 		m_player_health.restore();
