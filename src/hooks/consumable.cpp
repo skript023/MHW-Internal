@@ -6,12 +6,10 @@ namespace big
 	{
 		if (g_settings->player.inf_item)
 		{
-            if (!rax) return g_hooking->m_consumable_hook.get_original<decltype(&hooks::consumable)>()(rax, a2, a3);
+            uint32_t r13 = rax->field_14; // Example interpretation of r13
+            uint32_t r14d = static_cast<uint32_t>(a2);
 
-            auto r13 = rax->field_14; // Example interpretation of r13
-            int r14d = -a2;
-
-            if (r13 == (uintptr_t)rax)
+            if (r13 == (uint32_t)reinterpret_cast<uintptr_t>(rax))
             {
                 return g_hooking->m_consumable_hook.get_original<decltype(&hooks::consumable)>()(rax, a2, a3);
             }
