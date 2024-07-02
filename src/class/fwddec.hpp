@@ -22,5 +22,7 @@ struct Consumeable
 {
 	uint64_t field_08; // corresponds to [rax + 0x08]
 	uint32_t field_0C; // corresponds to [rax + 0x0C]
+	uint32_t field_10; // corresponds to [rax + 0x10]
+	uintptr_t field_14; // corresponds to [rax + 0x14]
 };
-static_assert(sizeof(Consumeable) == 0x10);
+static_assert(sizeof(Consumeable) == 0x18);

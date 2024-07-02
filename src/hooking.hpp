@@ -25,7 +25,7 @@ namespace big
 		static int __fastcall material_handler(uint32_t a1, int a2);
 		static bool __fastcall equipment_crafting(__int64 a1);
 		static void __fastcall consumable(Consumeable* a1, int a2, DWORD* a3);
-		static void __fastcall use_item(__int64* rcx, unsigned char r8l, int8_t a3);
+		static void __fastcall use_item(__int64 rcx, unsigned char r8l, int8_t a3);
 		static __int64 __fastcall master_rank_experience(__int64 a1, unsigned int a2, char a3);
 		static __int64 __fastcall high_rank_experience(__int64 a1, int a2);
 		static __int64 __fastcall infinite_gathering(Monster* a1, __int64 a2);

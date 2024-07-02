@@ -6,10 +6,12 @@ namespace big
 	{
 		if (g_settings->player.inf_item)
 		{
-            uint32_t r13 = *a3; // Example interpretation of r13
-            uint32_t r14d = static_cast<uint32_t>(a2);
+            if (!rax) return g_hooking->m_consumable_hook.get_original<decltype(&hooks::consumable)>()(rax, a2, a3);
 
-            if (r13 == (uint32_t)reinterpret_cast<uintptr_t>(rax))
+            auto r13 = rax->field_14; // Example interpretation of r13
+            int r14d = -a2;
+
+            if (r13 == (uintptr_t)rax)
             {
                 return g_hooking->m_consumable_hook.get_original<decltype(&hooks::consumable)>()(rax, a2, a3);
             }
@@ -22,13 +24,13 @@ namespace big
                 rax->field_0C = 5;
                 break;
             case 0xAF:
-                rax->field_0C = 33;
+                rax->field_0C = 51;
                 break;
             case 0xB0:
             case 0xB1:
             case 0xB2:
             case 0xB4:
-                rax->field_0C = 15;
+                rax->field_0C = 21;
                 break;
             case 0x3AC:
             case 0x3AD:
@@ -39,7 +41,7 @@ namespace big
                 rax->field_0C = 11;
                 break;
             default:
-                if (rax->field_08 <= 0xCC) 
+                if (rax->field_08 > 0xCC)
                 {
                     ++(rax->field_0C);
                 }
