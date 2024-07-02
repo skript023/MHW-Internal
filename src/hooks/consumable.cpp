@@ -9,7 +9,7 @@ namespace big
             uint32_t r13 = *a3; // Example interpretation of r13
             uint32_t r14d = static_cast<uint32_t>(a2);
 
-            if (r13 == reinterpret_cast<uint32_t>(rax)) 
+            if (r13 == (uint32_t)reinterpret_cast<uintptr_t>(rax))
             {
                 return g_hooking->m_consumable_hook.get_original<decltype(&hooks::consumable)>()(rax, a2, a3);
             }
