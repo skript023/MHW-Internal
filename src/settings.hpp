@@ -14,8 +14,8 @@ namespace big
 	public:
 		struct player
 		{
-			bool invulnerable = true;
-			bool inf_stamina = true;
+			bool invulnerable = false;
+			bool inf_stamina = false;
 			bool reveal_monster = false;
 			bool max_sharpness = false;
 			bool easy_part_breaker = false;
@@ -27,6 +27,7 @@ namespace big
 			bool mount_reset = false;
 			bool inf_gathering = false;
 			bool research_exp_mult = false;
+			bool inf_lucky_voucher = false;
 
 			int hr_ex_mult = 1;
 			int mr_ex_mult = 1;

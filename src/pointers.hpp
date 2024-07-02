@@ -39,9 +39,11 @@ namespace big
 		void* m_frostcraft_drawn{};
 		void* m_frostcraft_heat{};
 		void* m_inf_gathering{};
+		void* m_gathering_resource{};
 		void* m_mount_reset{};
 		void* m_inf_mount{};
 		void* m_research_exp{};
+		void* m_lucky_voucher{};
 	private:
 		functions::create_d3d11_device_and_swapchain_t create_device_and_swapchain{};
 		bool get_swapchain();

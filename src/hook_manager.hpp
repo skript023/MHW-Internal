@@ -19,6 +19,7 @@ namespace big
 		mid_function_hook m_mount_reset;
 		mid_function_hook m_frostcraft_drawn;
 		mid_function_hook m_frostcraft_heat;
+		mid_function_hook m_lucky_voucher;
 	public:
 		byte_patching m_inf_frostcraft;
 		byte_patching m_player_state;

@@ -112,4 +112,19 @@ namespace big
 			g_hook_manager->m_inf_mount.restore();
 		}
 	}
+	void player::inf_gathering()
+	{
+		*(unsigned short*)g_pointers->m_gathering_resource = g_settings->player.inf_gathering ? 0x9090 : 0xC8FF;
+	}
+	void player::inf_lucky_voucher()
+	{
+		if (g_settings->player.inf_lucky_voucher)
+		{
+			g_hook_manager->m_lucky_voucher.apply();
+		}
+		else
+		{
+			g_hook_manager->m_lucky_voucher.restore();
+		}
+	}
 }

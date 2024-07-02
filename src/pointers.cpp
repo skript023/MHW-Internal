@@ -122,6 +122,11 @@ namespace big
 			m_inf_gathering = ptr.as<void*>();
 		});
 		
+		main_batch.add("Gathering Resource", "FF C8 41 89 80 DC 00 00 00", [this](memory::handle ptr)
+		{
+			m_gathering_resource = ptr.as<void*>();
+		});
+		
 		main_batch.add("Mount Reset", "F3 0F 10 81 70 C1 01 00 C3", [this](memory::handle ptr)
 		{
 			m_mount_reset = ptr.as<void*>();
@@ -135,6 +140,11 @@ namespace big
 		main_batch.add("Reserch EXP Multiplier", "48 89 5C 24 ? 55 56 57 41 55 41 57 48 83 EC 40 0F 29 74 24", [this](memory::handle ptr)
 		{
 			m_research_exp = ptr.as<void*>();
+		});
+		
+		main_batch.add("Lucky Voucher", "3B B0 54 91 26 00 73 23", [this](memory::handle ptr)
+		{
+			m_lucky_voucher = ptr.as<void*>();
 		});
 		
 		main_batch.run(memory::module(nullptr));

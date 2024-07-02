@@ -26,6 +26,8 @@ namespace big
 				player::max_sharpness();
 				player::mount_reset();
 				player::inf_mount();
+				player::inf_gathering();
+				player::inf_lucky_voucher();
 			}
 			EXCEPT_CLAUSE
 			script::get_current()->yield();
