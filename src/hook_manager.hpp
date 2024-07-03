@@ -27,6 +27,7 @@ namespace big
 		byte_patching m_player_health;
 		byte_patching m_player_stamina;
 		byte_patching m_inf_mount;
+		byte_patching m_gathering_resource;
 	};
 
 	inline hook_manager* g_hook_manager;

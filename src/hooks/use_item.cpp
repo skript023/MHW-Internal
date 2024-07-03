@@ -2,11 +2,13 @@
 
 namespace big
 {
-	void __fastcall hooks::use_item(__int64 rcx, unsigned char a2, int8_t a3)
+	void __fastcall hooks::use_item(__int64 rcx, int a2, int8_t a3)
 	{
 		if (g_settings->player.inf_item)
 		{
-            LOG(INFO) << "Value of A3 is " << a3;
+            LOG(INFO) << "Value of A1 is " << std::hex << rcx;
+            LOG(INFO) << "Value of A2 is " << a2;
+            LOG(INFO) << "Value of A3 is " << (uint32_t)a3;
 
             if (*(DWORD*)(rcx + 0x8) > 0xCC)
             {

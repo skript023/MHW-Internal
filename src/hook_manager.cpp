@@ -22,7 +22,8 @@ namespace big
 		m_player_health(g_pointers->m_player_health, { 0x90, 0x90, 0x90, 0x90, 0x90 }),
 		m_player_stamina(g_pointers->m_player_stamina, { 0x90, 0x90, 0x90, 0x90 }),
 		m_inf_mount(g_pointers->m_inf_mount, { 0x90, 0x90 }),
-		m_inf_frostcraft(g_pointers->m_inf_frostcraft, { 0x90, 0x90, 0x90, 0x90 })
+		m_inf_frostcraft(g_pointers->m_inf_frostcraft, { 0x90, 0x90, 0x90, 0x90 }),
+		m_gathering_resource(g_pointers->m_gathering_resource, { 0x90, 0x90 })
 	{
 		g_hook_manager = this;
 	}
@@ -37,7 +38,6 @@ namespace big
 		m_maxed_attribute.restore();
 		m_max_sharpness.restore();
 		m_gs_inst_chrgs.restore();
-		m_inf_frostcraft.restore();
 		m_mount_reset.restore();
 		m_frostcraft_drawn.restore();
 		m_frostcraft_heat.restore();
@@ -48,6 +48,8 @@ namespace big
 		m_player_state.restore();
 		m_player_stamina.restore();
 		m_inf_mount.restore();
+		m_inf_frostcraft.restore();
+		m_gathering_resource.restore();
 
 		g_hook_manager = nullptr;
 	}

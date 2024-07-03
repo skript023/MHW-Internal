@@ -69,7 +69,7 @@ namespace big
 		
 		main_batch.add("Consumable Use", "89 51 0C 85 D2 75 09 41 80 F8 01 75 03 89 51 08", [this](memory::handle ptr)
 		{
-			m_use_item = ptr.as<void*>();
+			m_use_item = ptr.as<decltype(m_use_item)>();
 		});
 		
 		main_batch.add("Master Rank EXP Mult", "41 57 48 83 EC 20 48 8B F1 41 0F B6 F8 48 83 C1 08", [this](memory::handle ptr)

@@ -28,7 +28,7 @@ namespace big
 		void* m_player_health{};
 		void* m_player_stamina{};
 		void* m_consumable{};
-		void* m_use_item{};
+		functions::use_item_t m_use_item{};
 		void* m_master_rank_exp{};
 		void* m_highrank_exp{};
 		void* m_maxed_effect_set{};
