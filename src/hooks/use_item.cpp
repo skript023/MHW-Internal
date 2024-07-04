@@ -6,13 +6,8 @@ namespace big
 	{
 		if (g_settings->player.inf_item)
 		{
-            LOG(INFO) << "Value of A1 is " << std::hex << rcx;
-            LOG(INFO) << "Value of A2 is " << a2;
-            LOG(INFO) << "Value of A3 is " << (uint32_t)a3;
-
             if (*(DWORD*)(rcx + 0x8) > 0xCC)
             {
-                LOG(INFO) << "rcx + 8 = 0xCC returned to original value is : " << *(DWORD*)(rcx + 0x8);
                 if (a3 != 0x01)
                 {
                     return;
