@@ -11,13 +11,14 @@ namespace big
 			uint32_t r14d = static_cast<uint32_t>(a2);
 
 			//if (!rax) return g_hooking->m_consumable_hook.get_original<decltype(&hooks::consumable)>()(rax, a2, a3);
-			LOG(INFO) << "A1 : " << a1;
+			LOG(INFO) << "A1 : " << std::hex << a1;
+			LOG(INFO) << "Address A1 : " << &a1;
 			LOG(INFO) << "A2 : " << (__int64)a2;
 			LOG(INFO) << "A3 : " << (__int64)a3;
 
 			const auto rax = std::make_unique<Consumeable>();
 
-			switch ((int)a1) 
+			switch (a1) 
 			{
 			case 0x69:
 			case 0x3E8:
@@ -53,7 +54,7 @@ namespace big
 				break;
 			}
 
-			g_pointers->m_use_item(rax.get(), rax->field_0C, 1);
+			return g_pointers->m_use_item(rax.get(), rax->field_0C, 1);
 
 			uint32_t r12d = rax->field_0C;
 			if (r14d == r12d) 

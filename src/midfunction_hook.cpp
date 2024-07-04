@@ -10,6 +10,8 @@ namespace big
     {
         if (m_allocated_float)
             *(float*)m_allocated_float = *(float*)m_float_address;
+        if (m_allocated_int)
+            *(int*)m_allocated_int = *(int*)m_int_address;
 
         if (!m_new_code_address)
         {
@@ -38,7 +40,10 @@ namespace big
 
             if (m_int_address)
             {
-                uintptr_t relative_int_address = (uintptr_t)m_int_address - ((uintptr_t)m_new_code_address);
+                m_allocated_int = allocate_executable_memory((void*)((uintptr_t)m_new_code_address + 1024), sizeof(float) + 1);
+                memcpy(m_allocated_int, m_int_address, sizeof(void*));
+
+                uintptr_t relative_int_address = (uintptr_t)m_allocated_int - ((uintptr_t)m_new_code_address);
                 std::vector<byte> int_address_bytes = intToBytes(relative_int_address);
                 m_new_code.insert(m_new_code.end(), int_address_bytes.begin(), int_address_bytes.end());
             }

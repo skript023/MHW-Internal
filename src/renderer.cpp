@@ -166,7 +166,7 @@ namespace big
 		m_d3d_context->OMSetRenderTargets(1, &m_d3d_render_target, NULL);
 	}
 
-	bool renderer::wndproc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
+	void renderer::wndproc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
 	{
 		if (msg == WM_KEYUP && wparam == VK_INSERT)
 		{
@@ -183,10 +183,6 @@ namespace big
 
 			g_gui.m_opened ^= true;
 		}
-		if (msg == WM_KEYUP && wparam == VK_END)
-		{
-			g_running = false;
-		}
 		if (msg == WM_QUIT)
 		{
 			g_running = false;
@@ -196,11 +192,7 @@ namespace big
 		if (g_gui.m_opened)
 		{
 			ImGui_ImplWin32_WndProcHandler(hwnd, msg, wparam, lparam);
-
-			return true;
 		}
-		
-		return false;
 	}
 
 	void renderer::merge_icon_with_latest_font(float font_size, bool FontDataOwnedByAtlas)
