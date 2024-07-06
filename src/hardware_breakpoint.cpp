@@ -24,7 +24,7 @@ namespace big
         if (GetThreadContext(thread, &context)) 
         {
             context.Dr0 = reinterpret_cast<DWORD_PTR>(m_address);
-            context.Dr7 |= (1 << 0); // Enable local breakpoint in DR0
+            context.Dr7 |= (1ull << 0); // Enable local breakpoint in DR0
 
             if (SetThreadContext(thread, &context))
             {

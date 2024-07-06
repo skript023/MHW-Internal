@@ -34,7 +34,8 @@ namespace big
             {
                 m_float_address = arg;
 
-                m_new_code.resize(m_new_code.size() + sizeof(float), 0x00);
+                //m_new_code.resize(m_new_code.size() + sizeof(float), 0x00);
+                m_size_count = m_new_code.size() + 1;
             }
             else if constexpr (std::is_same_v<T, int>)
             {
@@ -52,7 +53,8 @@ namespace big
             {
                 m_int_address = arg;
 
-                m_new_code.resize(m_new_code.size() + sizeof(int), 0x00);
+                //m_new_code.resize(m_new_code.size() + sizeof(int), 0x00);
+                m_size_count = m_new_code.size() + 1;
             }
             else if constexpr (std::is_same_v <T, std::vector<byte>>)
             {
@@ -80,6 +82,7 @@ namespace big
         bool m_is_applied;
 
         int m_nop_count;
+        int m_size_count;
 
         void* m_value;
         void* m_target_address;

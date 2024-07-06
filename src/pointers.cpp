@@ -147,6 +147,26 @@ namespace big
 			m_lucky_voucher = ptr.as<void*>();
 		});
 		
+		main_batch.add("Load Cannon", "83 BF B8 0F 00 00 00", [this](memory::handle ptr)
+		{
+			m_loaded_cannon = ptr.as<void*>();
+		});
+		
+		main_batch.add("Cannon Fire", "7F 0A C7 83 D0 0E 00 00 07 00 00 00", [this](memory::handle ptr)
+		{
+			m_cannon_fire = ptr.as<void*>();
+		});
+		
+		main_batch.add("Barrel Placement Max", "7F 0A C7 83 D0 0E 00 00 07 00 00 00", [this](memory::handle ptr)
+		{
+			m_barrel_placement_max = ptr.as<void*>();
+		});
+		
+		main_batch.add("Barrel Placement Count", "7F 0A C7 83 D0 0E 00 00 07 00 00 00", [this](memory::handle ptr)
+		{
+			m_barrel_placement_count = ptr.as<void*>();
+		});
+		
 		main_batch.run(memory::module(nullptr));
 
 		this->m_hwnd = FindWindow(WINDOW_CLASS, WINDOW_NAME);

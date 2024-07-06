@@ -29,13 +29,11 @@ namespace big
 
                 uintptr_t relative_float_address = (uintptr_t)m_allocated_float - ((uintptr_t)m_new_code_address + sizeof(uint64_t));
                 std::vector<byte> float_address_bytes = intToBytes(relative_float_address);
-                m_new_code[4] = (byte)(relative_float_address & 0xFF);
+                m_new_code.insert(m_new_code.begin() + m_size_count, float_address_bytes.begin(), float_address_bytes.end());
+                /*m_new_code[4] = (byte)(relative_float_address & 0xFF);
                 m_new_code[5] = (byte)((relative_float_address >> 8) & 0xFF);
                 m_new_code[6] = (byte)((relative_float_address >> 16) & 0xFF);
-                m_new_code[7] = (byte)((relative_float_address >> 24) & 0xFF);
-
-                LOG(INFO) << "Float address : " << std::hex << m_float_address;
-                LOG(INFO) << "Float rel address : " << std::hex << (uintptr_t)m_float_address - ((uintptr_t)m_new_code_address);
+                m_new_code[7] = (byte)((relative_float_address >> 24) & 0xFF);*/
             }
 
             if (m_int_address)
@@ -45,40 +43,33 @@ namespace big
 
                 uintptr_t relative_int_address = (uintptr_t)m_allocated_int - ((uintptr_t)m_new_code_address);
                 std::vector<byte> int_address_bytes = intToBytes(relative_int_address);
-                m_new_code.insert(m_new_code.end(), int_address_bytes.begin(), int_address_bytes.end());
+                m_new_code.insert(m_new_code.begin() + m_size_count, int_address_bytes.begin(), int_address_bytes.end());
             }
 
-            // Copy the new code to allocated memory
             memcpy(m_new_code_address, m_new_code.data(), m_new_code.size());
 
-            // Add jump back to the original function after new code execution
             uintptr_t return_address = (uintptr_t)m_target_address + 5;
             byte* jump_back_location = (byte*)m_new_code_address + m_new_code.size();
-            jump_back_location[0] = 0xE9; // jmp opcode
+            jump_back_location[0] = 0xE9;
 
-            // Calculate relative offset for jump back to the original code
             uintptr_t relative_offset = return_address - ((uintptr_t)jump_back_location + 5);
             memcpy(jump_back_location + 1, &relative_offset, 4);
 
-            // Prepare the jump to the new code
             uintptr_t relative_address = (uintptr_t)m_new_code_address - ((uintptr_t)m_target_address + 5);
 
-            // Patch the target address with the jump
             std::vector<byte> jmp_newmem = {
-                0xE9, // jump instruction
+                0xE9, 
                 (byte)(relative_address & 0xFF),
                 (byte)((relative_address >> 8) & 0xFF),
                 (byte)((relative_address >> 16) & 0xFF),
                 (byte)((relative_address >> 24) & 0xFF)
             };
 
-            // Add nop if is nop true
             if (m_is_nop && m_nop_count > 0)
             {
                 jmp_newmem.insert(jmp_newmem.end(), m_nop_count, 0x90);
             }
 
-            // Patch the original function with the jump to the new code
             m_patch = std::make_unique<byte_patching>(m_target_address, jmp_newmem);
         }
 

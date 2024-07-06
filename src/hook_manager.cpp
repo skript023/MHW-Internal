@@ -16,6 +16,7 @@ namespace big
 		m_frostcraft_drawn(g_pointers->m_frostcraft_drawn, { 0xF3, 0x0F, 0x59, 0x05 }, &g_settings->weapon.frostcraft_drawn),
 		m_frostcraft_heat(g_pointers->m_frostcraft_heat, { 0xF3, 0x0F, 0x59, 0x05 }, &g_settings->weapon.frostcraft_heat, true, 4),
 		m_lucky_voucher(g_pointers->m_lucky_voucher, { 0xC7, 0x80, 0x54, 0x91, 0x26, 0x00, 0x05, 0x00, 0x00, 0x00, 0x3B, 0xB0, 0x54, 0x91, 0x26, 0x00 }, true, 1),
+		m_load_cannon(g_pointers->m_loaded_cannon, { 0xC7, 0x87, 0xB8, 0x0F, 0x00, 0x00, 0x05, 0x00, 0x00, 0x00, 0x83, 0xBF, 0xB8, 0x0F, 0x00, 0x00, 0x00 }, true, 2),
 		/*byte patching*/
 		m_player_state(g_pointers->m_player_state, { 0x90, 0x90, 0x90, 0x90, 0x90 }),
 		m_player_anim(g_pointers->m_player_anim, { 0x90, 0x90, 0x90, 0x90, 0x90 }),
@@ -23,7 +24,10 @@ namespace big
 		m_player_stamina(g_pointers->m_player_stamina, { 0x90, 0x90, 0x90, 0x90 }),
 		m_inf_mount(g_pointers->m_inf_mount, { 0x90, 0x90 }),
 		m_inf_frostcraft(g_pointers->m_inf_frostcraft, { 0x90, 0x90, 0x90, 0x90 }),
-		m_gathering_resource(g_pointers->m_gathering_resource, { 0x90, 0x90 })
+		m_gathering_resource(g_pointers->m_gathering_resource, { 0x90, 0x90 }),
+		m_cannon_fire(g_pointers->m_cannon_fire, { 0xEB }),
+		m_barrel_placement_max(g_pointers->m_barrel_placement_max, { 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90 }),
+		m_barrel_placement_count(g_pointers->m_barrel_placement_count, { 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90 })
 	{
 		g_hook_manager = this;
 	}
@@ -42,6 +46,7 @@ namespace big
 		m_frostcraft_drawn.restore();
 		m_frostcraft_heat.restore();
 		m_lucky_voucher.restore();
+		m_load_cannon.restore();
 		/*byte patching*/
 		m_player_anim.restore();
 		m_player_health.restore();

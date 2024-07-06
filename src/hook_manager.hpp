@@ -20,6 +20,7 @@ namespace big
 		mid_function_hook m_frostcraft_drawn;
 		mid_function_hook m_frostcraft_heat;
 		mid_function_hook m_lucky_voucher;
+		mid_function_hook m_load_cannon;
 	public:
 		byte_patching m_inf_frostcraft;
 		byte_patching m_player_state;
@@ -28,6 +29,9 @@ namespace big
 		byte_patching m_player_stamina;
 		byte_patching m_inf_mount;
 		byte_patching m_gathering_resource;
+		byte_patching m_cannon_fire;
+		byte_patching m_barrel_placement_max;
+		byte_patching m_barrel_placement_count;
 	};
 
 	inline hook_manager* g_hook_manager;
