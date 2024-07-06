@@ -34,6 +34,18 @@ namespace big
 
 		ImGui::EndGroup();
 
+		ImGui::BeginGroup();
+
+		ImGui::Checkbox("Inf Lucky Voucher", &g_settings->player.inf_lucky_voucher);
+
+		ImGui::Checkbox("Cannon Always Loaded", &g_settings->player.cannon_always_loaded);
+
+		ImGui::Checkbox("Inf Cannon Fire", &g_settings->player.inf_cannon_fire);
+
+		ImGui::Checkbox("Have All Pets", &g_settings->player.unlock_all_pet);
+
+		ImGui::EndGroup();
+
 		ImGui::Separator();
 
 		ImGui::BeginGroup();

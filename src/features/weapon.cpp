@@ -43,4 +43,19 @@ namespace big
 			g_hook_manager->m_gs_inst_chrgs.restore();
 		}
 	}
+	void weapon::max_slot_armor()
+	{
+		if (g_settings->weapon.max_slot_armor)
+		{
+			g_hook_manager->m_max_slot_armor.apply();
+			g_hook_manager->m_max_slot_armor_melee.apply();
+			g_hook_manager->m_max_slot_armor_ranged.apply();
+		}
+		else
+		{
+			g_hook_manager->m_max_slot_armor.restore();
+			g_hook_manager->m_max_slot_armor_melee.restore();
+			g_hook_manager->m_max_slot_armor_ranged.restore();
+		}
+	}
 }

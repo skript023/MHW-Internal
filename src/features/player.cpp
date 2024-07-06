@@ -134,4 +134,39 @@ namespace big
 			g_hook_manager->m_lucky_voucher.restore();
 		}
 	}
+	void player::cannon_always_loaded()
+	{
+		if (g_settings->player.cannon_always_loaded)
+		{
+			g_hook_manager->m_load_cannon.apply();
+		}
+		else
+		{
+			g_hook_manager->m_load_cannon.restore();
+		}
+	}
+	void player::inf_cannon_fire()
+	{
+		if (g_settings->player.inf_cannon_fire)
+		{
+			g_hook_manager->m_cannon_fire.apply();
+		}
+		else
+		{
+			g_hook_manager->m_cannon_fire.restore();
+		}
+	}
+	void player::unlock_all_pet()
+	{
+		if (g_settings->player.unlock_all_pet)
+		{
+			g_hook_manager->m_pet_mgr.apply();
+			g_hook_manager->m_pet_unlocker.apply();
+		}
+		else
+		{
+			g_hook_manager->m_pet_mgr.restore();
+			g_hook_manager->m_pet_unlocker.restore();
+		}
+	}
 }

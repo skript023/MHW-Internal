@@ -37,5 +37,11 @@ namespace big
 		static void inf_gathering();
 
 		static void inf_lucky_voucher();
+
+		static void cannon_always_loaded();
+
+		static void inf_cannon_fire();
+
+		static void unlock_all_pet();
 	};
 }

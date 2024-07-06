@@ -18,6 +18,12 @@ namespace big
 
 		ImGui::BeginGroup();
 
+		ImGui::Checkbox("Max Slot Armor", &g_settings->weapon.max_slot_armor);
+
+		ImGui::EndGroup();
+
+		ImGui::BeginGroup();
+
 		ImGui::Checkbox("Frostcraft Recharge", &g_settings->weapon.frostcraft_recharge);
 		ImGui::InputFloat("Frostcraft Drawn", &g_settings->weapon.frostcraft_drawn, 1.f, 10.f);
 		ImGui::InputFloat("Frostcraft Sheathed", &g_settings->weapon.frostcraft_heat, 1.f, 10.f);

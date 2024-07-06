@@ -24,5 +24,6 @@ namespace big
 		static void infinite_frostcraft();
 		static void frostcraft_recharge();
 		static void instant_charges_greater_sword();
+		static void max_slot_armor();
 	};
 }

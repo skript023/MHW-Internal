@@ -28,6 +28,9 @@ namespace big
 			bool inf_gathering = false;
 			bool research_exp_mult = false;
 			bool inf_lucky_voucher = false;
+			bool cannon_always_loaded = false;
+			bool inf_cannon_fire = false;
+			bool unlock_all_pet = false;
 
 			int hr_ex_mult = 1;
 			int mr_ex_mult = 1;
@@ -50,7 +53,11 @@ namespace big
 				inf_mount,
 				mount_reset,
 				inf_gathering,
-				research_exp_mult
+				research_exp_mult,
+				inf_lucky_voucher,
+				cannon_always_loaded,
+				inf_cannon_fire,
+				unlock_all_pet
 			);
 		} player;
 
@@ -59,11 +66,19 @@ namespace big
 			bool inst_chrgs_gs = false;
 			bool inf_frostcraft = false;
 			bool frostcraft_recharge = false;
+			bool max_slot_armor = false;
 
 			float frostcraft_drawn = 1.5f;
 			float frostcraft_heat = 30.f;
 
-			NLOHMANN_DEFINE_TYPE_INTRUSIVE(weapon, inst_chrgs_gs, inf_frostcraft, frostcraft_recharge, frostcraft_drawn, frostcraft_heat);
+			NLOHMANN_DEFINE_TYPE_INTRUSIVE(weapon, 
+				inst_chrgs_gs, 
+				inf_frostcraft, 
+				frostcraft_recharge, 
+				frostcraft_drawn, 
+				frostcraft_heat,
+				max_slot_armor
+			);
 		} weapon;
 
 		struct crafting
