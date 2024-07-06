@@ -167,6 +167,31 @@ namespace big
 			m_barrel_placement_count = ptr.as<void*>();
 		});
 		
+		main_batch.add("Pet Manager", "41 8B 84 97 28 6F 0F 00", [this](memory::handle ptr)
+		{
+			m_pet_mgr = ptr.as<void*>();
+		});
+		
+		main_batch.add("Pet Unlocker", "8B 84 96 28 6F 0F 00 48", [this](memory::handle ptr)
+		{
+			m_pet_unlocker = ptr.as<void*>();
+		});
+		
+		main_batch.add("Max Slot Armor", "41 0F B7 48 1E F3", [this](memory::handle ptr)
+		{
+			m_max_slot_armor = ptr.as<void*>();
+		});
+		
+		main_batch.add("Max Slot Armor Ranged", "0F B6 46 33 89 83 44 1D 00 00", [this](memory::handle ptr)
+		{
+			m_max_slot_armor_ranged = ptr.as<void*>();
+		});
+		
+		main_batch.add("Max Slot Armor Melee", "0F B6 46 2D 89 83 44 1D 00 00", [this](memory::handle ptr)
+		{
+			m_max_slot_armor_melee = ptr.as<void*>();
+		});
+		
 		main_batch.run(memory::module(nullptr));
 
 		this->m_hwnd = FindWindow(WINDOW_CLASS, WINDOW_NAME);

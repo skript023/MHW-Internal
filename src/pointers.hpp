@@ -48,6 +48,11 @@ namespace big
 		void* m_cannon_fire{};
 		void* m_barrel_placement_max{};
 		void* m_barrel_placement_count{};
+		void* m_pet_mgr{};
+		void* m_pet_unlocker{};
+		void* m_max_slot_armor{};
+		void* m_max_slot_armor_ranged{};
+		void* m_max_slot_armor_melee{};
 	private:
 		functions::create_d3d11_device_and_swapchain_t create_device_and_swapchain{};
 		bool get_swapchain();

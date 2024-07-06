@@ -21,6 +21,11 @@ namespace big
 		mid_function_hook m_frostcraft_heat;
 		mid_function_hook m_lucky_voucher;
 		mid_function_hook m_load_cannon;
+		mid_function_hook m_pet_mgr;
+		mid_function_hook m_pet_unlocker;
+		mid_function_hook m_max_slot_armor;
+		mid_function_hook m_max_slot_armor_ranged;
+		mid_function_hook m_max_slot_armor_melee;
 	public:
 		byte_patching m_inf_frostcraft;
 		byte_patching m_player_state;
