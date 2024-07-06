@@ -20,6 +20,8 @@ namespace big
 
 		ImGui::Checkbox("Max Slot Armor", &g_settings->weapon.max_slot_armor);
 
+		ImGui::Checkbox("Inf Slinger Ammo", &g_settings->weapon.inf_slinger_ammo);
+
 		ImGui::EndGroup();
 
 		ImGui::BeginGroup();

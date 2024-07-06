@@ -26,6 +26,10 @@ namespace big
 		mid_function_hook m_max_slot_armor;
 		mid_function_hook m_max_slot_armor_ranged;
 		mid_function_hook m_max_slot_armor_melee;
+		mid_function_hook m_scoutfly_level;
+		mid_function_hook m_scoutfly_max;
+		mid_function_hook m_palico_gadget_cd;
+		mid_function_hook m_slinger_ammo;
 	public:
 		byte_patching m_inf_frostcraft;
 		byte_patching m_player_state;
@@ -37,6 +41,7 @@ namespace big
 		byte_patching m_cannon_fire;
 		byte_patching m_barrel_placement_max;
 		byte_patching m_barrel_placement_count;
+		byte_patching m_slinger_max_ammo;
 	};
 
 	inline hook_manager* g_hook_manager;

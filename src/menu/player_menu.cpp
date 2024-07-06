@@ -18,6 +18,8 @@ namespace big
 
 		ImGui::Checkbox("Inf Gathering", &g_settings->player.inf_gathering);
 
+		ImGui::Checkbox("No Palico Gadget CD", &g_settings->player.palico_gadget_cd);
+
 		ImGui::EndGroup();
 
 		ImGui::SameLine(200.f);
@@ -33,6 +35,8 @@ namespace big
 		ImGui::Checkbox("Inf Item Use", &g_settings->player.inf_item);
 
 		ImGui::EndGroup();
+
+		ImGui::SameLine(400.f);
 
 		ImGui::BeginGroup();
 

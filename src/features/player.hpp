@@ -43,5 +43,9 @@ namespace big
 		static void inf_cannon_fire();
 
 		static void unlock_all_pet();
+
+		static void scoutfly_max_level();
+
+		static void palico_gadget_cd();
 	};
 }

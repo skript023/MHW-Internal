@@ -31,6 +31,8 @@ namespace big
 			bool cannon_always_loaded = false;
 			bool inf_cannon_fire = false;
 			bool unlock_all_pet = false;
+			bool scoutfly_max_level = false;
+			bool palico_gadget_cd = false;
 
 			int hr_ex_mult = 1;
 			int mr_ex_mult = 1;
@@ -57,7 +59,9 @@ namespace big
 				inf_lucky_voucher,
 				cannon_always_loaded,
 				inf_cannon_fire,
-				unlock_all_pet
+				unlock_all_pet,
+				scoutfly_max_level,
+				palico_gadget_cd
 			);
 		} player;
 
@@ -67,6 +71,7 @@ namespace big
 			bool inf_frostcraft = false;
 			bool frostcraft_recharge = false;
 			bool max_slot_armor = false;
+			bool inf_slinger_ammo = false;
 
 			float frostcraft_drawn = 1.5f;
 			float frostcraft_heat = 30.f;
@@ -77,7 +82,8 @@ namespace big
 				frostcraft_recharge, 
 				frostcraft_drawn, 
 				frostcraft_heat,
-				max_slot_armor
+				max_slot_armor,
+				inf_slinger_ammo
 			);
 		} weapon;
 

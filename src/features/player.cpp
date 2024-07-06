@@ -169,4 +169,28 @@ namespace big
 			g_hook_manager->m_pet_unlocker.restore();
 		}
 	}
+	void player::scoutfly_max_level()
+	{
+		if (g_settings->player.scoutfly_max_level)
+		{
+			g_hook_manager->m_scoutfly_max.apply();
+			g_hook_manager->m_scoutfly_level.apply();
+		}
+		else
+		{
+			g_hook_manager->m_scoutfly_max.restore();
+			g_hook_manager->m_scoutfly_level.restore();
+		}
+	}
+	void player::palico_gadget_cd()
+	{
+		if (g_settings->player.palico_gadget_cd)
+		{
+			g_hook_manager->m_palico_gadget_cd.apply();
+		}
+		else
+		{
+			g_hook_manager->m_palico_gadget_cd.restore();
+		}
+	}
 }

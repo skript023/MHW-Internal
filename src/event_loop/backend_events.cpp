@@ -28,6 +28,11 @@ namespace big
 				player::inf_mount();
 				player::inf_gathering();
 				player::inf_lucky_voucher();
+				player::cannon_always_loaded();
+				player::inf_cannon_fire();
+				player::unlock_all_pet();
+				player::scoutfly_max_level();
+				player::palico_gadget_cd();
 			}
 			EXCEPT_CLAUSE
 			script::get_current()->yield();
@@ -43,6 +48,8 @@ namespace big
 				weapon::instant_charges_greater_sword();
 				weapon::infinite_frostcraft();
 				weapon::frostcraft_recharge();
+				weapon::max_slot_armor();
+				weapon::inf_slinger_ammo();
 			}
 			EXCEPT_CLAUSE
 			script::get_current()->yield();

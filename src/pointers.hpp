@@ -53,6 +53,11 @@ namespace big
 		void* m_max_slot_armor{};
 		void* m_max_slot_armor_ranged{};
 		void* m_max_slot_armor_melee{};
+		void* m_scoutfly_level{};
+		void* m_scoutfly_max{};
+		void* m_palico_gadget_cd{};
+		void* m_slinger_ammo{};
+		void* m_slinger_max_ammo{};
 	private:
 		functions::create_d3d11_device_and_swapchain_t create_device_and_swapchain{};
 		bool get_swapchain();

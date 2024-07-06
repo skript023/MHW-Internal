@@ -58,4 +58,17 @@ namespace big
 			g_hook_manager->m_max_slot_armor_ranged.restore();
 		}
 	}
+	void weapon::inf_slinger_ammo()
+	{
+		if (g_settings->weapon.inf_slinger_ammo)
+		{
+			g_hook_manager->m_slinger_ammo.apply();
+			g_hook_manager->m_slinger_max_ammo.apply();
+		}
+		else
+		{
+			g_hook_manager->m_slinger_ammo.restore();
+			g_hook_manager->m_slinger_max_ammo.restore();
+		}
+	}
 }

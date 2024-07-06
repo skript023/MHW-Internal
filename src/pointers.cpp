@@ -192,6 +192,31 @@ namespace big
 			m_max_slot_armor_melee = ptr.as<void*>();
 		});
 		
+		main_batch.add("Scoutfly Max", "0F B6 46 2D 89 83 44 1D 00 00", [this](memory::handle ptr)
+		{
+			m_scoutfly_max = ptr.as<void*>();
+		});
+		
+		main_batch.add("Scoutfly Level", "0F B6 46 2D 89 83 44 1D 00 00", [this](memory::handle ptr)
+		{
+			m_scoutfly_level = ptr.as<void*>();
+		});
+		
+		main_batch.add("Palico Gadget Cooldown", "F3 0F 10 84 81 40 A3 00 00 F3", [this](memory::handle ptr)
+		{
+			m_palico_gadget_cd = ptr.as<void*>();
+		});
+		
+		main_batch.add("Slinger Ammo", "41 83 BC C9 20 7E 00 00 01", [this](memory::handle ptr)
+		{
+			m_slinger_ammo = ptr.as<void*>();
+		});
+		
+		main_batch.add("Slinger Max Ammo", "C3 C7 41 08 00 00 00 00 41", [this](memory::handle ptr)
+		{
+			m_slinger_max_ammo = ptr.as<void*>();
+		});
+		
 		main_batch.run(memory::module(nullptr));
 
 		this->m_hwnd = FindWindow(WINDOW_CLASS, WINDOW_NAME);
