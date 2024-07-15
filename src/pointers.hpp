@@ -3,6 +3,9 @@
 #include "function_types.hpp"
 #include <class/vector.hpp>
 
+extern "C" uint64_t g_equipment_ret_addr;
+extern "C" uint64_t g_gs_charge_ret_addr;
+
 namespace big
 {
 	class pointers
@@ -58,6 +61,7 @@ namespace big
 		void* m_palico_gadget_cd{};
 		void* m_slinger_ammo{};
 		void* m_slinger_max_ammo{};
+		void* m_armor_ptr{};
 	private:
 		functions::create_d3d11_device_and_swapchain_t create_device_and_swapchain{};
 		bool get_swapchain();

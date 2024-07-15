@@ -3,6 +3,9 @@
 #include "pointers.hpp"
 #include "memory/all.hpp"
 
+uint64_t g_equipment_ret_addr;
+uint64_t g_gs_charge_ret_addr;
+
 namespace big
 {
 	pointers::pointers(): m_resolution(new iVector2(1920, 1080)), m_base_address(memory::module(nullptr).begin().as<uint64_t>())
@@ -215,6 +218,11 @@ namespace big
 		main_batch.add("Slinger Max Ammo", "C3 C7 41 08 00 00 00 00 41", [this](memory::handle ptr)
 		{
 			m_slinger_max_ammo = ptr.as<void*>();
+		});
+		
+		main_batch.add("Armor Ptr", "45 0F BE 47 2C 48 8D 15 ? ? ? ? 48 8D 4D 87", [this](memory::handle ptr)
+		{
+			g_equipment_ret_addr = ptr.as<uint64_t>();
 		});
 		
 		main_batch.run(memory::module(nullptr));

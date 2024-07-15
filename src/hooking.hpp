@@ -5,6 +5,8 @@
 
 #include "class/fwddec.hpp"
 
+extern "C" void equipment();
+
 namespace big
 {
 	struct hooks
@@ -67,6 +69,7 @@ namespace big
 		detour_hook m_highrank_mult_hook;
 		detour_hook m_inf_gathering_hook;
 		detour_hook m_research_exp_hook;
+		detour_hook m_equipment_hook;
 	};
 
 	inline hooking* g_hooking{};

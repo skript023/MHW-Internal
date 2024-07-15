@@ -1,9 +1,11 @@
 #pragma once
 
 #include "common.hpp"
+#include "class/fwddec.hpp"
 
 extern "C" float g_frostcraft_drawn;
 extern "C" float g_frostcraft_sheathed;
+extern "C" uint64_t g_equipment_ptr;
 //extern "C" bool g_is_frostcraft_drawn;
 //extern "C" bool g_is_frostcraft_sheathed;
 
@@ -26,5 +28,6 @@ namespace big
 		static void instant_charges_greater_sword();
 		static void max_slot_armor();
 		static void inf_slinger_ammo();
+		static Equipment* eqipment();
 	};
 }
