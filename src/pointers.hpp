@@ -69,6 +69,8 @@ namespace big
 		void* m_atk_ptr{};
 		void* m_def_ptr{};
 		void* m_affinity_ptr{};
+		void* m_character_ptr{};
+		void* m_player_params{};
 		void* m_current_player_name{};
 		void* m_monster{};
 		void* m_player_buff{};

@@ -65,6 +65,42 @@ public:
 };
 static_assert(sizeof(Equipment) == 0x42);
 
+class PlayerParams
+{
+public:
+	uint32_t m_base; //0x00
+	char pad_0004[180]; //0x04
+	float m_gravity; //0xB8
+	float m_gravity_speed_rate; //0xBC
+	char pad_00C0[600]; //0xC0
+	float m_health_initial; //0x318
+	float m_health_max; //0x31C
+	float m_health_recover_ratio; //0x320
+	float m_health_recover_delay; //0x324
+	float m_health_recover_interval; //0x328
+	float m_health_recover_amount; //0x32C
+	float m_stamina_initial; //0x330
+	float m_stamina_max; //0x334
+	float m_stamina_tired; //0x338
+	float m_stamina_recover; //0x33C
+	float m_stamina_regen_rate; //0x340
+	float m_stamina_reduction_eat; //0x344
+	float m_stamina_reduction_timer; //0x348
+	float m_stamina_escape_dash_cost; //0x34C
+	float m_stamina_cost_rate; //0x350
+	float unk_354; //0x354
+	float m_stamina_multiplier_action; //0x358
+	float m_stamina_multiplier_bow; //0x35C
+	float m_stamina_cost_action; //0x360
+	char pad_364[12]; //0x364
+	float m_dp_cost; //0x370
+	char pad_0374[14]; //0x374
+	float unk_388; //0x388
+	char pad_38C[212]; //0x38C
+	float m_bow_charge_step; //0x460
+};
+static_assert(sizeof(PlayerParams) == 0x460);
+
 class Monster
 {
 public:
