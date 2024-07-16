@@ -1,14 +1,14 @@
 #pragma once
 #include <common.hpp>
 
-class Monster
+class GatheringMonster
 {
 public:
 	char padding[199];
 	uint64_t m_material_count; //0xC8
 	uint64_t m_body_count; //0XD0
 };
-static_assert(sizeof(Monster) == 0xD8);
+static_assert(sizeof(GatheringMonster) == 0xD8);
 
 class PlayerStat
 {

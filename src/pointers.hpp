@@ -3,12 +3,19 @@
 #include "function_types.hpp"
 #include <class/vector.hpp>
 
-extern "C" uint64_t g_equipment_ret_addr;
-extern "C" uint64_t g_gs_charge_ret_addr;
-extern "C" uint64_t g_atk_ret_addr;
-extern "C" uint64_t g_def_ret_addr;
-extern "C" uint64_t g_affinity_ret_addr;
-extern "C" uint64_t g_affinity_call_addr;
+extern "C" {
+	extern uint64_t g_equipment_ret_addr;
+	extern uint64_t g_gs_charge_ret_addr;
+	extern uint64_t g_atk_ret_addr;
+	extern uint64_t g_def_ret_addr;
+	extern uint64_t g_affinity_ret_addr;
+	extern uint64_t g_affinity_call_addr;
+	extern uint64_t g_selected_item_ret_addr;
+	extern uint64_t g_player_info_ret_addr;
+	extern uint64_t g_set_item;
+	extern uint64_t g_item_box;
+	extern uint64_t g_player_info;
+}
 
 namespace big
 {

@@ -68,6 +68,10 @@
 #include "settings.hpp"
 #include "logger.hpp"
 
+extern "C" uint64_t g_player_info;
+extern "C" uint64_t g_set_item;
+extern "C" uint64_t g_item_box;
+
 namespace big
 {
 	using namespace std::chrono_literals;

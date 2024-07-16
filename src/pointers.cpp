@@ -9,6 +9,8 @@ uint64_t g_atk_ret_addr;
 uint64_t g_def_ret_addr;
 uint64_t g_affinity_ret_addr;
 uint64_t g_affinity_call_addr;
+uint64_t g_selected_item_ret_addr;
+uint64_t g_player_info_ret_addr;
 
 namespace big
 {

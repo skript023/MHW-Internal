@@ -2,7 +2,7 @@
 
 namespace big
 {
-	__int64 __fastcall hooks::infinite_gathering(Monster* monster, __int64 a2)
+	__int64 __fastcall hooks::infinite_gathering(GatheringMonster* monster, __int64 a2)
 	{
 		if (g_settings->player.inf_gathering)
 		{
