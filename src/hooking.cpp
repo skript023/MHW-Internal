@@ -25,7 +25,10 @@ namespace big
 		m_highrank_mult_hook("High Rank EXP Mult", g_pointers->m_highrank_exp, &hooks::high_rank_experience),
 		m_inf_gathering_hook("High Rank EXP Mult", g_pointers->m_inf_gathering, &hooks::infinite_gathering),
 		m_research_exp_hook("Research EXP Mult", g_pointers->m_research_exp, &hooks::research_experience),
-		m_equipment_hook("Equipment Hook", (void*)g_equipment_ret_addr, &equipment)
+		m_equipment_hook("Equipment Hook", g_pointers->m_armor_ptr, &equipment),
+		m_player_atk_stat_hook("Atk Hook", g_pointers->m_atk_ptr, &player_atk_stat),
+		m_player_def_stat_hook("Def Hook", g_pointers->m_def_ptr, &player_def_stat),
+		m_player_affinity_stat_hook("Aff Hook", g_pointers->m_affinity_ptr, &player_affinity_stat)
 	{
 		g_hooking = this;
 	}
@@ -56,6 +59,9 @@ namespace big
 		m_inf_gathering_hook.enable();
 		m_research_exp_hook.enable();
 		m_equipment_hook.enable();
+		m_player_atk_stat_hook.enable();
+		m_player_def_stat_hook.enable();
+		m_player_affinity_stat_hook.enable();
 
 		m_enabled = true;
 	}
@@ -64,6 +70,9 @@ namespace big
 	{
 		m_enabled = false;
 
+		m_player_affinity_stat_hook.disable();
+		m_player_def_stat_hook.disable();
+		m_player_atk_stat_hook.disable();
 		m_equipment_hook.disable();
 		m_research_exp_hook.disable();
 		m_inf_gathering_hook.disable();

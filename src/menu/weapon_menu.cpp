@@ -40,7 +40,7 @@ namespace big
 
 			if (equipment)
 			{
-				/*ImGui::InputScalar("ID For Layered", ImGuiDataType_S16, &equipment->m_id_layered);
+				ImGui::InputScalar("ID For Layered", ImGuiDataType_S16, &equipment->m_id_layered);
 				ImGui::InputScalar("ID For ED", ImGuiDataType_S16, &equipment->m_id_ed);
 				ImGui::InputScalar("Defense", ImGuiDataType_S16, &equipment->m_defense);
 
@@ -74,7 +74,7 @@ namespace big
 					ImGui::InputScalar("Skill 3 Level", ImGuiDataType_S8, &equipment->m_slot_c_level);
 
 					ImGui::TreePop();
-				}*/
+				}
 			}
 		}
 	}

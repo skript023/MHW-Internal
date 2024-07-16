@@ -5,6 +5,10 @@
 
 uint64_t g_equipment_ret_addr;
 uint64_t g_gs_charge_ret_addr;
+uint64_t g_atk_ret_addr;
+uint64_t g_def_ret_addr;
+uint64_t g_affinity_ret_addr;
+uint64_t g_affinity_call_addr;
 
 namespace big
 {
@@ -222,7 +226,76 @@ namespace big
 		
 		main_batch.add("Armor Ptr", "45 0F BE 47 2C 48 8D 15 ? ? ? ? 48 8D 4D 87", [this](memory::handle ptr)
 		{
-			g_equipment_ret_addr = ptr.as<uint64_t>();
+			m_armor_ptr = ptr.as<void*>();
+			g_equipment_ret_addr = ptr.add(5).as<uint64_t>();
+		});
+		
+		main_batch.add("Atk Ptr", "48 8B 7B 08 45 0F 57 C9", [this](memory::handle ptr)
+		{
+			m_atk_ptr = ptr.as<void*>();
+			g_atk_ret_addr = ptr.add(5).as<uint64_t>();
+		});
+		
+		main_batch.add("Def Ptr", "44 2B C1 44 3B C7 73 05", [this](memory::handle ptr)
+		{
+			m_def_ptr = ptr.as<void*>();
+			g_def_ret_addr = ptr.add(5).as<uint64_t>();
+		});
+		
+		main_batch.add("Affinity Ptr", "49 8B 4E 08 48 8B 89 20 7D 00 00 E8", [this](memory::handle ptr)
+		{
+			m_affinity_ptr = ptr.add(11).as<void*>();
+			g_affinity_ret_addr = ptr.add(11 + 5).as<uint64_t>();
+		});
+		
+		main_batch.add("Affinity Ptr", "40 ? 48 83 EC ? 48 8B ? ? 48 8B ? 4C 8B ? ? ? ? ? 4D 85 ? 0F 84 ? ? ? ? 41 F6 40 0C ? 0F 84 ? ? ? ? 49 63 ? ? ? ? ? 0F 29 ? ? ? 66 41 ? ? ? ? ? ? ? 0F 5B ? 85 D2 7E ? 49 8B ? ? ? ? ? 32 C0 48 85 ? 74 ? 80 79 1C ? 0F 93 ? EB ? 49 8B ? ? ? ? ? 48 85 ? 74 ? 80 79 20 ? 41 B9 ? ? ? ? 0F B6 ? 41 0F ? ? 84 C0 48 8B ? ? ? ? ? 74 ? 0F B6 ? ? ? ? ? ? 66 0F ? ? EB ? 0F B6 ? ? ? ? ? ? 66 0F ? ? 0F 5B ? F3 0F ? ? 49 8B ? E8 ? ? ? ? 8B C0 0F 57 ? F3 48 ? ? ? 48 8B ? ? 48 8B ? ? ? ? ? F3 0F ? ? 48 85 ? 74 ? F6 42 0C ? 75 ? 33 D2 B9 ? ? ? ? E8 ? ? ? ? 0F 57 ? 8B C0 F3 48 ? ? ? F3 0F ? ? 0F 28 ? ? ? 48 83 C4", [this](memory::handle ptr)
+		{
+			g_affinity_call_addr = ptr.as<uint64_t>();
+		});
+		
+		main_batch.add("Current Player Name", "48 8B 0D ? ? ? ? 48 8D 55 97 41 B1 01 45 33 C0 E8", [this](memory::handle ptr)
+		{
+			m_current_player_name = ptr.as<void*>();
+		});
+		
+		main_batch.add("Current Weapon", "48 8B 0D ? ? ? ? 4C 8D 45 ? 48 8D 97 ? ? ? ? E8 ? ? ? ? 48 8B D8 48 85 C0", [this](memory::handle ptr)
+		{
+			m_current_player_name = ptr.as<void*>();
+		});
+		
+		main_batch.add("Player Damage", "48 8B 0D ? ? ? ?? E8 ? ? ? ? 48 8B D8 48 85 C0 75 04 33 C9", [this](memory::handle ptr)
+		{
+			m_current_player_name = ptr.as<void*>();
+		});
+		
+		main_batch.add("Player Name", "48 8B 0D ?? ?? ?? ?? 48 8D 54 24 38 C6 44 24 20 00 E8 ?? ?? ?? ?? 48 8B 5C 24 70 48 8B 7C 24 60 48 83 C4 68 C3", [this](memory::handle ptr)
+		{
+			m_current_player_name = ptr.as<void*>();
+		});
+		
+		main_batch.add("Monster", "48 8B 0D ?? ?? ?? ?? B2 01 E8 ?? ?? ?? ?? C6 83 ?? ?? ?? ?? ?? 48 8B 0D", [this](memory::handle ptr)
+		{
+			m_monster = ptr.as<void*>();
+		});
+		
+		main_batch.add("Player Buff", "48 8B 05 ?? ?? ?? ?? 41 8B 94 00 ?? ?? ?? ?? 89 57 ??", [this](memory::handle ptr)
+		{
+			m_player_buff = ptr.as<void*>();
+		});
+		
+		main_batch.add("Selected Monster", "48 8B 0D ?? ?? ?? ?? E8 ?? ?? ?? ?? 48 8B 0D ?? ?? ?? ?? E8 ?? ?? ?? ?? 48 8B 05 ?? ?? ?? ?? 83 A0 ?? ?? ?? ?? ?? C6 43 ?? ??", [this](memory::handle ptr)
+		{
+			m_selected_monster = ptr.as<void*>();
+		});
+		
+		main_batch.add("Lobby Status", "48 8B 0D ?? ?? ?? ?? E8 ?? ?? ?? ?? 48 8B 4E ?? F3 0F 10 86 ?? ?? ?? ?? F3 0F 58 86 ?? ?? ?? ?? F3 0F 11 86 ?? ?? ?? ?? E8 ?? ?? ?? ?? 48 8B 4E ??", [this](memory::handle ptr)
+		{
+			m_lobby_status = ptr.as<void*>();
+		});
+		
+		main_batch.add("Damage on Screen", "48 8B 0D ?? ?? ?? ?? 45 33 C0 48 8B D0 E8 ?? ?? ?? ?? 48 8B F0 48 39 83 ?? ?? ?? ??", [this](memory::handle ptr)
+		{
+			m_dmg_on_screen = ptr.as<void*>();
 		});
 		
 		main_batch.run(memory::module(nullptr));

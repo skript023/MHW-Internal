@@ -4,6 +4,10 @@
 #include "settings.hpp"
 #include "utility/mhw.hpp"
 
+float g_atk_addr = 30.f;
+float g_def_addr = 0.5f;
+float g_affinity_addr = 150.f;
+
 namespace big
 {
 	void player_menu::render_menu()
@@ -52,14 +56,21 @@ namespace big
 
 		ImGui::Separator();
 
-		ImGui::BeginGroup();
+		if (ImGui::CollapsingHeader("Stats"))
+		{
+			ImGui::InputFloat("Critical Boost", &g_settings->player.critical_boost, 1.f, 1000.f);
+			ImGui::InputFloat("Atk +", &g_atk_addr, 1.f, 1000.f);
+			ImGui::InputFloat("dmg receive percent", &g_def_addr, 1.f, 1000.f);
+			ImGui::InputInt("Def +", &*(int*)(&g_def_addr + 4), 1, 1000);
+			ImGui::InputFloat("Affinity +", &g_affinity_addr, 1.f, 1000.f);
+		}
 
-		ImGui::InputFloat("Critical Boost", &g_settings->player.critical_boost, 1.f, 1000.f);
-		ImGui::InputFloat("EXP Multiplier", &g_settings->player.research_exp, 1.f, 10.f);
-		ImGui::InputInt("MR EXP Mult", &g_settings->player.mr_ex_mult, 1, 1000);
-		ImGui::InputInt("HR EXP Mult", &g_settings->player.hr_ex_mult, 1, 1000);
-
-		ImGui::EndGroup();
+		if (ImGui::CollapsingHeader("Player EXP"))
+		{
+			ImGui::InputFloat("EXP Multiplier", &g_settings->player.research_exp, 1.f, 10.f);
+			ImGui::InputInt("MR EXP Mult", &g_settings->player.mr_ex_mult, 1, 1000);
+			ImGui::InputInt("HR EXP Mult", &g_settings->player.hr_ex_mult, 1, 1000);
+		}
 
 		ImGui::EndTabItem();
 	}

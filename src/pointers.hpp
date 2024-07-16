@@ -5,6 +5,10 @@
 
 extern "C" uint64_t g_equipment_ret_addr;
 extern "C" uint64_t g_gs_charge_ret_addr;
+extern "C" uint64_t g_atk_ret_addr;
+extern "C" uint64_t g_def_ret_addr;
+extern "C" uint64_t g_affinity_ret_addr;
+extern "C" uint64_t g_affinity_call_addr;
 
 namespace big
 {
@@ -62,6 +66,15 @@ namespace big
 		void* m_slinger_ammo{};
 		void* m_slinger_max_ammo{};
 		void* m_armor_ptr{};
+		void* m_atk_ptr{};
+		void* m_def_ptr{};
+		void* m_affinity_ptr{};
+		void* m_current_player_name{};
+		void* m_monster{};
+		void* m_player_buff{};
+		void* m_selected_monster{};
+		void* m_lobby_status{};
+		void* m_dmg_on_screen{};
 	private:
 		functions::create_d3d11_device_and_swapchain_t create_device_and_swapchain{};
 		bool get_swapchain();

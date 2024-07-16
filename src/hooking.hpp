@@ -6,6 +6,9 @@
 #include "class/fwddec.hpp"
 
 extern "C" void equipment();
+extern "C" void player_atk_stat();
+extern "C" void player_def_stat();
+extern "C" void player_affinity_stat();
 
 namespace big
 {
@@ -70,6 +73,9 @@ namespace big
 		detour_hook m_inf_gathering_hook;
 		detour_hook m_research_exp_hook;
 		detour_hook m_equipment_hook;
+		detour_hook m_player_atk_stat_hook;
+		detour_hook m_player_def_stat_hook;
+		detour_hook m_player_affinity_stat_hook;
 	};
 
 	inline hooking* g_hooking{};

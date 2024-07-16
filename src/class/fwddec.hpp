@@ -64,3 +64,20 @@ public:
 	int8_t m_slot_c_level; //0x42
 };
 static_assert(sizeof(Equipment) == 0x42);
+
+class Monster
+{
+public:
+	// Doubly linked list
+	long long MonsterStartOfStructOffset = 0x40;
+	long long NextMonsterOffset = 0x18;
+	long long MonsterHealthComponentOffset = 0x7670;
+	long long PreviousMonsterOffset = 0x10;
+	long long SizeScale = 0x188;
+	long long ScaleModifier = 0x7730;
+	long long PartCollection = 0x14528;
+	long long RemovablePartCollection = PartCollection + 0x22A0 - 0xF0 - 0xF0 - 0xF0;
+	long long StatusEffectCollection = 0x19900;
+	long long MonsterStaminaOffset = 0x1C130; //0x1BE20(???) 0x1C0D8(old) 0x1C130(now)
+	long long MonsterRageOffset = 0x1BE88; //0x1BE20(???) 0x1BE30(old) 0x1BE88(now)
+};
