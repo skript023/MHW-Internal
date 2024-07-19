@@ -77,7 +77,7 @@ namespace big
 		void* m_def_ptr{};
 		void* m_affinity_ptr{};
 		void* m_character_ptr{};
-		PlayerParams* m_player_params{};
+		PlayerParams** m_player_params{};
 		void* m_item_params{};
 		void* m_skill_params{};
 		void* m_mantle_params{};
@@ -85,7 +85,7 @@ namespace big
 		void* m_world_data{};
 		void* m_session_data{};
 		void* m_gathering_data{};
-		void* m_monster_data{};
+		Monster** m_monster_data{};
 		void* m_current_player_name{};
 		void* m_monster{};
 		void* m_player_buff{};

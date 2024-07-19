@@ -21,6 +21,11 @@ namespace big
 		if (!this->get_swapchain())
 			LOG(WARNING) << "Failed get swapchain";
 
+		/*main_batch.add("Screen Resolution", "48 8D 05 ? ? ? ? 4C 89 74 24 ? 48 89 44 24 ? 0F 57 D2 48 8D 05", [this](memory::handle ptr)
+		{
+			m_resolution = ptr.as<iVector2*>();
+		});
+		*/
 		main_batch.add("Ignore Material", "40 57 48 83 EC 20 8B F9 83 FA 02", [this](memory::handle ptr)
 		{
 			m_ignore_material = ptr.as<void*>();
@@ -260,87 +265,87 @@ namespace big
 			m_character_ptr = ptr.as<void*>();
 		});
 		
-		main_batch.add("Player Params", "48 8B 05 ?? ?? ?? ?? F3 0F 10 80 34 01 00 00 C3", [this](memory::handle ptr)
+		main_batch.add("Player Params", "48 8B 05 ? ? ? ? F3 0F 10 80 34 01 00 00 C3", [this](memory::handle ptr)
 		{
 			m_player_params = ptr.add(3).rip().as<decltype(m_player_params)>();
 		});
 		
-		main_batch.add("Item Params", "48 8B 05 ?? ?? ?? ?? 44 8B F6 F3 0F 10 3D", [this](memory::handle ptr)
+		main_batch.add("Item Params", "48 8B 05 ? ? ? ? 44 8B F6 F3 0F 10 3D", [this](memory::handle ptr)
 		{
 			m_item_params = ptr.add(3).rip().as<void*>();
 		});
 		
-		main_batch.add("Skill Params", "48 03 0D ?? ?? ?? ?? 48 8D 14 9B 0F B6 84 0A", [this](memory::handle ptr)
+		main_batch.add("Skill Params", "48 03 0D ? ? ? ? 48 8D 14 9B 0F B6 84 0A", [this](memory::handle ptr)
 		{
 			m_skill_params = ptr.add(3).rip().as<void*>();
 		});
 		
-		main_batch.add("Mantle Params", "48 8B 05 ?? ?? ?? ?? F3 0F 10 80 EC 00 00 00 0F 2F 87", [this](memory::handle ptr)
+		main_batch.add("Mantle Params", "48 8B 05 ? ? ? ? F3 0F 10 80 EC 00 00 00 0F 2F 87", [this](memory::handle ptr)
 		{
 			m_mantle_params = ptr.add(3).rip().as<void*>();
 		});
 		
-		main_batch.add("Player Data", "48 8B 0D ?? ?? ?? ?? 4C 8D 43 50 48 8B D3", [this](memory::handle ptr)
+		main_batch.add("Player Data", "48 8B 0D ? ? ? ? 4C 8D 43 50 48 8B D3", [this](memory::handle ptr)
 		{
 			m_player_data = ptr.add(3).rip().as<void*>();
 		});
 		
-		main_batch.add("World Data", "48 8B 05 ?? ?? ?? ?? F3 0F 10 40 38 0F 2F 40 50 72", [this](memory::handle ptr)
+		main_batch.add("World Data", "48 8B 05 ? ? ? ? F3 0F 10 40 38 0F 2F 40 50 72", [this](memory::handle ptr)
 		{
 			m_world_data = ptr.add(3).rip().as<void*>();
 		});
 		
-		main_batch.add("Session Data", "48 8B 3D ?? ?? ?? ?? BB FF FF FF FF 41 8B 87 0C 29 00 00", [this](memory::handle ptr)
+		main_batch.add("Session Data", "48 8B 3D ? ? ? ? BB FF FF FF FF 41 8B 87 0C 29 00 00", [this](memory::handle ptr)
 		{
 			m_session_data = ptr.add(3).rip().as<void*>();
 		});
 		
-		main_batch.add("Gathering Data", "48 8B 0D ?? ?? ?? ?? E8 ?? ?? ?? ?? 48 85 C0 75 0E 48 8B 0D ?? ?? ?? ?? 33 D2", [this](memory::handle ptr)
+		main_batch.add("Gathering Data", "48 8B 0D ? ? ? ? E8 ? ? ? ? 48 85 C0 75 0E 48 8B 0D ? ? ? ? 33 D2", [this](memory::handle ptr)
 		{
 			m_gathering_data = ptr.add(3).rip().as<void*>();
 		});
 		
-		main_batch.add("Monster Data", "48 8B 05 ?? ?? ?? ?? 48 8B 97 B0 0D 00 00", [this](memory::handle ptr)
+		main_batch.add("Monster Data", "48 8B 05 ? ? ? ? 48 8B 97 B0 0D 00 00", [this](memory::handle ptr)
 		{
-			m_monster_data = ptr.add(3).rip().as<void*>();
+			m_monster_data = ptr.add(3).rip().as<decltype(m_monster_data)>();
 		});
 		
-		main_batch.add("Item Caps", "48 8B 0D ?? ?? ?? ?? 48 85 C9 74 ?? E8 ?? ?? ?? ?? 48 85 C0 74 ?? 0F BE 40 12", [this](memory::handle ptr)
-		{
-			m_character_ptr = ptr.add(3).rip().as<void*>();
-		});
-		
-		main_batch.add("Save Data", "48 8B 05 ?? ?? ?? ?? 48 8D 4C 24 30 48 8B 90 A8 00 00 00 46 8B 84 22 94 00 00 00 48 8D 15", [this](memory::handle ptr)
+		main_batch.add("Item Caps", "48 8B 0D ? ? ? ? 48 85 C9 74 ? E8 ? ? ? ? 48 85 C0 74 ? 0F BE 40 12", [this](memory::handle ptr)
 		{
 			m_character_ptr = ptr.add(3).rip().as<void*>();
 		});
 		
-		main_batch.add("Steamworks", "48 8B 05 ?? ?? ?? ?? 83 B8 40 03 00 00 00 75 ?? 80 B8", [this](memory::handle ptr)
+		main_batch.add("Save Data", "48 8B 05 ? ? ? ? 48 8D 4C 24 30 48 8B 90 A8 00 00 00 46 8B 84 22 94 00 00 00 48 8D 15", [this](memory::handle ptr)
 		{
 			m_character_ptr = ptr.add(3).rip().as<void*>();
 		});
 		
-		main_batch.add("Coating Data", "48 8B 0D ?? ?? ?? ?? E8 ?? ?? ?? ?? 48 85 C0 74 ?? 0F B6 48 08", [this](memory::handle ptr)
+		main_batch.add("Steamworks", "48 8B 05 ? ? ? ? 83 B8 40 03 00 00 00 75 ? 80 B8", [this](memory::handle ptr)
 		{
 			m_character_ptr = ptr.add(3).rip().as<void*>();
 		});
 		
-		main_batch.add("World Session", "48 8B 05 ?? ?? ?? ?? 83 B8 D4 01 00 00 03 7D ?? F3", [this](memory::handle ptr)
+		main_batch.add("Coating Data", "48 8B 0D ? ? ? ? E8 ? ? ? ? 48 85 C0 74 ? 0F B6 48 08", [this](memory::handle ptr)
 		{
 			m_character_ptr = ptr.add(3).rip().as<void*>();
 		});
 		
-		main_batch.add("Session Quest", "48 8B 0D ?? ?? ?? ?? 44 8B F0 8B 99 40 A3 02 00 E8 ?? ?? ?? ?? 84 C0", [this](memory::handle ptr)
+		main_batch.add("World Session", "48 8B 05 ? ? ? ? 83 B8 D4 01 00 00 03 7D ? F3", [this](memory::handle ptr)
 		{
 			m_character_ptr = ptr.add(3).rip().as<void*>();
 		});
 		
-		main_batch.add("Harvest Box Data", "48 8B 05 ?? ?? ?? ?? 48 8B 7C 24 40 48 8B B4 24 88 00 00 00", [this](memory::handle ptr)
+		main_batch.add("Session Quest", "48 8B 0D ? ? ? ? 44 8B F0 8B 99 40 A3 02 00 E8 ? ? ? ? 84 C0", [this](memory::handle ptr)
 		{
 			m_character_ptr = ptr.add(3).rip().as<void*>();
 		});
 		
-		main_batch.add("Armor Skill", "48 8B 0D ?? ?? ?? ?? 8B D0 E8 ?? ?? ?? ?? 0F BF 44 78 24 48 8B 5C 24 30", [this](memory::handle ptr)
+		main_batch.add("Harvest Box Data", "48 8B 05 ? ? ? ? 48 8B 7C 24 40 48 8B B4 24 88 00 00 00", [this](memory::handle ptr)
+		{
+			m_character_ptr = ptr.add(3).rip().as<void*>();
+		});
+		
+		main_batch.add("Armor Skill", "48 8B 0D ? ? ? ? 8B D0 E8 ? ? ? ? 0F BF 44 78 24 48 8B 5C 24 30", [this](memory::handle ptr)
 		{
 			m_character_ptr = ptr.add(3).rip().as<void*>();
 		});
@@ -355,37 +360,37 @@ namespace big
 			m_current_player_name = ptr.as<void*>();
 		});
 		
-		main_batch.add("Player Damage", "48 8B 0D ? ? ? ?? E8 ? ? ? ? 48 8B D8 48 85 C0 75 04 33 C9", [this](memory::handle ptr)
+		main_batch.add("Player Damage", "48 8B 0D ? ? ? ? E8 ? ? ? ? 48 8B D8 48 85 C0 75 04 33 C9", [this](memory::handle ptr)
 		{
 			m_current_player_name = ptr.as<void*>();
 		});
 		
-		main_batch.add("Player Name", "48 8B 0D ?? ?? ?? ?? 48 8D 54 24 38 C6 44 24 20 00 E8 ?? ?? ?? ?? 48 8B 5C 24 70 48 8B 7C 24 60 48 83 C4 68 C3", [this](memory::handle ptr)
+		main_batch.add("Player Name", "48 8B 0D ? ? ? ? 48 8D 54 24 38 C6 44 24 20 00 E8 ? ? ? ? 48 8B 5C 24 70 48 8B 7C 24 60 48 83 C4 68 C3", [this](memory::handle ptr)
 		{
 			m_current_player_name = ptr.as<void*>();
 		});
 		
-		main_batch.add("Monster", "48 8B 0D ?? ?? ?? ?? B2 01 E8 ?? ?? ?? ?? C6 83 ?? ?? ?? ?? ?? 48 8B 0D", [this](memory::handle ptr)
+		main_batch.add("Monster", "48 8B 0D ? ? ? ? B2 01 E8 ? ? ? ? C6 83 ? ? ? ? ? 48 8B 0D", [this](memory::handle ptr)
 		{
 			m_monster = ptr.as<void*>();
 		});
 		
-		main_batch.add("Player Buff", "48 8B 05 ?? ?? ?? ?? 41 8B 94 00 ?? ?? ?? ?? 89 57 ??", [this](memory::handle ptr)
+		main_batch.add("Player Buff", "48 8B 05 ? ? ? ? 41 8B 94 00 ? ? ? ? 89 57 ?", [this](memory::handle ptr)
 		{
 			m_player_buff = ptr.as<void*>();
 		});
 		
-		main_batch.add("Selected Monster", "48 8B 0D ?? ?? ?? ?? E8 ?? ?? ?? ?? 48 8B 0D ?? ?? ?? ?? E8 ?? ?? ?? ?? 48 8B 05 ?? ?? ?? ?? 83 A0 ?? ?? ?? ?? ?? C6 43 ?? ??", [this](memory::handle ptr)
+		main_batch.add("Selected Monster", "48 8B 0D ? ? ? ? E8 ? ? ? ? 48 8B 0D ? ? ? ? E8 ? ? ? ? 48 8B 05 ? ? ? ? 83 A0 ? ? ? ? ? C6 43 ? ?", [this](memory::handle ptr)
 		{
 			m_selected_monster = ptr.as<void*>();
 		});
 		
-		main_batch.add("Lobby Status", "48 8B 0D ?? ?? ?? ?? E8 ?? ?? ?? ?? 48 8B 4E ?? F3 0F 10 86 ?? ?? ?? ?? F3 0F 58 86 ?? ?? ?? ?? F3 0F 11 86 ?? ?? ?? ?? E8 ?? ?? ?? ?? 48 8B 4E ??", [this](memory::handle ptr)
+		main_batch.add("Lobby Status", "48 8B 0D ? ? ? ? E8 ? ? ? ? 48 8B 4E ? F3 0F 10 86 ? ? ? ? F3 0F 58 86 ? ? ? ? F3 0F 11 86 ? ? ? ? E8 ? ? ? ? 48 8B 4E ?", [this](memory::handle ptr)
 		{
 			m_lobby_status = ptr.as<void*>();
 		});
 		
-		main_batch.add("Damage on Screen", "48 8B 0D ?? ?? ?? ?? 45 33 C0 48 8B D0 E8 ?? ?? ?? ?? 48 8B F0 48 39 83 ?? ?? ?? ??", [this](memory::handle ptr)
+		main_batch.add("Damage on Screen", "48 8B 0D ? ? ? ? 45 33 C0 48 8B D0 E8 ? ? ? ? 48 8B F0 48 39 83 ? ? ? ?", [this](memory::handle ptr)
 		{
 			m_dmg_on_screen = ptr.as<void*>();
 		});

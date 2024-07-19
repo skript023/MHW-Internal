@@ -99,21 +99,48 @@ public:
 	char pad_38C[212]; //0x38C
 	float m_bow_charge_step; //0x460
 };
-static_assert(sizeof(PlayerParams) == 0x460);
+static_assert(sizeof(PlayerParams) == 0x460, "PlayerParams not properly sized.");
+
+class MonsterWorldStatus
+{
+public:
+	char pad_0000[120328]; //0x0000
+	float m_timer; //0x1D608
+	float m_max_timer; //0x1D60C
+	char pad_1D610[424]; //0x1D610
+	uint32_t m_monster_id; //0x1D7B8
+};
+static_assert(sizeof(MonsterWorldStatus) == 0x1D7BC, "MonsterWorldStatus not properly sized.");
+
+class MonsterStats
+{
+public:
+	char pad_0000[96];
+	float m_max;
+	float m_health;
+};
+static_assert(sizeof(MonsterStats) == 0x68, "MonsterStats not properly sized.");
+
+class MonsterEntry
+{
+public:
+	char pad_0000[392]; //0x0000
+	float m_size; //0x0188
+	char pad_018C[29924]; //0x018C
+	MonsterStats* m_monster_stats; //0x7670
+	char pad_7678[44032]; //0x7678
+	MonsterWorldStatus* m_monster_world_stats; //0x12278
+};
+static_assert(sizeof(MonsterEntry) == 0x12280, "MonsterEntry not properly sized.");
 
 class Monster
 {
 public:
-	// Doubly linked list
-	long long MonsterStartOfStructOffset = 0x40;
-	long long NextMonsterOffset = 0x18;
-	long long MonsterHealthComponentOffset = 0x7670;
-	long long PreviousMonsterOffset = 0x10;
-	long long SizeScale = 0x188;
-	long long ScaleModifier = 0x7730;
-	long long PartCollection = 0x14528;
-	long long RemovablePartCollection = PartCollection + 0x22A0 - 0xF0 - 0xF0 - 0xF0;
-	long long StatusEffectCollection = 0x19900;
-	long long MonsterStaminaOffset = 0x1C130; //0x1BE20(???) 0x1C0D8(old) 0x1C130(now)
-	long long MonsterRageOffset = 0x1BE88; //0x1BE20(???) 0x1BE30(old) 0x1BE88(now)
+	char pad_0000[3672];
+	MonsterEntry* m_first_world_monster; //0xE58
+	char pad_0E60[72];
+	MonsterEntry* m_second_world_monster; //0xEA8
+	char pad_0EB0[72];
+	MonsterEntry* m_third_world_monster; //0xEF8
 };
+static_assert(sizeof(Monster) == 0xF00, "Monster not properly sized.");

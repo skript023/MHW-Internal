@@ -72,6 +72,30 @@ namespace big
 			ImGui::InputInt("HR EXP Mult", &g_settings->player.hr_ex_mult, 1, 1000);
 		}
 
+		if (ImGui::CollapsingHeader("Monster"))
+		{
+			for (int i = 0; i < 3; i++)
+			{
+				ImGui::SeparatorText(std::format("Monster {}", i + 1).c_str());
+
+				if (auto entry = mhw::monster_stats(i))
+				{
+					ImGui::Text("Monster Size %.0f", entry->m_size);
+					if (auto wt = entry->m_monster_world_stats)
+					{
+						ImGui::Text("Monster ID %i", wt->m_monster_id);
+						ImGui::Text("Monster Timer %f", wt->m_timer);
+						ImGui::Text("Monster Max Timer %f", wt->m_max_timer);
+					}
+					if (auto st = entry->m_monster_stats)
+					{
+						ImGui::Text("Monster Health %.0f", st->m_health);
+						ImGui::Text("Monster Max %.0f", st->m_max);
+					}
+				}
+			}
+		}
+
 		ImGui::EndTabItem();
 	}
     
