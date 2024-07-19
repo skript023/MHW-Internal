@@ -44,6 +44,7 @@ namespace big
 
 	void hooking::enable()
 	{
+		m_character_ptr_hook.enable();
 		m_swapchain_present_hook.enable();
 		m_swapchain_resizebuffers_hook.enable();
 		m_swapchain_draw_indexed_hook.enable();
@@ -63,7 +64,6 @@ namespace big
 		m_player_atk_stat_hook.enable();
 		m_player_def_stat_hook.enable();
 		m_player_affinity_stat_hook.enable();
-		m_character_ptr_hook.enable();
 
 		m_enabled = true;
 	}
@@ -72,7 +72,6 @@ namespace big
 	{
 		m_enabled = false;
 
-		m_character_ptr_hook.disable();
 		m_player_affinity_stat_hook.disable();
 		m_player_def_stat_hook.disable();
 		m_player_atk_stat_hook.disable();
@@ -92,6 +91,7 @@ namespace big
 		m_swapchain_draw_indexed_hook.disable();
 		m_swapchain_resizebuffers_hook.disable();
 		m_swapchain_present_hook.disable();
+		m_character_ptr_hook.disable();
 	}
 
 	minhook_keepalive::minhook_keepalive()

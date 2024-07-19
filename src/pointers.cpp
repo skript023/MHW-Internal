@@ -237,6 +237,16 @@ namespace big
 			g_equipment_ret_addr = ptr.add(5).as<uint64_t>();
 		});
 		
+		main_batch.add("Highlighted", "45 0F BE 47 2C 48 8D 15 ? ? ? ? 48 8D 4D 87", [this](memory::handle ptr)
+		{
+			m_weapon_ptr = ptr.sub(61).as<void*>();
+		});
+		
+		main_batch.add("Select Weapon", "E8 ? ? ? ? EB 05 E8 ? ? ? ? 48 85 C0 74 28 0F", [this](memory::handle ptr)
+		{
+			m_select_waapon = ptr.add(1).rip().as<void*>();
+		});
+		
 		main_batch.add("Atk Ptr", "48 8B 7B 08 45 0F 57 C9", [this](memory::handle ptr)
 		{
 			m_atk_ptr = ptr.as<void*>();

@@ -7,9 +7,10 @@ namespace big
 	class character_service
 	{
 	public:
-		explicit character_service(Character* chara);
+		explicit character_service();
 		~character_service() noexcept;
 
+		void init(Character chara);
 		[[nodiscard]] std::string get_name() const;
 		[[nodiscard]] uint32_t get_zeni() const;
 		[[nodiscard]] uint32_t get_high_rank_level() const;
@@ -28,7 +29,7 @@ namespace big
 		void set_master_rank_level(uint32_t level);
 		void set_master_rank_experience(uint32_t exp);
 	private:
-		std::shared_ptr<Character> m_character;
+		Character m_character;
 	};
 
 	inline character_service* g_character_service{};

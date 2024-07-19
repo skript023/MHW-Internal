@@ -35,7 +35,7 @@ namespace big
 		static __int64 __fastcall high_rank_experience(__int64 a1, int a2);
 		static __int64 __fastcall infinite_gathering(GatheringMonster* a1, __int64 a2);
 		static void __fastcall research_experience(__int64 a1, uint32_t a2, float a3);
-		static void __fastcall deploy_character(Character* a1, uint32_t a2);
+		static void __fastcall deploy_character(Character a1, uint32_t a2);
 	};
 
 	struct minhook_keepalive

@@ -63,7 +63,7 @@ namespace big
 			ImGui::BeginGroup();
 			ImGui::Text("Welcome");
 			ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.172f, 0.380f, 0.909f, 1.f));
-			ImGui::Text(g_character_service->get_name().c_str());
+			ImGui::Text(g_character_service == nullptr ? "Not initialized yet" : g_character_service->get_name().c_str());
 			ImGui::PopStyleColor();
 			ImGui::EndGroup();
 			ImGui::SameLine();

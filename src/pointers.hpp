@@ -73,6 +73,8 @@ namespace big
 		void* m_slinger_ammo{};
 		void* m_slinger_max_ammo{};
 		void* m_armor_ptr{};
+		void* m_weapon_ptr{};
+		void* m_select_waapon{};
 		void* m_atk_ptr{};
 		void* m_def_ptr{};
 		void* m_affinity_ptr{};
