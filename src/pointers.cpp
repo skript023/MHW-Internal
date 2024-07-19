@@ -237,7 +237,7 @@ namespace big
 			g_equipment_ret_addr = ptr.add(5).as<uint64_t>();
 		});
 		
-		main_batch.add("Highlighted", "45 0F BE 47 2C 48 8D 15 ? ? ? ? 48 8D 4D 87", [this](memory::handle ptr)
+		main_batch.add("Highlighted Weapon", "0F B6 40 20 48 83 C4 20 5B C3 8B", [this](memory::handle ptr)
 		{
 			m_weapon_ptr = ptr.sub(61).as<void*>();
 		});
