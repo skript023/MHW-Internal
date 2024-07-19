@@ -31,10 +31,11 @@ namespace big
 		static bool __fastcall equipment_crafting(__int64 a1);
 		static void __fastcall consumable(__int64 a1, int a2, DWORD* a3);
 		static void __fastcall use_item(__int64 rcx, int r8l, int8_t a3);
-		static __int64 __fastcall master_rank_experience(__int64 a1, unsigned int a2, char a3);
+		static __int64 __fastcall master_rank_experience(__int64 a1, uint32_t a2, char a3);
 		static __int64 __fastcall high_rank_experience(__int64 a1, int a2);
 		static __int64 __fastcall infinite_gathering(GatheringMonster* a1, __int64 a2);
-		static void __fastcall research_experience(__int64 a1, unsigned int a2, float a3);
+		static void __fastcall research_experience(__int64 a1, uint32_t a2, float a3);
+		static void __fastcall deploy_character(Character* a1, uint32_t a2);
 	};
 
 	struct minhook_keepalive
@@ -76,6 +77,7 @@ namespace big
 		detour_hook m_player_atk_stat_hook;
 		detour_hook m_player_def_stat_hook;
 		detour_hook m_player_affinity_stat_hook;
+		detour_hook m_character_ptr_hook;
 	};
 
 	inline hooking* g_hooking{};

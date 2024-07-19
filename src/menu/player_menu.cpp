@@ -3,6 +3,7 @@
 #include "player_menu.h"
 #include "settings.hpp"
 #include "utility/mhw.hpp"
+#include <services/character/character_service.hpp>
 
 float g_atk_addr = 30.f;
 float g_def_addr = 0.5f;
@@ -55,6 +56,17 @@ namespace big
 		ImGui::EndGroup();
 
 		ImGui::Separator();
+
+		if (ImGui::CollapsingHeader("Character Info"))
+		{
+			ImGui::Text("Zeni : %d", g_character_service->get_zeni());
+			ImGui::Text("HR EXP : %d", g_character_service->get_high_rank_experience());
+			ImGui::Text("HR Level : %d", g_character_service->get_high_rank_level());
+			ImGui::Text("MR EXP : %d", g_character_service->get_master_rank_experience());
+			ImGui::Text("MR Level : %d", g_character_service->get_master_rank_level());
+			ImGui::Text("Research Points : %d", g_character_service->get_research_points());
+			ImGui::Text("Time Playing (ms) : %d", g_character_service->get_time_playing());
+		}
 
 		if (ImGui::CollapsingHeader("Stats"))
 		{

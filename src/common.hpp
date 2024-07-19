@@ -64,6 +64,7 @@
 
 #define WINDOW_CLASS nullptr
 #define WINDOW_NAME "MONSTER HUNTER: WORLD(421740)"
+#define TARGET_PROCESS "MonsterHunterWorld.exe"
 
 #include "settings.hpp"
 #include "logger.hpp"

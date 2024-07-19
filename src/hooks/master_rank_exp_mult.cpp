@@ -2,7 +2,7 @@
 
 namespace big
 {
-	__int64 __fastcall hooks::master_rank_experience(__int64 a1, unsigned int a2, char a3)
+	__int64 __fastcall hooks::master_rank_experience(__int64 a1, uint32_t a2, char a3)
 	{
 		__int64 v3; // rsi@1
 		char v4; // di@1

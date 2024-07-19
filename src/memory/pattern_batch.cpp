@@ -20,7 +20,7 @@ namespace memory
 				if (entry.m_callback)
 				{
 					std::invoke(std::move(entry.m_callback), result);
-					LOG(big::INFO_TO_FILE) << "Found '" << entry.m_name << "' ScarletNexus-Win64-Shipping.exe+" << HEX_TO_UPPER(result.as<DWORD64>() - region.begin().as<DWORD64>());
+					LOG(big::INFO_TO_FILE) << "Found '" << entry.m_name << std::format("' {}+", TARGET_PROCESS) << HEX_TO_UPPER(result.as<DWORD64>() - region.begin().as<DWORD64>());
 				}
 				else
 				{

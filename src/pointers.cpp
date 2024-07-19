@@ -262,7 +262,7 @@ namespace big
 		
 		main_batch.add("Character Ptr", "8B 8F A0 00 00 00 8B C1 F7", [this](memory::handle ptr)
 		{
-			m_character_ptr = ptr.as<void*>();
+			m_character_ptr = ptr.sub(30).as<void*>();
 		});
 		
 		main_batch.add("Player Params", "48 8B 05 ? ? ? ? F3 0F 10 80 34 01 00 00 C3", [this](memory::handle ptr)
@@ -312,42 +312,42 @@ namespace big
 		
 		main_batch.add("Item Caps", "48 8B 0D ? ? ? ? 48 85 C9 74 ? E8 ? ? ? ? 48 85 C0 74 ? 0F BE 40 12", [this](memory::handle ptr)
 		{
-			m_character_ptr = ptr.add(3).rip().as<void*>();
+			//m_character_ptr = ptr.add(3).rip().as<void*>();
 		});
 		
 		main_batch.add("Save Data", "48 8B 05 ? ? ? ? 48 8D 4C 24 30 48 8B 90 A8 00 00 00 46 8B 84 22 94 00 00 00 48 8D 15", [this](memory::handle ptr)
 		{
-			m_character_ptr = ptr.add(3).rip().as<void*>();
+			//m_character_ptr = ptr.add(3).rip().as<void*>();
 		});
 		
 		main_batch.add("Steamworks", "48 8B 05 ? ? ? ? 83 B8 40 03 00 00 00 75 ? 80 B8", [this](memory::handle ptr)
 		{
-			m_character_ptr = ptr.add(3).rip().as<void*>();
+			//m_character_ptr = ptr.add(3).rip().as<void*>();
 		});
 		
 		main_batch.add("Coating Data", "48 8B 0D ? ? ? ? E8 ? ? ? ? 48 85 C0 74 ? 0F B6 48 08", [this](memory::handle ptr)
 		{
-			m_character_ptr = ptr.add(3).rip().as<void*>();
+			//m_character_ptr = ptr.add(3).rip().as<void*>();
 		});
 		
 		main_batch.add("World Session", "48 8B 05 ? ? ? ? 83 B8 D4 01 00 00 03 7D ? F3", [this](memory::handle ptr)
 		{
-			m_character_ptr = ptr.add(3).rip().as<void*>();
+			//m_character_ptr = ptr.add(3).rip().as<void*>();
 		});
 		
 		main_batch.add("Session Quest", "48 8B 0D ? ? ? ? 44 8B F0 8B 99 40 A3 02 00 E8 ? ? ? ? 84 C0", [this](memory::handle ptr)
 		{
-			m_character_ptr = ptr.add(3).rip().as<void*>();
+			//m_character_ptr = ptr.add(3).rip().as<void*>();
 		});
 		
 		main_batch.add("Harvest Box Data", "48 8B 05 ? ? ? ? 48 8B 7C 24 40 48 8B B4 24 88 00 00 00", [this](memory::handle ptr)
 		{
-			m_character_ptr = ptr.add(3).rip().as<void*>();
+			//m_character_ptr = ptr.add(3).rip().as<void*>();
 		});
 		
 		main_batch.add("Armor Skill", "48 8B 0D ? ? ? ? 8B D0 E8 ? ? ? ? 0F BF 44 78 24 48 8B 5C 24 30", [this](memory::handle ptr)
 		{
-			m_character_ptr = ptr.add(3).rip().as<void*>();
+			//m_character_ptr = ptr.add(3).rip().as<void*>();
 		});
 		
 		main_batch.add("Current Player Name", "48 8B 0D ? ? ? ? 48 8D 55 97 41 B1 01 45 33 C0 E8", [this](memory::handle ptr)

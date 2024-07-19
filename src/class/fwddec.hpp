@@ -31,6 +31,23 @@ public:
 };
 static_assert(sizeof(Consumeable) == 0x18);
 
+class Character
+{
+public:
+	char pad_0000[0x50]; //0x0000
+	char m_name[16]; //0x0050
+	char pad_0066[42]; //0x0066
+	uint32_t m_high_rank_level; //0x0090
+	uint32_t m_zeni; //0x0094
+	uint32_t m_research_points; //0x0098
+	uint32_t m_high_rank_experience; //0x009C
+	uint32_t m_time_playing; //0x00A0
+	char pad_00A4[48]; //0x00A4
+	uint32_t m_master_rank_level; //0x00D4
+	uint32_t m_master_rank_experience; //0x00D8
+};
+static_assert(sizeof(Character) == 0xD8);
+
 class Equipment
 {
 public:
