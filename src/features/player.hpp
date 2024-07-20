@@ -18,6 +18,8 @@ namespace big
 
 		static void infinite_stamina();
 
+		static void reveal_monster();
+
 		static void critical_boost();
 
 		static void easy_part_breaker();

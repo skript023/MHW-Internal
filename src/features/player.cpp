@@ -30,6 +30,13 @@ namespace big
 			g_hook_manager->m_player_stamina.restore();
 		}
 	}
+	void player::reveal_monster()
+	{
+		if (g_settings->player.reveal_monster)
+			g_hook_manager->m_reveal_monster.apply();
+		else
+			g_hook_manager->m_reveal_monster.restore();
+	}
 	void player::critical_boost()
 	{
 		auto addr = (*g_pointers->m_player_stat);

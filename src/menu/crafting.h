@@ -10,7 +10,5 @@ namespace big
 		~crafting() = delete;
 
 		static void render_menu();
-	public:
-		static void reveal_monster();
 	};
 }

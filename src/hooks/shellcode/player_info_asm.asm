@@ -1,6 +1,6 @@
-EXTERN g_player_info: DQ
-EXTERN g_player_info_ret_addr: DQ
-
+.DATA
+	g_player_info DQ 0
+	g_player_info_ret_addr DQ 0
 .CODE
 	player_info PROC
 		mov [g_player_info],rdi

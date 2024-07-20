@@ -33,6 +33,7 @@ namespace big
 				player::unlock_all_pet();
 				player::scoutfly_max_level();
 				player::palico_gadget_cd();
+				player::reveal_monster();
 			}
 			EXCEPT_CLAUSE
 			script::get_current()->yield();

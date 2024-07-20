@@ -39,6 +39,8 @@ namespace big
 
 		ImGui::Checkbox("Inf Item Use", &g_settings->player.inf_item);
 
+		ImGui::Checkbox("Reveal Monster", &g_settings->player.reveal_monster);
+
 		ImGui::EndGroup();
 
 		ImGui::SameLine(400.f);

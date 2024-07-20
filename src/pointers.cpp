@@ -10,7 +10,6 @@ uint64_t g_def_ret_addr;
 uint64_t g_affinity_ret_addr;
 uint64_t g_affinity_call_addr;
 uint64_t g_selected_item_ret_addr;
-uint64_t g_player_info_ret_addr;
 
 namespace big
 {
@@ -231,10 +230,14 @@ namespace big
 			m_slinger_max_ammo = ptr.as<void*>();
 		});
 		
-		main_batch.add("Armor Ptr", "45 0F BE 47 2C 48 8D 15 ? ? ? ? 48 8D 4D 87", [this](memory::handle ptr)
+		main_batch.add("Highlighted Armour", "45 0F BE 47 2C 48 8D 15 ? ? ? ? 48 8D 4D 87", [this](memory::handle ptr)
 		{
-			m_armor_ptr = ptr.as<void*>();
-			g_equipment_ret_addr = ptr.add(5).as<uint64_t>();
+			m_armor_ptr = ptr.sub(175).as<void*>();
+		});
+		
+		main_batch.add("Highlight Armour", "8B C1 83 FA FF 74 20 3B 15", [this](memory::handle ptr)
+		{
+			m_select_armour = ptr.as<decltype(m_select_armour)>();
 		});
 		
 		main_batch.add("Highlighted Weapon", "0F B6 40 20 48 83 C4 20 5B C3 8B", [this](memory::handle ptr)
@@ -242,9 +245,9 @@ namespace big
 			m_weapon_ptr = ptr.sub(61).as<void*>();
 		});
 		
-		main_batch.add("Select Weapon", "E8 ? ? ? ? EB 05 E8 ? ? ? ? 48 85 C0 74 28 0F", [this](memory::handle ptr)
+		main_batch.add("Highlight Weapon", "E8 ? ? ? ? EB 05 E8 ? ? ? ? 48 85 C0 74 28 0F", [this](memory::handle ptr)
 		{
-			m_select_waapon = ptr.add(1).rip().as<void*>();
+			m_select_waapon = ptr.add(1).rip().as<decltype(m_select_waapon)>();
 		});
 		
 		main_batch.add("Atk Ptr", "48 8B 7B 08 45 0F 57 C9", [this](memory::handle ptr)

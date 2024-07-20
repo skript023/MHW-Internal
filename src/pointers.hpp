@@ -11,10 +11,8 @@ extern "C" {
 	extern uint64_t g_affinity_ret_addr;
 	extern uint64_t g_affinity_call_addr;
 	extern uint64_t g_selected_item_ret_addr;
-	extern uint64_t g_player_info_ret_addr;
 	extern uint64_t g_set_item;
 	extern uint64_t g_item_box;
-	extern uint64_t g_player_info;
 }
 
 namespace big
@@ -73,8 +71,9 @@ namespace big
 		void* m_slinger_ammo{};
 		void* m_slinger_max_ammo{};
 		void* m_armor_ptr{};
+		functions::select_armour_t m_select_armour{};
 		void* m_weapon_ptr{};
-		void* m_select_waapon{};
+		functions::select_weapon_t m_select_waapon{};
 		void* m_atk_ptr{};
 		void* m_def_ptr{};
 		void* m_affinity_ptr{};

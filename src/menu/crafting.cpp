@@ -10,9 +10,6 @@ namespace big
 	{
 		ImGui::BeginGroup();
 
-		if (ImGui::Checkbox("Reveal Monster", &g_settings->player.reveal_monster))
-			reveal_monster();
-
 		ImGui::Checkbox("Ignore Material", &g_settings->crafting.ignore_material);
 
 		ImGui::Checkbox("Unlock Equipment", &g_settings->crafting.unlock_equipment);
@@ -20,12 +17,5 @@ namespace big
 		ImGui::EndGroup();
 
 		ImGui::EndTabItem();
-	}
-	void crafting::reveal_monster()
-	{
-		if (g_settings->player.reveal_monster)
-			g_hook_manager->m_reveal_monster.apply();
-		else
-			g_hook_manager->m_reveal_monster.restore();
 	}
 }
