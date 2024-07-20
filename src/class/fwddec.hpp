@@ -150,6 +150,27 @@ namespace big
 		Vector3 m_position; //0x7D30
 	};
 
+	struct MealIngredientSlot
+	{
+		uint32_t m_ingredient[6];
+	};
+	static_assert(sizeof(MealIngredientSlot) == 0x18);
+
+	class MealStats
+	{
+	public:
+		uint64_t pad_0000; //0x0000
+		MealIngredientSlot m_ingredient_slot; //0x0008
+		char pad_0020[48]; //0x0020
+		uint32_t m_skill_a; //0x0050
+		char pad_0051[11]; //0x0051
+		uint32_t m_skill_b; //0x005C
+		char pad_005D[5]; //0x005D
+		uint32_t m_skill_c; //0x0062
+	};
+	constexpr auto sz = sizeof(MealStats);
+	static_assert(sizeof(MealStats) == 0x70);
+
 	class PlayerParams
 	{
 	public:

@@ -408,6 +408,11 @@ namespace big
 			m_dmg_on_screen = ptr.as<void*>();
 		});
 		
+		main_batch.add("Meal Handler", "49 89 6B 08 48 8D 42", [this](memory::handle ptr)
+		{
+			m_meal_handler = ptr.sub(21).as<void*>();
+		});
+		
 		main_batch.run(memory::module(nullptr));
 
 		this->m_hwnd = FindWindow(WINDOW_CLASS, WINDOW_NAME);

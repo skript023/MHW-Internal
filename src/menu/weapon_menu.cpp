@@ -56,11 +56,27 @@ namespace big
 					ImGui::InputScalar("Rarity (-1)", ImGuiDataType_U8, &melee->m_rarity);
 					ImGui::InputScalar("Sharpness Quality", ImGuiDataType_U8, &melee->m_sharpness_quality);
 					ImGui::InputScalar("Sharpness Amount", ImGuiDataType_U8, &melee->m_sharpness_amount);
-					ImGui::InputScalar("Skill", ImGuiDataType_U8, &melee->m_skill);
+
+					ImGui::Text("Skill");
+					if (ImGui::BeginCombo("##skill", g_weapon_service->get_melee_skill().c_str()))
+					{
+						for (auto& skill : g_weapon_service->get_skill_data())
+						{
+							if (ImGui::Selectable(skill.second.c_str(), melee->m_element_type == skill.first))
+							{
+								melee->m_skill = skill.first;
+							}
+							if (melee->m_skill == skill.first)
+								ImGui::SetItemDefaultFocus();
+						}
+
+						ImGui::EndCombo();
+					}
 
 					if (ImGui::TreeNode("Elemental Effect"))
 					{
-						ImGui::BeginCombo("#elementaltype", g_weapon_service->get_melee_elemental().c_str());
+						ImGui::Text("Elemental Type");
+						if (ImGui::BeginCombo("##elementaltype", g_weapon_service->get_melee_elemental().c_str()))
 						{
 							for (auto& element : g_weapon_service->get_element_data())
 							{
@@ -76,7 +92,8 @@ namespace big
 						}
 						ImGui::InputScalar("Elemental Attack", ImGuiDataType_U16, &melee->m_elemental_atk);
 
-						ImGui::BeginCombo("#hiddenelementaltype", g_weapon_service->get_melee_hidden_elemental().c_str());
+						ImGui::Text("Hidden Elemental Type");
+						if (ImGui::BeginCombo("##hiddenelementaltype", g_weapon_service->get_melee_hidden_elemental().c_str()))
 						{
 							for (auto& element : g_weapon_service->get_element_data())
 							{

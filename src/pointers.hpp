@@ -93,6 +93,7 @@ namespace big
 		void* m_selected_monster{};
 		void* m_lobby_status{};
 		void* m_dmg_on_screen{};
+		void* m_meal_handler{};
 	private:
 		functions::create_d3d11_device_and_swapchain_t create_device_and_swapchain{};
 		bool get_swapchain();

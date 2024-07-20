@@ -50,6 +50,18 @@ namespace big
 
 		return "No element found";
 	}
+	std::string weapon_service::get_melee_skill()
+	{
+		if (m_melee_weapon)
+		{
+			if (auto it = m_skill_data.find(m_melee_weapon->m_skill); it != m_skill_data.end())
+			{
+				return it->second;
+			}
+		}
+
+		return "No skill found";
+	}
 	std::string weapon_service::get_ranged_elemental()
 	{
 		if (m_ranged_weapon)
@@ -73,5 +85,17 @@ namespace big
 		}
 
 		return "No element found";
+	}
+	std::string weapon_service::get_ranged_skill()
+	{
+		if (m_ranged_weapon)
+		{
+			if (auto it = m_skill_data.find(m_ranged_weapon->m_skill); it != m_skill_data.end())
+			{
+				return it->second;
+			}
+		}
+
+		return "No skill found";
 	}
 }
