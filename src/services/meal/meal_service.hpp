@@ -10,6 +10,7 @@ namespace big
 		~meal_service() noexcept;
 
 		void init(MealStats* instance);
+		MealStats* get() { m_meal_stat == nullptr ? nullptr : m_meal_stat; };
 	private:
 		MealStats* m_meal_stat = nullptr;
 	};

@@ -150,11 +150,12 @@ namespace big
 		Vector3 m_position; //0x7D30
 	};
 
+#pragma pack(push, 1)
 	struct MealIngredientSlot
 	{
-		uint32_t m_ingredient[6];
+		uint32_t m_ingredient[5];
 	};
-	static_assert(sizeof(MealIngredientSlot) == 0x18);
+	static_assert(sizeof(MealIngredientSlot) == 0x14);
 
 	class MealStats
 	{
@@ -163,13 +164,24 @@ namespace big
 		MealIngredientSlot m_ingredient_slot; //0x0008
 		char pad_0020[48]; //0x0020
 		uint32_t m_skill_a; //0x0050
-		char pad_0051[11]; //0x0051
+		uint32_t m_skill_category; //0x0054
+		uint32_t pad_0058; //0x0058
 		uint32_t m_skill_b; //0x005C
-		char pad_005D[5]; //0x005D
+		char pad_0060[2]; //0x0060
 		uint32_t m_skill_c; //0x0062
+		char pad_0066[58]; //0x0066
+		uint32_t m_fresh_ingredients; //0x00A0
+		char pad_00A4[12]; //0x00A4
+		uint32_t m_health_effect; //0x00B0
+		uint32_t m_stamina_effect; //0x00B4
+		uint32_t m_attack_effect; //0x00B8
+		uint32_t m_defense_effect; //0x00BC
+		uint32_t m_elemental_res; //0x00C0
+		char pad_00C4[20]; //0x00C4
+		uint32_t m_palico_health; //0x00D8
 	};
-	constexpr auto sz = sizeof(MealStats);
-	static_assert(sizeof(MealStats) == 0x70);
+	static_assert(sizeof(MealStats) == 0xD8);
+#pragma pack(pop)
 
 	class PlayerParams
 	{
