@@ -1,5 +1,6 @@
 #pragma once
 #include "class/fwddec.hpp"
+#include "meal_data.hpp"
 
 namespace big
 {
@@ -10,7 +11,9 @@ namespace big
 		~meal_service() noexcept;
 
 		void init(MealStats* instance);
-		MealStats* get() { m_meal_stat == nullptr ? nullptr : m_meal_stat; };
+		MealStats* instance() { return m_meal_stat == nullptr ? nullptr : m_meal_stat; };
+		std::string get_buff(uint32_t skill);
+		std::string get_buff_category();
 	private:
 		MealStats* m_meal_stat = nullptr;
 	};

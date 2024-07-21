@@ -160,27 +160,27 @@ namespace big
 	class MealStats
 	{
 	public:
-		uint64_t pad_0000; //0x0000
-		MealIngredientSlot m_ingredient_slot; //0x0008
+		int64_t pad_0000; //0x0000
+		int32_t m_ingredient_slots[6]; //0x0008
 		char pad_0020[48]; //0x0020
-		uint32_t m_skill_a; //0x0050
-		uint32_t m_skill_category; //0x0054
-		uint32_t pad_0058; //0x0058
-		uint32_t m_skill_b; //0x005C
+		int32_t m_skill_a; //0x0050
+		int32_t m_skill_category; //0x0054
+		int32_t pad_0058; //0x0058
+		int32_t m_skill_b; //0x005C
 		char pad_0060[2]; //0x0060
-		uint32_t m_skill_c; //0x0062
+		int32_t m_skill_c; //0x0062
 		char pad_0066[58]; //0x0066
-		uint32_t m_fresh_ingredients; //0x00A0
+		int32_t m_fresh_ingredients; //0x00A0
 		char pad_00A4[12]; //0x00A4
-		uint32_t m_health_effect; //0x00B0
-		uint32_t m_stamina_effect; //0x00B4
-		uint32_t m_attack_effect; //0x00B8
-		uint32_t m_defense_effect; //0x00BC
-		uint32_t m_elemental_res; //0x00C0
+		int32_t m_health_effect; //0x00B0
+		int32_t m_stamina_effect; //0x00B4
+		int32_t m_attack_effect; //0x00B8
+		int32_t m_defense_effect; //0x00BC
+		int32_t m_elemental_res; //0x00C0
 		char pad_00C4[20]; //0x00C4
-		uint32_t m_palico_health; //0x00D8
+		int32_t m_palico_health; //0x00D8
 	};
-	static_assert(sizeof(MealStats) == 0xD8);
+	static_assert(sizeof(MealStats) == 0xDC);
 #pragma pack(pop)
 
 	class PlayerParams

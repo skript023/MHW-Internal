@@ -36,6 +36,7 @@ namespace big
 
 			int hr_ex_mult = 1;
 			int mr_ex_mult = 1;
+			int palico_exp_mult = 2;
 
 			float critical_boost = 1.25f;
 			float research_exp = 2.f;

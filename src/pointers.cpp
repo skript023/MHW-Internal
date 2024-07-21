@@ -410,7 +410,12 @@ namespace big
 		
 		main_batch.add("Meal Handler", "49 89 6B 08 48 8D 42", [this](memory::handle ptr)
 		{
-			m_meal_handler = ptr.sub(21).as<void*>();
+			m_meal_handler = ptr.sub(15).as<void*>();
+		});
+		
+		main_batch.add("Palico Experience Handler", "41 03 C6 3B C5 0F 47 C5 89 81 60", [this](memory::handle ptr)
+		{
+			m_palico_experiece_handler = ptr.sub(61).as<void*>();
 		});
 		
 		main_batch.run(memory::module(nullptr));

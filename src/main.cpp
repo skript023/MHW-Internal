@@ -16,6 +16,7 @@
 #include <services/character/character_service.hpp>
 #include <services/equipment/armour_service.hpp>
 #include <services/equipment/weapon_service.hpp>
+#include <services/meal/meal_service.hpp>
 
 DWORD APIENTRY main_thread(LPVOID)
 {
@@ -61,6 +62,7 @@ DWORD APIENTRY main_thread(LPVOID)
 		auto character_service_instance = std::make_unique<character_service>();
 		auto armour_service_instance = std::make_unique<armour_service>();
 		auto weapon_service_instance = std::make_unique<weapon_service>();
+		auto meal_service_instance = std::make_unique<meal_service>();
 		LOG(HACKER) << "Service registered.";
 
 		g_script_mgr.add_script(std::make_unique<script>(&gui::script_func));
@@ -101,6 +103,7 @@ DWORD APIENTRY main_thread(LPVOID)
 		character_service_instance.reset();
 		armour_service_instance.reset();
 		weapon_service_instance.reset();
+		meal_service_instance.reset();
 		LOG(HACKER) << "Service unregistered.";
 
 		hooking_instance.reset();
