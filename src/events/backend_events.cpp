@@ -46,11 +46,17 @@ namespace big
 		{
 			TRY_CLAUSE
 			{
-				weapon::instant_charges_greater_sword();
 				weapon::infinite_frostcraft();
 				weapon::frostcraft_recharge();
 				weapon::max_slot_armor();
 				weapon::inf_slinger_ammo();
+
+				weapon::instant_charges_greater_sword();
+				weapon::inf_spirit_gauge();
+				weapon::inf_demon_mode();
+				weapon::full_charged_switch_axe();
+				weapon::inf_gl_ammo();
+				weapon::no_gl_cooldown();
 			}
 			EXCEPT_CLAUSE
 			script::get_current()->yield();
