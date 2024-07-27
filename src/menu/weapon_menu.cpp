@@ -11,7 +11,11 @@ namespace big
 		ImGui::Checkbox("Infinite Frostcraft", &g_settings->weapon.inf_frostcraft);
 		ImGui::Checkbox("Max Sharpness", &g_settings->player.max_sharpness);
 		ImGui::Checkbox("Maxed Stat Set", &g_settings->player.maxed_stat_set);
+		if (ImGui::IsItemHovered())
+			ImGui::SetTooltip("These will trigger when you hover over a piece of equipment, when you view the 'Change Equipment' menu, OR(Set Bonus) when you press 'ESC'. I find that pressing 'ESC' is the easiest method to use, since you can just equip an armor set, enable the script and press 'ESC' for everything to take effect. You can then disable the script as to not screw with anything else. Skills will still need to be hovered over.");
 		ImGui::Checkbox("Maxed Armor Effect", &g_settings->player.maxed_armor_effect);
+		if (ImGui::IsItemHovered())
+			ImGui::SetTooltip("These will trigger when you hover over a piece of equipment, when you view the 'Change Equipment' menu, OR(Set Bonus) when you press 'ESC'. I find that pressing 'ESC' is the easiest method to use, since you can just equip an armor set, enable the script and press 'ESC' for everything to take effect. You can then disable the script as to not screw with anything else. Skills will still need to be hovered over.");
 		ImGui::EndGroup();
 
 		ImGui::SameLine(200.f);

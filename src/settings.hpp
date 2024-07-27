@@ -18,9 +18,9 @@ namespace big
 			bool inf_stamina = true;
 			bool reveal_monster = true;
 			bool max_sharpness = true;
-			bool easy_part_breaker = true;
-			bool maxed_stat_set = true;
-			bool maxed_armor_effect = true;
+			bool easy_part_breaker = false;
+			bool maxed_stat_set = false;
+			bool maxed_armor_effect = false;
 			bool part_breaker = false;
 			bool inf_item = false;
 			bool inf_mount = false;
