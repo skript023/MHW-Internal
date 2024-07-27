@@ -14,6 +14,14 @@ namespace big
 	{
 		m_character = chara;
 	}
+	void character_service::init(PlayerPosition* coords)
+	{
+		m_position = coords;
+	}
+	void character_service::init(Waypoint* wp)
+	{
+		m_waypoint = wp;
+	}
 	std::string character_service::get_name() const
 	{
 		return m_character.m_name;
@@ -46,7 +54,15 @@ namespace big
 	{
 		return m_character.m_master_rank_experience;
 	}
-	void character_service::set_name(std::string_view name)
+	Vector3 character_service::get_position() const
+	{
+		return m_position == nullptr ? Vector3(0.f, 0.f, 0.f) : m_position->m_position;
+	}
+	Vector3 character_service::get_waypoint_pos() const
+	{
+		return m_waypoint == nullptr ? Vector3(0.f, 0.f, 0.f) : m_waypoint->m_waypoint;
+	}
+	void character_service::set_name(std::string_view const& name)
 	{
 		strcpy(m_character.m_name, name.data());
 	}
@@ -77,5 +93,21 @@ namespace big
 	void character_service::set_master_rank_experience(uint32_t exp)
 	{
 		m_character.m_master_rank_experience = exp;
+	}
+	void character_service::set_player_coords(Vector3 vec3)
+	{
+		if (m_position)
+		{
+			m_position->m_position = vec3;
+			m_position->m_psycal_pos = vec3;
+		}
+	}
+	void character_service::set_player_to_waypoint()
+	{
+		if (m_position)
+		{
+			m_position->m_position = m_waypoint->m_waypoint;
+			m_position->m_psycal_pos = m_waypoint->m_waypoint;
+		}
 	}
 }

@@ -40,6 +40,9 @@ namespace big
 		static int __fastcall highlighted_armour(__int64 a1, __int64 a2, char a3, signed int* a4);
 		static int __fastcall meal_handler(__int64 a1, MealStats* a2);
 		static void __fastcall palico_experience_handler(__int64 a1, unsigned int a2, int a3, int a4);
+		static int __fastcall player_coordinates(PlayerCoordinates* a1, __int64 a2);
+		static int __fastcall player_position(PlayerPosition* a1);
+		static int __fastcall waypoint(Waypoint* a1);
 	};
 
 	struct minhook_keepalive
@@ -85,6 +88,9 @@ namespace big
 		detour_hook m_weapon_hook;
 		detour_hook m_meal_handler_hook;
 		detour_hook m_palico_exp_handler_hook;
+		detour_hook m_player_coordinates_hook;
+		detour_hook m_player_position_hook;
+		detour_hook m_waypoint_hook;
 	};
 
 	inline hooking* g_hooking{};

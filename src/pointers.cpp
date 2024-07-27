@@ -418,6 +418,21 @@ namespace big
 			m_palico_experiece_handler = ptr.sub(61).as<void*>();
 		});
 		
+		main_batch.add("Player Position", "48 89 5C 24 ? 55 56 41 57 48 8D AC 24", [this](memory::handle ptr)
+		{
+			m_player_position = ptr.as<void*>();
+		});
+		
+		main_batch.add("Player Coordinates", "48 8B C4 55 53 57 41 55 41 56 48 8D 68 A1 48 81 EC", [this](memory::handle ptr)
+		{
+			m_player_coordinates = ptr.as<void*>();
+		});
+		
+		main_batch.add("Waypoint", "40 55 48 83 EC 50 48 89 5C 24 ? 48 8B E9 48", [this](memory::handle ptr)
+		{
+			m_waypoint = ptr.as<void*>();
+		});
+		
 		main_batch.run(memory::module(nullptr));
 
 		this->m_hwnd = FindWindow(WINDOW_CLASS, WINDOW_NAME);

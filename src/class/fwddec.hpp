@@ -149,6 +149,25 @@ namespace big
 		char pad_0000[0x7D30]; //0x0000
 		Vector3 m_position; //0x7D30
 	};
+	static_assert(sizeof(PlayerCoordinates) == 0x7D3C);
+
+	class PlayerPosition
+	{
+	public:
+		char pad_0000[352]; //0x0000
+		Vector3 m_position; //0x0160
+		char pad_016C[2276]; //0x016C
+		Vector3 m_psycal_pos; //0x0A50
+	};
+	static_assert(sizeof(PlayerPosition) == 0xA5C);
+
+	class Waypoint
+	{
+	public:
+		char pad_0000[720]; //0x0000
+		Vector3 m_waypoint; //0x02D0
+	};
+	static_assert(sizeof(Waypoint) == 0x2DC);
 
 #pragma pack(push, 1)
 	struct MealIngredientSlot

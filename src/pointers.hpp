@@ -95,6 +95,9 @@ namespace big
 		void* m_dmg_on_screen{};
 		void* m_meal_handler{};
 		void* m_palico_experiece_handler{};
+		void* m_player_coordinates{};
+		void* m_player_position{};
+		void* m_waypoint{};
 	private:
 		functions::create_d3d11_device_and_swapchain_t create_device_and_swapchain{};
 		bool get_swapchain();

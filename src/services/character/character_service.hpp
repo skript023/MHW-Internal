@@ -11,6 +11,8 @@ namespace big
 		~character_service() noexcept;
 
 		void init(Character chara);
+		void init(PlayerPosition* coords);
+		void init(Waypoint* wp);
 		[[nodiscard]] std::string get_name() const;
 		[[nodiscard]] uint32_t get_zeni() const;
 		[[nodiscard]] uint32_t get_high_rank_level() const;
@@ -19,8 +21,10 @@ namespace big
 		[[nodiscard]] uint32_t get_time_playing() const;
 		[[nodiscard]] uint32_t get_master_rank_level() const;
 		[[nodiscard]] uint32_t get_master_rank_experience() const;
+		[[nodiscard]] Vector3 get_position() const;
+		[[nodiscard]] Vector3 get_waypoint_pos() const;
 		
-		void set_name(std::string_view name);
+		void set_name(std::string_view const& name);
 		void set_zeni(uint32_t zeni);
 		void set_high_rank_level(uint32_t level);
 		void set_research_points(uint32_t pts);
@@ -28,8 +32,12 @@ namespace big
 		void set_time_playing(uint32_t time);
 		void set_master_rank_level(uint32_t level);
 		void set_master_rank_experience(uint32_t exp);
+		void set_player_coords(Vector3 vec3);
+		void set_player_to_waypoint();
 	private:
 		Character m_character;
+		PlayerPosition* m_position;
+		Waypoint* m_waypoint;
 	};
 
 	inline character_service* g_character_service{};
