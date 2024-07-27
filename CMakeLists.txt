@@ -40,6 +40,7 @@ source_group(TREE ${SRC_DIR} PREFIX "src" FILES ${SRC_MAIN} )
 
 target_include_directories(MHW PRIVATE 
     "${SRC_DIR}"
+    "${SRC_DIR}/services"
     "${json_SOURCE_DIR}/single_include"
     "${imgui_SOURCE_DIR}"
 )

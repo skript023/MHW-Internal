@@ -8,7 +8,7 @@
 #include "script_mgr.hpp"
 #include "settings.hpp"
 #include "benchmark.hpp"
-#include "event_loop/backend_events.hpp"
+#include "events/backend_events.hpp"
 
 #include "services/gui/gui_service.hpp"
 #include "services/notification/notification_service.hpp"
