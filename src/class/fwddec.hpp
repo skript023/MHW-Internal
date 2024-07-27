@@ -143,13 +143,13 @@ namespace big
 	};
 	static_assert(sizeof(RangedWeapon) == 0x52);
 
-	class PlayerCoordinates
+	class PlayerForward
 	{
 	public:
 		char pad_0000[0x7D30]; //0x0000
-		Vector3 m_position; //0x7D30
+		Vector3 m_forward_pos; //0x7D30
 	};
-	static_assert(sizeof(PlayerCoordinates) == 0x7D3C);
+	static_assert(sizeof(PlayerForward) == 0x7D3C);
 
 	class PlayerPosition
 	{

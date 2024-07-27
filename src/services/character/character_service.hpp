@@ -13,6 +13,8 @@ namespace big
 		void init(Character chara);
 		void init(PlayerPosition* coords);
 		void init(Waypoint* wp);
+		void init(PlayerForward* fwd);
+
 		[[nodiscard]] std::string get_name() const;
 		[[nodiscard]] uint32_t get_zeni() const;
 		[[nodiscard]] uint32_t get_high_rank_level() const;
@@ -34,10 +36,12 @@ namespace big
 		void set_master_rank_experience(uint32_t exp);
 		void set_player_coords(Vector3 vec3);
 		void set_player_to_waypoint();
+		void set_player_forward();
 	private:
 		Character m_character;
-		PlayerPosition* m_position;
-		Waypoint* m_waypoint;
+		PlayerPosition* m_position = nullptr;
+		Waypoint* m_waypoint = nullptr;
+		PlayerForward* m_forward = nullptr;
 	};
 
 	inline character_service* g_character_service{};

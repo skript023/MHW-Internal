@@ -33,7 +33,7 @@ namespace big
 		m_weapon_hook("Weapon Hook", g_pointers->m_weapon_ptr, &hooks::highlighted_weapon),
 		m_meal_handler_hook("Meal Handler Hook", g_pointers->m_meal_handler, &hooks::meal_handler),
 		m_palico_exp_handler_hook("Meal Handler Hook", g_pointers->m_palico_experiece_handler, &hooks::palico_experience_handler),
-		m_player_coordinates_hook("Player Coordinates Hook", g_pointers->m_player_coordinates, &hooks::player_coordinates),
+		m_player_forward_hook("Player Coordinates Hook", g_pointers->m_player_forward, &hooks::player_forward),
 		m_player_position_hook("Player Position Hook", g_pointers->m_player_position, &hooks::player_position),
 		m_waypoint_hook("Waypoint Position Hook", g_pointers->m_waypoint, &hooks::waypoint)
 	{
@@ -74,6 +74,7 @@ namespace big
 		m_meal_handler_hook.enable();
 		m_palico_exp_handler_hook.enable();
 		m_player_position_hook.enable();
+		m_player_forward_hook.enable();
 		m_waypoint_hook.enable();
 
 		m_enabled = true;
@@ -84,6 +85,7 @@ namespace big
 		m_enabled = false;
 
 		m_waypoint_hook.disable();
+		m_player_forward_hook.disable();
 		m_player_position_hook.disable();
 		m_palico_exp_handler_hook.disable();
 		m_meal_handler_hook.disable();

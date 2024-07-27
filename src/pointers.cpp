@@ -425,7 +425,7 @@ namespace big
 		
 		main_batch.add("Player Coordinates", "48 8B C4 55 53 57 41 55 41 56 48 8D 68 A1 48 81 EC", [this](memory::handle ptr)
 		{
-			m_player_coordinates = ptr.as<void*>();
+			m_player_forward = ptr.as<void*>();
 		});
 		
 		main_batch.add("Waypoint", "40 55 48 83 EC 50 48 89 5C 24 ? 48 8B E9 48", [this](memory::handle ptr)

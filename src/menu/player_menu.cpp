@@ -58,6 +58,22 @@ namespace big
 
 		ImGui::EndGroup();
 
+		ImGui::BeginGroup();
+
+		if (ImGui::Button("Teleport Waypoint"))
+		{
+			g_character_service->set_player_to_waypoint();
+		}
+
+		ImGui::SameLine(200.f);
+
+		if (ImGui::Button("Teleport Forward"))
+		{
+			g_character_service->set_player_forward();
+		}
+
+		ImGui::EndGroup();
+
 		ImGui::Separator();
 
 		if (ImGui::CollapsingHeader("Character Info"))

@@ -22,6 +22,10 @@ namespace big
 	{
 		m_waypoint = wp;
 	}
+	void character_service::init(PlayerForward* fwd)
+	{
+		m_forward = fwd;
+	}
 	std::string character_service::get_name() const
 	{
 		return m_character.m_name;
@@ -104,10 +108,18 @@ namespace big
 	}
 	void character_service::set_player_to_waypoint()
 	{
-		if (m_position)
+		if (m_position && m_waypoint)
 		{
 			m_position->m_position = m_waypoint->m_waypoint;
 			m_position->m_psycal_pos = m_waypoint->m_waypoint;
+		}
+	}
+	void character_service::set_player_forward()
+	{
+		if (m_position && m_forward)
+		{
+			m_position->m_position = m_forward->m_forward_pos;
+			m_position->m_psycal_pos = m_forward->m_forward_pos;
 		}
 	}
 }

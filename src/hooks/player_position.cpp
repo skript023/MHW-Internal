@@ -3,11 +3,13 @@
 
 namespace big
 {
-	int __fastcall hooks::player_position(PlayerPosition* a1)
+	int __fastcall hooks::player_position(__int64 a1)
 	{
 		if (a1)
 		{
-			g_character_service->init(a1);
+			auto rax = *(PlayerPosition**)(a1 + 0xDB0);
+
+			g_character_service->init(rax);
 		}
 
 		return g_hooking->m_player_position_hook.get_original<decltype(&hooks::player_position)>()(a1);

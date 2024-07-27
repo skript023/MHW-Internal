@@ -95,7 +95,7 @@ namespace big
 		void* m_dmg_on_screen{};
 		void* m_meal_handler{};
 		void* m_palico_experiece_handler{};
-		void* m_player_coordinates{};
+		void* m_player_forward{};
 		void* m_player_position{};
 		void* m_waypoint{};
 	private:
