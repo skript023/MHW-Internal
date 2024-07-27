@@ -30,6 +30,11 @@ namespace big
 		mid_function_hook m_scoutfly_max;
 		mid_function_hook m_palico_gadget_cd;
 		mid_function_hook m_slinger_ammo;
+		mid_function_hook m_spirit_gauge;
+		mid_function_hook m_demon_mode;
+		mid_function_hook m_fully_charged_switch_axe;
+		mid_function_hook m_gl_ammo;
+		mid_function_hook m_gl_cooldown;
 	public:
 		byte_patching m_inf_frostcraft;
 		byte_patching m_player_state;

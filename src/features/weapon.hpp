@@ -24,10 +24,16 @@ namespace big
 		weapon& operator=(weapon&&) = delete;
 
 		static void infinite_frostcraft();
-		static void frostcraft_recharge();
 		static void instant_charges_greater_sword();
 		static void max_slot_armor();
 		static void inf_slinger_ammo();
 		static Equipment* eqipment();
+
+		static void frostcraft_recharge();
+		static void inf_spirit_gauge();
+		static void inf_demon_mode();
+		static void full_charged_switch_axe();
+		static void inf_gl_ammo();
+		static void no_gl_cooldown();
 	};
 }

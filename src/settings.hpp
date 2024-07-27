@@ -15,16 +15,16 @@ namespace big
 		struct player
 		{
 			bool invulnerable = false;
-			bool inf_stamina = false;
-			bool reveal_monster = false;
-			bool max_sharpness = false;
-			bool easy_part_breaker = false;
-			bool maxed_stat_set = false;
-			bool maxed_armor_effect = false;
+			bool inf_stamina = true;
+			bool reveal_monster = true;
+			bool max_sharpness = true;
+			bool easy_part_breaker = true;
+			bool maxed_stat_set = true;
+			bool maxed_armor_effect = true;
 			bool part_breaker = false;
 			bool inf_item = false;
 			bool inf_mount = false;
-			bool mount_reset = false;
+			bool mount_reset = true;
 			bool inf_gathering = false;
 			bool research_exp_mult = false;
 			bool inf_lucky_voucher = false;
@@ -68,7 +68,13 @@ namespace big
 
 		struct weapon
 		{
-			bool inst_chrgs_gs = false;
+			bool inst_chrgs_gs = true;
+			bool inf_spirit_gauge = false;
+			bool inf_demon_mode = false;
+			bool full_charged_switch_axe = false;
+			bool inf_gl_ammo = false;
+			bool no_gl_cooldown = false;
+
 			bool inf_frostcraft = false;
 			bool frostcraft_recharge = false;
 			bool max_slot_armor = false;

@@ -98,10 +98,15 @@ namespace big
 		void* m_player_forward{};
 		void* m_player_position{};
 		void* m_waypoint{};
+		void* m_spirit_gauge{};
+		void* m_demon_mode{};
+		void* m_fully_charged_switch_axe{};
+		void* m_gl_ammo{};
+		void* m_gl_cooldown{};
 	private:
 		functions::create_d3d11_device_and_swapchain_t create_device_and_swapchain{};
 		bool get_swapchain();
-		void window_focus();
+		HWND window_focus();
 		bool swapchain_found = false;
 		HWND m_window;
 		IDXGISwapChain* m_swapchain = nullptr;

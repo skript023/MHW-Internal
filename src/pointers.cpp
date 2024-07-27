@@ -433,9 +433,34 @@ namespace big
 			m_waypoint = ptr.as<void*>();
 		});
 		
+		main_batch.add("Spirit Gauge", "F3 0F 10 87 68 23 00 00 0F", [this](memory::handle ptr)
+		{
+			m_spirit_gauge = ptr.as<void*>();
+		});
+		
+		main_batch.add("Demon Mode", "F3 0F 10 87 6C 23 00 00 F3 0F 5E", [this](memory::handle ptr)
+		{
+			m_demon_mode = ptr.as<void*>();
+		});
+		
+		main_batch.add("Switch Axe", "F3 0F 10 B1 50 23 00 00", [this](memory::handle ptr)
+		{
+			m_fully_charged_switch_axe = ptr.as<void*>();
+		});
+		
+		main_batch.add("GL Ammo", "8B 82 6C 23 00 00 89 81", [this](memory::handle ptr)
+		{
+			m_gl_ammo = ptr.as<void*>();
+		});
+		
+		main_batch.add("GL Cooldown", "F3 0F 11 4B 10 77", [this](memory::handle ptr)
+		{
+			m_gl_cooldown = ptr.as<void*>();
+		});
+		
 		main_batch.run(memory::module(nullptr));
 
-		this->m_hwnd = FindWindow(WINDOW_CLASS, WINDOW_NAME);
+		this->m_hwnd = this->window_focus();
 		if (!this->m_hwnd)
 			throw std::runtime_error("Failed to find the game's window.");
 
@@ -542,7 +567,7 @@ namespace big
 
 		return true;
 	}
-	void pointers::window_focus()
+	HWND pointers::window_focus()
 	{
 		bool window_focus = false;
 
@@ -557,25 +582,29 @@ namespace big
 				m_handle = GetCurrentProcess();
 				m_hwnd = GetForegroundWindow();
 
-				RECT TempRect;
-				GetWindowRect(m_hwnd, &TempRect);
-				m_resolution->x = TempRect.right - TempRect.left;
-				m_resolution->y = TempRect.bottom - TempRect.top;
+				RECT rect;
+				GetWindowRect(m_hwnd, &rect);
+				m_resolution->x = rect.right - rect.left;
+				m_resolution->y = rect.bottom - rect.top;
 
-				char TempTitle[MAX_PATH];
-				GetWindowText(m_hwnd, TempTitle, sizeof(TempTitle));
-				m_title = TempTitle;
+				char title[MAX_PATH];
+				GetWindowText(m_hwnd, title, sizeof(title));
+				m_title = title;
 
-				char TempClassName[MAX_PATH];
-				GetClassName(m_hwnd, TempClassName, sizeof(TempClassName));
-				m_classname = TempClassName;
+				char className[MAX_PATH];
+				GetClassName(m_hwnd, className, sizeof(className));
+				m_classname = className;
 
-				char TempPath[MAX_PATH];
-				GetModuleFileNameExA(m_handle, NULL, TempPath, sizeof(TempPath));
-				m_path = TempPath;
+				char path[MAX_PATH];
+				GetModuleFileNameExA(m_handle, NULL, path, sizeof(path));
+				m_path = path;
 
 				window_focus = true;
+
+				return m_hwnd;
 			}
 		}
+
+		return nullptr;
 	}
 }

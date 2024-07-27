@@ -48,7 +48,7 @@ namespace big
 
             memcpy(m_new_code_address, m_new_code.data(), m_new_code.size());
 
-            uintptr_t return_address = (uintptr_t)m_target_address + 5;
+            uintptr_t return_address = m_is_nop ? (uintptr_t)m_target_address + (5 + m_nop_count) : (uintptr_t)m_target_address + 5;
             byte* jump_back_location = (byte*)m_new_code_address + m_new_code.size();
             jump_back_location[0] = 0xE9;
 
