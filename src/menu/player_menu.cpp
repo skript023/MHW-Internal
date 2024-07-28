@@ -7,7 +7,8 @@
 #include <services/meal/meal_service.hpp>
 
 float g_atk_addr = 30.f;
-float g_def_addr = 0.5f;
+int g_def_addr = 1;
+float g_def_rate_addr = 0.5f;
 float g_affinity_addr = 150.f;
 
 namespace big
@@ -91,8 +92,8 @@ namespace big
 		{
 			ImGui::InputFloat("Critical Boost", &g_settings->player.critical_boost, 1.f, 1000.f);
 			ImGui::InputFloat("Atk +", &g_atk_addr, 1.f, 1000.f);
-			ImGui::InputFloat("dmg receive percent", &g_def_addr, 1.f, 1000.f);
-			ImGui::InputInt("Def +", &*(int*)(&g_def_addr + 4), 1, 1000);
+			ImGui::InputFloat("dmg receive percent", &g_def_rate_addr, 1.f, 1000.f);
+			ImGui::InputInt("Def +", &g_def_addr, 1, 1000);
 			ImGui::InputFloat("Affinity +", &g_affinity_addr, 1.f, 1000.f);
 		}
 

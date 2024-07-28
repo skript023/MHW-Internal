@@ -50,7 +50,6 @@ namespace big
 
 	void hooking::enable()
 	{
-		m_character_ptr_hook.enable();
 		m_swapchain_present_hook.enable();
 		m_swapchain_resizebuffers_hook.enable();
 		m_swapchain_draw_indexed_hook.enable();
@@ -67,6 +66,7 @@ namespace big
 		m_inf_gathering_hook.enable();
 		m_research_exp_hook.enable();
 		m_equipment_hook.enable();
+		m_character_ptr_hook.enable();
 		m_player_atk_stat_hook.enable();
 		m_player_def_stat_hook.enable();
 		m_player_affinity_stat_hook.enable();
