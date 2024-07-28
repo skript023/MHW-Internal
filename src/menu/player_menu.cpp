@@ -7,7 +7,7 @@
 #include <services/meal/meal_service.hpp>
 
 float g_atk_addr = 30.f;
-int g_def_addr = 1;
+int g_def_addr = 5000;
 float g_def_rate_addr = 0.5f;
 float g_affinity_addr = 150.f;
 
