@@ -68,7 +68,7 @@ namespace big
 		m_equipment_hook.enable();
 		m_character_ptr_hook.enable();
 		m_player_atk_stat_hook.enable();
-		m_player_def_stat_hook.enable();
+		//m_player_def_stat_hook.enable();
 		m_player_affinity_stat_hook.enable();
 		m_weapon_hook.enable();
 		m_meal_handler_hook.enable();
