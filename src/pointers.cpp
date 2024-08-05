@@ -305,7 +305,7 @@ namespace big
 		
 		main_batch.add("World Data", "48 8B 05 ? ? ? ? F3 0F 10 40 38 0F 2F 40 50 72", [this](memory::handle ptr)
 		{
-			m_world_data = ptr.add(3).rip().as<void*>();
+			m_world_data = ptr.add(3).rip().as<decltype(m_world_data)>();
 		});
 		
 		main_batch.add("Session Data", "48 8B 3D ? ? ? ? BB FF FF FF FF 41 8B 87 0C 29 00 00", [this](memory::handle ptr)

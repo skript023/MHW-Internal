@@ -83,7 +83,7 @@ namespace big
 		void* m_skill_params{};
 		void* m_mantle_params{};
 		void* m_player_data{};
-		void* m_world_data{};
+		World** m_world_data{};
 		void* m_session_data{};
 		void* m_gathering_data{};
 		Monster** m_monster_data{};

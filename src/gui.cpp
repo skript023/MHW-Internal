@@ -15,6 +15,7 @@
 #include "menu/notification.h"
 #include "menu/navigation_menu.h"
 #include "services/notification/notification_service.hpp"
+#include <menu/overlay.h>
 
 namespace big
 {
@@ -81,6 +82,7 @@ namespace big
 	void gui::dx_on_tick()
 	{
 		draw::notifications();
+		overlay::render_menu();
 	}
 
 	void gui::dx_on_opened()

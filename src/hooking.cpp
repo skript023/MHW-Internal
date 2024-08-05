@@ -91,7 +91,7 @@ namespace big
 		m_meal_handler_hook.disable();
 		m_weapon_hook.disable();
 		m_player_affinity_stat_hook.disable();
-		m_player_def_stat_hook.disable();
+		//m_player_def_stat_hook.disable();
 		m_player_atk_stat_hook.disable();
 		m_equipment_hook.disable();
 		m_research_exp_hook.disable();

@@ -278,7 +278,7 @@ namespace big
 		float m_timer; //0x1D608
 		float m_max_timer; //0x1D60C
 		char pad_1D610[424]; //0x1D610
-		uint32_t m_monster_id; //0x1D7B8
+		int32_t m_monster_id; //0x1D7B8
 	};
 	static_assert(sizeof(MonsterWorldStatus) == 0x1D7BC, "MonsterWorldStatus not properly sized.");
 
@@ -314,4 +314,16 @@ namespace big
 		MonsterEntry* m_third_world_monster; //0xEF8
 	};
 	static_assert(sizeof(Monster) == 0xF00, "Monster not properly sized.");
+
+	class World
+	{
+	public:
+		char pad_0000[56]; //0x0000
+		float m_time_of_day; //0x0038
+		float m_unk_3C; //0x003C
+		float m_unk_40; //0x0040
+		char pad_0044[72]; //0x0044
+		uint32_t m_weather; //0x008C
+	};
+	static_assert(sizeof(World) == 0x90);
 }
