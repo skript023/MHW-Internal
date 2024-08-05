@@ -1,5 +1,5 @@
 #pragma once
-#include "class/fwddec.hpp"
+#include "mhw/fwddec.hpp"
 
 namespace big
 {

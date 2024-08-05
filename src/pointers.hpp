@@ -1,7 +1,7 @@
 #pragma once
 #include "common.hpp"
 #include "function_types.hpp"
-#include <class/vector.hpp>
+#include <mhw/vector.hpp>
 
 extern "C" {
 	extern uint64_t g_equipment_ret_addr;

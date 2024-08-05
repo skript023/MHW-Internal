@@ -3,7 +3,7 @@
 #include "detour_hook.hpp"
 #include "vmt_hook.hpp"
 
-#include "class/fwddec.hpp"
+#include "mhw/fwddec.hpp"
 
 extern "C" void equipment();
 extern "C" void player_atk_stat();

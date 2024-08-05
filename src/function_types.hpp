@@ -1,6 +1,6 @@
 #pragma once
 #include "common.hpp"
-#include <class/fwddec.hpp>
+#include <mhw/fwddec.hpp>
 
 namespace big::functions
 {

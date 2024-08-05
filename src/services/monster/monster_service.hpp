@@ -1,6 +1,6 @@
 #pragma once
 #include "data/monster_data.hpp"
-#include "class/fwddec.hpp"
+#include "mhw/fwddec.hpp"
 
 namespace big
 {

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "common.hpp"
-#include "class/fwddec.hpp"
+#include "mhw/fwddec.hpp"
 
 extern "C" float g_frostcraft_drawn;
 extern "C" float g_frostcraft_sheathed;
