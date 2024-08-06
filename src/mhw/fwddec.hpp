@@ -34,12 +34,42 @@ namespace big
 	};
 	static_assert(sizeof(Consumeable) == 0x18);
 
+	struct LayeredArmour
+	{
+		uint32_t m_layered_head; //0xE7434
+		uint32_t m_layered_chest; //0xE7438
+		uint32_t m_layered_arms; //0xE743C
+		uint32_t m_layered_waist; //0xE7440
+		uint32_t m_layered_legs; //0xE7444
+	};
+
+	struct Palico
+	{
+		char m_name[20]; //0x10261C
+		char pad_102630[44]; //0x102630
+		uint32_t m_experience; //0x10265C
+		uint32_t m_vigorwasp; //0x102660
+		uint32_t m_flashfly; //0x102664
+		uint32_t m_shieldspire; //0x102668
+		uint32_t m_coral; //0x10266C
+		uint32_t m_plunder_blade; //0x102670
+		uint32_t m_cocktail; //0x102674
+		char pad_x102678[40]; //0x102678
+		uint32_t m_bugtrappers; //0x1026A0
+		uint32_t m_protectors; //0x1026A4
+		uint32_t m_troupers; //0x1026A8
+		uint32_t m_plunderers; //0x1026AC
+		uint32_t m_linguist; //0x1026B0
+		uint32_t m_unk; //0x1026B4
+		uint32_t m_unity; //0x1026B8
+	};
+
 	class Character
 	{
 	public:
 		char pad_0000[0x50]; //0x0000
 		char m_name[16]; //0x0050
-		char pad_0066[42]; //0x0066
+		char pad_0060[48]; //0x0060
 		uint32_t m_high_rank_level; //0x0090
 		uint32_t m_zeni; //0x0094
 		uint32_t m_research_points; //0x0098
@@ -49,40 +79,14 @@ namespace big
 		uint32_t m_master_rank_level; //0x00D4
 		uint32_t m_master_rank_experience; //0x00D8
 		//char pad_00DC[947032]; //0x00DC
-		//struct LayeredArmour
-		//{
-		//	uint32_t m_layered_head; //0xE7434
-		//	uint32_t m_layered_chest; //0xE7438
-		//	uint32_t m_layered_arms; //0xE743C
-		//	uint32_t m_layered_waist; //0xE7440
-		//	uint32_t m_layered_legs; //0xE7444
-		//} m_layered_armour;
+		//LayeredArmour m_layered_armour;
 		//char pad_E74448[111060]; //0xE7448
-		//struct Palico
-		//{
-		//	char m_name[20]; //0x10261C
-		//	char pad_102630[44]; //0x102630
-		//	uint32_t m_experience; //0x10265C
-		//	uint32_t m_vigorwasp; //0x102660
-		//	uint32_t m_flashfly; //0x102664
-		//	uint32_t m_shieldspire; //0x102668
-		//	uint32_t m_coral; //0x10266C
-		//	uint32_t m_plunder_blade; //0x102670
-		//	uint32_t m_cocktail; //0x102674
-		//	char pad_x102678[40]; //0x102678
-		//	uint32_t m_bugtrappers; //0x1026A0
-		//	uint32_t m_protectors	; //0x1026A4
-		//	uint32_t m_troupers; //0x1026A8
-		//	uint32_t m_plunderers; //0x1026AC
-		//	uint32_t m_linguist; //0x1026B0
-		//	uint32_t m_unk; //0x1026B4
-		//	uint32_t m_unity; //0x1026B8
-		//} m_palico;
+		//Palico m_palico;
 		//char pad_1026BC[1541640]; //0x1026BC
 		//uint32_t m_lucky_voucher; //0x27ACC4
 	};
-	//static_assert(sizeof(Character) == 0x27ACC4);
-	static_assert(sizeof(Character) == 0xD8);
+	//static_assert(sizeof(Character) == 0x27ACC8);
+	static_assert(sizeof(Character) == 0xDC);
 
 	class Equipment
 	{

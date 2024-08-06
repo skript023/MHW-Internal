@@ -1,6 +1,7 @@
+#include <gui.hpp>
 #include "overlay.h"
 #include "monster/monster_service.hpp"
-#include <gui.hpp>
+#include <character/character_service.hpp>
 
 namespace big
 {
@@ -16,6 +17,14 @@ namespace big
 		if (ImGui::Begin("overlay", nullptr, window_flags))
 		{
 			ImGui::Text("Overlay Info");
+
+			ImGui::Text("Zeni : %d", g_character_service->get_zeni());
+			ImGui::Text("HR EXP : %d", g_character_service->get_high_rank_experience());
+			ImGui::Text("HR Level : %d", g_character_service->get_high_rank_level());
+			ImGui::Text("MR EXP : %d", g_character_service->get_master_rank_experience());
+			ImGui::Text("MR Level : %d", g_character_service->get_master_rank_level());
+			ImGui::Text("Research Points : %d", g_character_service->get_research_points());
+			ImGui::Text("Time Playing (ms) : %d", g_character_service->get_time_playing());
 
 			ImGui::Separator();
 			for (int i = 0; i < 3; i++)
