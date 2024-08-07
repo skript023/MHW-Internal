@@ -10,14 +10,15 @@
 #include "benchmark.hpp"
 #include "events/backend_events.hpp"
 
-#include "services/gui/gui_service.hpp"
-#include "services/notification/notification_service.hpp"
 #include <hook_manager.hpp>
-#include <services/character/character_service.hpp>
-#include <services/equipment/armour_service.hpp>
-#include <services/equipment/weapon_service.hpp>
-#include <services/meal/meal_service.hpp>
+#include <gui/gui_service.hpp>
+#include <meal/meal_service.hpp>
+#include <world/world_service.hpp>
 #include <monster/monster_service.hpp>
+#include <equipment/weapon_service.hpp>
+#include <equipment/armour_service.hpp>
+#include <character/character_service.hpp>
+#include <notification/notification_service.hpp>
 
 DWORD APIENTRY main_thread(LPVOID)
 {
@@ -65,6 +66,7 @@ DWORD APIENTRY main_thread(LPVOID)
 		auto weapon_service_instance = std::make_unique<weapon_service>();
 		auto meal_service_instance = std::make_unique<meal_service>();
 		auto monster_service_instance = std::make_unique<monster_service>();
+		auto world_service_instance = std::make_unique<world_service>();
 		LOG(HACKER) << "Service registered.";
 
 		g_script_mgr.add_script(std::make_unique<script>(&gui::script_func));
@@ -107,6 +109,7 @@ DWORD APIENTRY main_thread(LPVOID)
 		weapon_service_instance.reset();
 		meal_service_instance.reset();
 		monster_service_instance.reset();
+		world_service_instance.reset();
 		LOG(HACKER) << "Service unregistered.";
 
 		hooking_instance.reset();

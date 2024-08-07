@@ -1,6 +1,7 @@
 #include <gui.hpp>
 #include "overlay.h"
-#include "monster/monster_service.hpp"
+#include <world/world_service.hpp>
+#include <monster/monster_service.hpp>
 #include <character/character_service.hpp>
 
 namespace big
@@ -18,6 +19,9 @@ namespace big
 		{
 			ImGui::Text("Overlay Info");
 
+			ImGui::SeparatorText("Character Info");
+
+			ImGui::Text("Name : %s", g_character_service->get_name());
 			ImGui::Text("Zeni : %d", g_character_service->get_zeni());
 			ImGui::Text("HR EXP : %d", g_character_service->get_high_rank_experience());
 			ImGui::Text("HR Level : %d", g_character_service->get_high_rank_level());
@@ -26,7 +30,13 @@ namespace big
 			ImGui::Text("Research Points : %d", g_character_service->get_research_points());
 			ImGui::Text("Time Playing (ms) : %d", g_character_service->get_time_playing());
 
-			ImGui::Separator();
+			ImGui::SeparatorText("World Info");
+
+			ImGui::Text("Time of Days : %f", g_world_service->get_time_of_date());
+			ImGui::Text("Weather : %s", g_world_service->get_weather());
+
+			ImGui::SeparatorText("Monster Info");
+
 			for (int i = 0; i < 3; i++)
 			{
 				if (g_monster_service->get_entry(i))

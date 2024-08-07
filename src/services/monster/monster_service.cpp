@@ -74,7 +74,7 @@ namespace big
 			}
 		}
 
-		return "Monster Not Found";
+		return std::format("Monster Not Found, ID: {}", index);
 	}
 	float monster_service::get_timer(int index)
 	{

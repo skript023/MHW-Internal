@@ -48,6 +48,7 @@
 #include <regex>
 #include <tlhelp32.h>
 #include <Psapi.h>
+#include <format>
 
 #include <nlohmann/json.hpp>
 
