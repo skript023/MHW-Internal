@@ -2,7 +2,7 @@
 
 namespace big::world_data
 {
-    std::map<uint32_t, std::string> weather_data = {
+    inline std::map<uint32_t, std::string> weather_data = {
         {0, "Clear"},
         {1, "Rain"},
         {2, "Sandstorm"},
