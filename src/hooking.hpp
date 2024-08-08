@@ -43,6 +43,8 @@ namespace big
 		static int __fastcall player_forward(PlayerForward* a1, __int64 a2);
 		static int __fastcall player_position(__int64 a1);
 		static int __fastcall waypoint(Waypoint* a1);
+		static int great_sword_charges(unsigned int a1, __int64 a2, float a3);
+		static unsigned int glaive_spirit_gauge(__int64 a1, float a2);
 	};
 
 	struct minhook_keepalive
