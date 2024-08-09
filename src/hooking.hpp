@@ -45,6 +45,7 @@ namespace big
 		static int __fastcall waypoint(Waypoint* a1);
 		static int great_sword_charges(unsigned int a1, __int64 a2, float a3);
 		static unsigned int glaive_spirit_gauge(__int64 a1, float a2);
+		static unsigned int monster_part_breaking(__int64 a1, unsigned int a2);
 	};
 
 	struct minhook_keepalive
