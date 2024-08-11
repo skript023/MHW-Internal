@@ -43,9 +43,11 @@ namespace big
 		static int __fastcall player_forward(PlayerForward* a1, __int64 a2);
 		static int __fastcall player_position(__int64 a1);
 		static int __fastcall waypoint(Waypoint* a1);
-		static int great_sword_charges(unsigned int a1, __int64 a2, float a3);
-		static unsigned int glaive_spirit_gauge(__int64 a1, float a2);
-		static unsigned int monster_part_breaking(__int64 a1, unsigned int a2);
+		static int WINAPI great_sword_charges(__int64 a1, uint32_t a2, float a3);
+		static unsigned int __fastcall glaive_spirit_gauge(__int64 a1, float a2);
+		static __int64 __fastcall monster_part_breaking(__int64 a1, unsigned int a2);
+		static __int64 __fastcall monster_on_map(__int64 a1, int a2, int a3);
+		static int __fastcall bow_gun_effect(__int64 a1);
 	};
 
 	struct minhook_keepalive
@@ -94,6 +96,10 @@ namespace big
 		detour_hook m_player_forward_hook;
 		detour_hook m_player_position_hook;
 		detour_hook m_waypoint_hook;
+
+		detour_hook m_part_break_handle_hook;
+		detour_hook m_monster_on_map_hook;
+		detour_hook m_bow_gun_effect_hook;
 	};
 
 	inline hooking* g_hooking{};

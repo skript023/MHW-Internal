@@ -35,7 +35,10 @@ namespace big
 		m_palico_exp_handler_hook("Meal Handler Hook", g_pointers->m_palico_experiece_handler, &hooks::palico_experience_handler),
 		m_player_forward_hook("Player Coordinates Hook", g_pointers->m_player_forward, &hooks::player_forward),
 		m_player_position_hook("Player Position Hook", g_pointers->m_player_position, &hooks::player_position),
-		m_waypoint_hook("Waypoint Position Hook", g_pointers->m_waypoint, &hooks::waypoint)
+		m_waypoint_hook("Waypoint Position Hook", g_pointers->m_waypoint, &hooks::waypoint),
+		m_part_break_handle_hook("Easy Part Break Hook", g_pointers->m_easy_breaker, &hooks::monster_part_breaking),
+		m_monster_on_map_hook("Monster On Map Progress Hook", g_pointers->m_reveal_monster, &hooks::monster_on_map),
+		m_bow_gun_effect_hook("Bow Gun Effect Hook", g_pointers->m_bow_gun_effect, &hooks::bow_gun_effect)
 	{
 		g_hooking = this;
 	}
@@ -76,6 +79,9 @@ namespace big
 		m_player_position_hook.enable();
 		m_player_forward_hook.enable();
 		m_waypoint_hook.enable();
+		m_part_break_handle_hook.enable();
+		m_monster_on_map_hook.enable();
+		m_bow_gun_effect_hook.enable();
 
 		m_enabled = true;
 	}
@@ -84,6 +90,9 @@ namespace big
 	{
 		m_enabled = false;
 
+		m_bow_gun_effect_hook.disable();
+		m_monster_on_map_hook.disable();
+		m_part_break_handle_hook.disable();
 		m_waypoint_hook.disable();
 		m_player_forward_hook.disable();
 		m_player_position_hook.disable();

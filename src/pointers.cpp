@@ -40,14 +40,14 @@ namespace big
 			m_part_breaker = ptr.as<void*>();
 		});
 		
-		main_batch.add("Easy Part Breaker", "F3 0F 10 41 10 C3", [this](memory::handle ptr)
+		main_batch.add("Easy Part Breaker", "48 8B C1 3B 51 10 72 04", [this](memory::handle ptr)
 		{
 			m_easy_breaker = ptr.as<void*>();
 		});
 		
 		main_batch.add("Show All Monster", "F3 0F 10 77 28 48", [this](memory::handle ptr)
 		{
-			m_reveal_monster = ptr.as<void*>();
+			m_reveal_monster = ptr.sub(132).as<void*>();
 		});
 		
 		main_batch.add("Player Stat", "48 8B 05 ? ? ? ? F3 0F 10 88 ? ? ? ? 0F 2F C1 77 03 0F 28 C1", [this](memory::handle ptr)
@@ -458,6 +458,17 @@ namespace big
 			m_gl_cooldown = ptr.as<void*>();
 		});
 		
+		main_batch.add("Charged Blade Phials", "8B 87 74 23 00 00 0F", [this](memory::handle ptr)
+		{
+			m_charged_blade_phials = ptr.as<void*>();
+		});
+		
+		main_batch.add("Bow Gun Effect", "48 89 5C 24 ? 57 48 83 EC 20 48 8B D9 E8", [this](memory::handle ptr)
+		{
+			m_bow_gun_effect = ptr.add(14).rip().as<void*>();
+			m_bow_gun_effect_apply = ptr.add(14).rip().add(19).rip().as<decltype(m_bow_gun_effect_apply)>();
+		});
+
 		main_batch.run(memory::module(nullptr));
 
 		this->m_hwnd = this->window_focus();

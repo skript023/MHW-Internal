@@ -2,15 +2,24 @@
 
 namespace big
 {
-    unsigned int hooks::monster_part_breaking(__int64 a1, unsigned int a2)
+    __int64 __fastcall hooks::monster_part_breaking(__int64 a1, unsigned int a2)
     {
-        if (*(uint32_t *)(a1 + 0x10) <= a2) 
+        __int64 result; // rax@1
+
+        if (g_settings->player.easy_part_breaker)
         {
-            return 0;
+            result = a1;
+
+            if (a2 < *(DWORD*)(a1 + 16))
+            {
+                result = *(uintptr_t*)(a1 + 32);
+
+                *(DWORD*)(*(uintptr_t*)(result + 8i64 * a2) + 16i64) = 0;
+            }
+
+            return result;
         }
 
-        *(uint32_t*)(*(int64_t*)(*(int64_t*)(a2 + 0x20) + (uint64_t)a2 * 8) + 0x10) = 0;
-
-        return *(uint32_t*)(*(int64_t*)(*(int64_t*)(a2 + 0x20) + (uint64_t)a2 * 8) + 0x10);
+        return g_hooking->m_part_break_handle_hook.get_original<decltype(&hooks::monster_part_breaking)>()(a1, a2);
     }
 }

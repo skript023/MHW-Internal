@@ -9,9 +9,9 @@ namespace big
 		~hook_manager();
 
 	public:
-		mid_function_hook m_easy_breaker;
+		//mid_function_hook m_easy_breaker;
 		mid_function_hook m_part_breaker;
-		mid_function_hook m_reveal_monster;
+		//mid_function_hook m_reveal_monster;
 		mid_function_hook m_maxed_effect_set;
 		mid_function_hook m_maxed_attribute;
 		mid_function_hook m_max_sharpness;
@@ -35,6 +35,7 @@ namespace big
 		mid_function_hook m_fully_charged_switch_axe;
 		mid_function_hook m_gl_ammo;
 		mid_function_hook m_gl_cooldown;
+		mid_function_hook m_charged_blade_phials;
 	public:
 		byte_patching m_inf_frostcraft;
 		byte_patching m_player_state;

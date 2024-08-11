@@ -103,6 +103,9 @@ namespace big
 		void* m_fully_charged_switch_axe{};
 		void* m_gl_ammo{};
 		void* m_gl_cooldown{};
+		void* m_charged_blade_phials{};
+		void* m_bow_gun_effect{};
+		functions::bow_gun_effect_apply_t m_bow_gun_effect_apply{};
 	private:
 		functions::create_d3d11_device_and_swapchain_t create_device_and_swapchain{};
 		bool get_swapchain();

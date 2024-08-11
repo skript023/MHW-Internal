@@ -97,11 +97,11 @@ namespace big
 					ImGui::TreePop();
 				}
 
-				ImGui::InputScalar("Fire Res", ImGuiDataType_S16, &equipment->m_fire_res);
-				ImGui::InputScalar("Water Res", ImGuiDataType_S16, &equipment->m_water_res);
-				ImGui::InputScalar("Thunder Res", ImGuiDataType_S16, &equipment->m_thunder_res);
-				ImGui::InputScalar("Ice Res", ImGuiDataType_S16, &equipment->m_ice_res);
-				ImGui::InputScalar("Dragon Res", ImGuiDataType_S16, &equipment->m_dragon_res);
+				ImGui::InputScalar("Fire Res", ImGuiDataType_S8, &equipment->m_fire_res);
+				ImGui::InputScalar("Water Res", ImGuiDataType_S8, &equipment->m_water_res);
+				ImGui::InputScalar("Thunder Res", ImGuiDataType_S8, &equipment->m_thunder_res);
+				ImGui::InputScalar("Ice Res", ImGuiDataType_S8, &equipment->m_ice_res);
+				ImGui::InputScalar("Dragon Res", ImGuiDataType_S8, &equipment->m_dragon_res);
 
 				if (ImGui::TreeNode("Equipment Effect"))
 				{

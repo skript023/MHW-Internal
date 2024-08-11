@@ -32,10 +32,10 @@ namespace big
 	}
 	void player::reveal_monster()
 	{
-		if (g_settings->player.reveal_monster)
+		/*if (g_settings->player.reveal_monster)
 			g_hook_manager->m_reveal_monster.apply();
 		else
-			g_hook_manager->m_reveal_monster.restore();
+			g_hook_manager->m_reveal_monster.restore();*/
 	}
 	void player::critical_boost()
 	{
@@ -44,14 +44,14 @@ namespace big
 	}
 	void player::easy_part_breaker()
 	{
-		if (g_settings->player.easy_part_breaker)
+		/*if (g_settings->player.easy_part_breaker)
 		{
 			g_hook_manager->m_easy_breaker.apply();
 		}
 		else
 		{
 			g_hook_manager->m_easy_breaker.restore();
-		}
+		}*/
 	}
 	void player::part_breaker()
 	{
