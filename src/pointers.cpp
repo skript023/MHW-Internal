@@ -463,6 +463,21 @@ namespace big
 			m_charged_blade_phials = ptr.as<void*>();
 		});
 		
+		main_batch.add("Bow Gun Charges", "89 BB B4 23 00 00", [this](memory::handle ptr)
+		{
+			m_bow_gun_charge = ptr.as<void*>();
+		});
+		
+		main_batch.add("Bows Support All Coatings", "0F B6 51 45 4D 8B F9", [this](memory::handle ptr)
+		{
+			m_bow_coatings = ptr.as<void*>();
+		});
+		
+		main_batch.add("Inf Wyvern Blast", "8B 8F 48 28 00 00 89", [this](memory::handle ptr)
+		{
+			m_inf_wyvern_blast = ptr.as<void*>();
+		});
+		
 		main_batch.add("Bow Gun Effect", "48 89 5C 24 ? 57 48 83 EC 20 48 8B D9 E8", [this](memory::handle ptr)
 		{
 			m_bow_gun_effect = ptr.add(14).rip().as<void*>();

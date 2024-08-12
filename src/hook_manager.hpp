@@ -36,6 +36,9 @@ namespace big
 		mid_function_hook m_gl_ammo;
 		mid_function_hook m_gl_cooldown;
 		mid_function_hook m_charged_blade_phials;
+		mid_function_hook m_bow_gun_charge;
+		mid_function_hook m_bow_coatings;
+		mid_function_hook m_inf_wyvern_blast;
 	public:
 		byte_patching m_inf_frostcraft;
 		byte_patching m_player_state;

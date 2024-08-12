@@ -104,6 +104,9 @@ namespace big
 		void* m_gl_ammo{};
 		void* m_gl_cooldown{};
 		void* m_charged_blade_phials{};
+		void* m_bow_gun_charge{};
+		void* m_bow_coatings{};
+		void* m_inf_wyvern_blast{};
 		void* m_bow_gun_effect{};
 		functions::bow_gun_effect_apply_t m_bow_gun_effect_apply{};
 	private:
