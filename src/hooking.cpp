@@ -146,6 +146,9 @@ namespace big
 		if (g_running)
 		{
 			g_renderer->wndproc(hwnd, msg, wparam, lparam);
+
+			if (g_gui.m_opened)
+				return 1;
 		}
 
 		return CallWindowProc(g_hooking->m_og_wndproc, hwnd, msg, wparam, lparam);
