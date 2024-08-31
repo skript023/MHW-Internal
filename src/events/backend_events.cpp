@@ -2,6 +2,7 @@
 #include "script.hpp"
 #include <features/player.hpp>
 #include <features/weapon.hpp>
+#include <server_module.hpp>
 
 namespace big
 {
@@ -70,6 +71,7 @@ namespace big
 			TRY_CLAUSE
 			{
 				g_settings->attempt_save();
+				g_server_module->run();
 				features();
 			} 
 			EXCEPT_CLAUSE

@@ -14,6 +14,7 @@
 #include <gui/gui_service.hpp>
 #include <meal/meal_service.hpp>
 #include <world/world_service.hpp>
+#include <server/server_module.hpp>
 #include <monster/monster_service.hpp>
 #include <equipment/weapon_service.hpp>
 #include <equipment/armour_service.hpp>
@@ -58,6 +59,9 @@ DWORD APIENTRY main_thread(LPVOID)
 
 		auto hooking_instance = std::make_unique<hooking>();
 		LOG(HACKER) << "Hooking initialized.";
+
+		auto server_instance = std::make_unique<server_module>();
+		LOG(HACKER) << "Connected to server.";
 
 		auto gui_service_instance = std::make_unique<gui_service>();
 		auto notification_instance = std::make_unique<notification_service>();
@@ -111,6 +115,9 @@ DWORD APIENTRY main_thread(LPVOID)
 		monster_service_instance.reset();
 		world_service_instance.reset();
 		LOG(HACKER) << "Service unregistered.";
+
+		server_instance.reset();
+		LOG(HACKER) << "Disconnected from server.";
 
 		hooking_instance.reset();
 		LOG(HACKER) << "Hooking uninitialized.";

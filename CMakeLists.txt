@@ -12,6 +12,7 @@ include(scripts/g3log.cmake)
 
 message("\nFetching custom modules")
 include(scripts/imgui.cmake)
+include(scripts/websocket.cmake)
 
 
 # MHW
@@ -25,6 +26,8 @@ file(GLOB_RECURSE SRC_MAIN
     "${SRC_DIR}/**.asm"
 )
 
+add_library(easyws STATIC "${websocket_SOURCE_DIR}/easywsclient.cpp")
+
 add_library(MHW MODULE "${SRC_MAIN}")
 
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
@@ -35,12 +38,14 @@ source_group(TREE ${SRC_DIR} PREFIX "src" FILES ${SRC_MAIN} )
 target_include_directories(MHW PRIVATE 
     "${SRC_DIR}"
     "${SRC_DIR}/services"
+    "${SRC_DIR}/server"
     "${json_SOURCE_DIR}/single_include"
     "${imgui_SOURCE_DIR}"
+    "${websocket_SOURCE_DIR}"
 )
 
 target_precompile_headers(MHW PRIVATE "${SRC_DIR}/common.hpp")
-target_link_libraries(MHW PRIVATE minhook imgui g3log)
+target_link_libraries(MHW PRIVATE minhook imgui g3log easyws)
 
 # Warnings as errors
 set_property(TARGET MHW PROPERTY COMPILE_WARNING_AS_ERROR ON)
