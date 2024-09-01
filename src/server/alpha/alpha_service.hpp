@@ -16,10 +16,10 @@ namespace big
 
 		void find()
 		{
-			m_event.event = "finAllAlphaChannel";
+			m_event.event = "findAllAlpha";
 
 			m_alpha_gateway->send_message(m_event.to_json_string());
-			m_alpha_gateway->on_message_received([](const std::string& message) {
+			m_alpha_gateway->on_message_received([](std::string const& message) {
 				if (message.empty())
 				{
 					LOG(HACKER) << "Received an empty message";
@@ -28,15 +28,15 @@ namespace big
 				{
 					LOG(HACKER) << "Received: " << message;
 				}
-				});
+			});
 		}
 
 		void ping()
 		{
-			m_event.event = "pingAlphaChannel";
+			m_event.event = "pingAlpha";
 
 			m_alpha_gateway->send_message(m_event.to_json_string());
-			m_alpha_gateway->on_message_received([](const std::string& message) {
+			m_alpha_gateway->on_message_received([](std::string const& message) {
 				if (message.empty())
 				{
 					LOG(HACKER) << "Received an empty message";
@@ -45,7 +45,7 @@ namespace big
 				{
 					LOG(HACKER) << "Received: " << message;
 				}
-				});
+			});
 		}
 
 		void poll()
