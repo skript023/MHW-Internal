@@ -15,8 +15,8 @@ namespace big
 	public:
 		using MessageCallback = std::function<void(const std::string&)>;
 
-		socket_client(const std::string& host, int port) :
-			host_(host), port_(port), ws_(nullptr), m_connection_status(eConnectionStatus::DISCONNECT)
+		socket_client(const std::string& host) :
+			host_(host), ws_(nullptr), m_connection_status(eConnectionStatus::DISCONNECT)
 		{
 			if (!connect())
 			{
@@ -46,7 +46,7 @@ namespace big
 				return false;
 			}
 
-			std::string url = std::format("ws://{}:{}", host_, port_);;
+			std::string url = std::format("ws://{}", host_);
 
 			LOG(HACKER) << "Connecting to " << url;
 
@@ -129,7 +129,6 @@ namespace big
 
 	private:
 		std::string host_;
-		int port_;
 		easywsclient::WebSocket* ws_ = nullptr;
 		std::stack<MessageCallback> m_message_callback;
 		std::recursive_mutex m_mutex;

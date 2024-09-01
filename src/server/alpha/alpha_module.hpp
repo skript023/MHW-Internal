@@ -9,7 +9,7 @@ namespace big
 	public:
 		alpha_module()
 		{
-			socket_client_ = std::make_shared<socket_client>("127.0.0.1", 3001);
+			socket_client_ = std::make_shared<socket_client>("server.imost.id/ws/alpha");
 		}
 
 		std::shared_ptr<socket_client> getClient()
