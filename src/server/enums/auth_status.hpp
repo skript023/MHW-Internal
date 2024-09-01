@@ -2,7 +2,7 @@
 
 namespace big
 {
-	enum class eAuthStatus
+	enum class eAuthStatus : uint32_t
 	{
 		UNAUTHENTICATED = 1 << 25,
 		AUTHENTICATED = 1 << 12,

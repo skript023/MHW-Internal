@@ -42,7 +42,6 @@ namespace big
 			if (WSAStartup(MAKEWORD(2, 2), &wsaData) != 0)
 			{
 				LOG(WARNING) << "WSAStartup failed";
-
 				return false;
 			}
 
@@ -57,8 +56,14 @@ namespace big
 			if (!ws_)
 			{
 				WSACleanup();
+				LOG(WARNING) << "Error: Connection failed. Could not create WebSocket object.";
+				return false;
+			}
 
-				LOG(WARNING) << "Error: Connection failed";
+			if (ws_->getReadyState() == easywsclient::WebSocket::CLOSED)
+			{
+				LOG(WARNING) << "Error: WebSocket connection closed immediately.";
+				m_connection_status = eConnectionStatus::CLOSED;
 
 				return false;
 			}
@@ -112,7 +117,9 @@ namespace big
 
 						std::invoke(std::move(job), message);
 					}
-					});
+				});
+
+				ws_->sendPing();
 			}
 			else
 			{

@@ -6,6 +6,7 @@ namespace big
     {
         CONNECTING = 1 << 8,
         CONNECTED = 2 << 16,
-        DISCONNECT = 3 << 24
+        DISCONNECT = 3 << 24,
+        CLOSED,
     };
 }

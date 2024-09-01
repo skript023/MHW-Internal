@@ -12,12 +12,14 @@ namespace big
     public:
         explicit server_module()
         {
+            init();
+
             g_server_module = this;
         }
 
         ~server_module() noexcept
         {
-            g_server_module->shutdown();
+            shutdown();
         }
 
         std::unique_ptr<alpha_service>& get_alpha() { return m_alpha_service; }
