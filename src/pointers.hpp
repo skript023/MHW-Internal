@@ -25,6 +25,7 @@ namespace big
 	public:
 		HWND m_hwnd{};
 		void* m_swapchain_methods[19];
+		IDXGISwapChain** m_swapchain;
 	public:
 		iVector2* m_resolution{};
 		uint64_t m_base_address{};
@@ -115,7 +116,7 @@ namespace big
 		HWND window_focus();
 		bool swapchain_found = false;
 		HWND m_window;
-		IDXGISwapChain* m_swapchain = nullptr;
+		IDXGISwapChain* m_dummy_swapchain = nullptr;
 		ID3D11Device* m_d3d_device = nullptr;
 		ID3D11DeviceContext* m_d3d_context = nullptr;
 		DWORD m_process_id;

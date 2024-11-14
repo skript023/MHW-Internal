@@ -70,11 +70,12 @@ namespace big
 		minhook_keepalive m_minhook_keepalive;
 
 		WNDPROC m_og_wndproc;
+		vmt_hook m_swapchain_hook;
 
 		detour_hook m_convert_thread_to_fiber_hook;
-		detour_hook m_swapchain_present_hook;
+		/*detour_hook m_swapchain_present_hook;
 		detour_hook m_swapchain_resizebuffers_hook;
-		detour_hook m_swapchain_draw_indexed_hook;
+		detour_hook m_swapchain_draw_indexed_hook;*/
 		detour_hook m_set_cursor_pos_hook;
 
 		detour_hook m_ignore_material_hook;

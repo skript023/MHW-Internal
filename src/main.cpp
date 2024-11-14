@@ -30,7 +30,7 @@ DWORD APIENTRY main_thread(LPVOID)
 
 	benchmark initialization_benchmark("Initialization");
 
-	auto logger_instance = std::make_unique<logger>(WINDOW_NAME);
+	auto logger_instance = std::make_unique<logger>("Ellohim");
 	try
 	{
 		LOG(RAW_GREEN_TO_CONSOLE) << R"kek(

@@ -183,7 +183,7 @@ namespace big
 
 			g_gui.m_opened ^= true;
 		}
-		if (msg == WM_QUIT)
+		if (msg == WM_KEYUP && wparam == VK_END)
 		{
 			g_running = false;
 		}

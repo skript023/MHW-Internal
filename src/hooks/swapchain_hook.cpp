@@ -10,7 +10,7 @@ namespace big
 		if (g_renderer->m_init || g_renderer->init(this_))
 			g_renderer->on_present();
 
-		return g_hooking->m_swapchain_present_hook.get_original<decltype(&swapchain_present)>()(this_, sync_interval, flags);
+		return g_hooking->m_swapchain_hook.get_original<decltype(&swapchain_present)>(swapchain_present_index)(this_, sync_interval, flags);
 	}
 
 	HRESULT APIENTRY hooks::swapchain_resizebuffers(IDXGISwapChain* this_, UINT buffer_count, UINT width, UINT height, DXGI_FORMAT new_format, UINT swapchain_flags)
@@ -19,7 +19,7 @@ namespace big
 		{
 			g_renderer->pre_reset();
 
-			auto result = g_hooking->m_swapchain_resizebuffers_hook.get_original<decltype(&swapchain_resizebuffers)>()
+			auto result = g_hooking->m_swapchain_hook.get_original<decltype(&swapchain_resizebuffers)>(swapchain_resizebuffers_index)
 				(this_, buffer_count, width, height, new_format, swapchain_flags);
 
 			if (SUCCEEDED(result))
@@ -30,12 +30,12 @@ namespace big
 			return result;
 		}
 
-		return g_hooking->m_swapchain_resizebuffers_hook.get_original<decltype(&swapchain_resizebuffers)>()
+		return g_hooking->m_swapchain_hook.get_original<decltype(&swapchain_resizebuffers)>(swapchain_resizebuffers_index)
 			(this_, buffer_count, width, height, new_format, swapchain_flags);
 	}
 
 	void APIENTRY hooks::swapchain_draw_indexed(ID3D11DeviceContext* pContext, UINT IndexCount, UINT StartIndexLocation, INT BaseVertexLocation)
 	{
-		return g_hooking->m_swapchain_draw_indexed_hook.get_original<decltype(&swapchain_draw_indexed)>()(pContext, IndexCount, StartIndexLocation, BaseVertexLocation);
+		//return g_hooking->m_swapchain_draw_indexed_hook.get_original<decltype(&swapchain_draw_indexed)>()(pContext, IndexCount, StartIndexLocation, BaseVertexLocation);
 	}
 }

@@ -12,9 +12,7 @@
 namespace big
 {
 	hooking::hooking() :
-		m_swapchain_present_hook("SwapChainPresent", g_pointers->m_swapchain_methods[hooks::swapchain_present_index], &hooks::swapchain_present),
-		m_swapchain_resizebuffers_hook("SwapChainResizeBuffers", g_pointers->m_swapchain_methods[hooks::swapchain_resizebuffers_index], &hooks::swapchain_resizebuffers),
-		m_swapchain_draw_indexed_hook("SwapChainDrawIndexed", g_pointers->m_swapchain_methods[hooks::swapchain_draw_indexed_index], &hooks::swapchain_draw_indexed),
+		m_swapchain_hook(*g_pointers->m_swapchain, hooks::swapchain_num_funcs),
 		m_set_cursor_pos_hook("SetCursorPos", memory::module("user32.dll").get_export("SetCursorPos").as<void*>(), &hooks::set_cursor_pos),
 		m_convert_thread_to_fiber_hook("ConvertThreadToFiber", memory::module("kernel32.dll").get_export("ConvertThreadToFiber").as<void*>(), &hooks::convert_thread_to_fiber),
 		m_ignore_material_hook("Ignore Material", g_pointers->m_ignore_material, &hooks::material_handler),
@@ -40,6 +38,9 @@ namespace big
 		m_monster_on_map_hook("Monster On Map Progress Hook", g_pointers->m_reveal_monster, &hooks::monster_on_map),
 		m_bow_gun_effect_hook("Bow Gun Effect Hook", g_pointers->m_bow_gun_effect, &hooks::bow_gun_effect)
 	{
+		m_swapchain_hook.hook(hooks::swapchain_present_index, hooks::swapchain_present);
+		m_swapchain_hook.hook(hooks::swapchain_resizebuffers_index, hooks::swapchain_resizebuffers);
+
 		g_hooking = this;
 	}
 
@@ -53,9 +54,8 @@ namespace big
 
 	void hooking::enable()
 	{
-		m_swapchain_present_hook.enable();
-		m_swapchain_resizebuffers_hook.enable();
-		m_swapchain_draw_indexed_hook.enable();
+		m_swapchain_hook.enable();
+
 		m_og_wndproc = reinterpret_cast<WNDPROC>(SetWindowLongPtr(g_pointers->m_hwnd, GWLP_WNDPROC, reinterpret_cast<LONG_PTR>(&hooks::wndproc)));
 		m_set_cursor_pos_hook.enable();
 		m_convert_thread_to_fiber_hook.enable();
@@ -115,10 +115,10 @@ namespace big
 		m_convert_thread_to_fiber_hook.disable();
 		m_set_cursor_pos_hook.disable();
 		SetWindowLongPtr(g_pointers->m_hwnd, GWLP_WNDPROC, reinterpret_cast<LONG_PTR>(m_og_wndproc));
-		m_swapchain_draw_indexed_hook.disable();
-		m_swapchain_resizebuffers_hook.disable();
-		m_swapchain_present_hook.disable();
+
 		m_character_ptr_hook.disable();
+
+		m_swapchain_hook.disable();
 	}
 
 	minhook_keepalive::minhook_keepalive()
@@ -146,9 +146,6 @@ namespace big
 		if (g_running)
 		{
 			g_renderer->wndproc(hwnd, msg, wparam, lparam);
-
-			if (g_gui.m_opened)
-				return 1;
 		}
 
 		return CallWindowProc(g_hooking->m_og_wndproc, hwnd, msg, wparam, lparam);

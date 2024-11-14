@@ -16,9 +16,10 @@ namespace big
 	pointers::pointers(): m_resolution(new iVector2(1920, 1080)), m_base_address(memory::module(nullptr).begin().as<uint64_t>())
 	{
 		memory::pattern_batch main_batch;
+		memory::pattern_batch steam_batch;
 
-		if (!this->get_swapchain())
-			LOG(WARNING) << "Failed get swapchain";
+		/*if (!this->get_swapchain())
+			LOG(WARNING) << "Failed get swapchain";*/
 
 		/*main_batch.add("Screen Resolution", "48 8D 05 ? ? ? ? 4C 89 74 24 ? 48 89 44 24 ? 0F 57 D2 48 8D 05", [this](memory::handle ptr)
 		{
@@ -55,14 +56,14 @@ namespace big
 			m_player_stat = ptr.add(3).rip().as<uintptr_t**>();
 		});
 		
-		main_batch.add("Player State", "E8 EB 6C 2C FF", [this](memory::handle ptr)
+		main_batch.add("Player State", "48 83 EC 28 48 8B 89 58 76 00 00 48 85 C9 74 05 E8 ? ? ? ? 33 C0 48 83 C4 28 C3", [this](memory::handle ptr)
 		{
-			m_player_state = ptr.as<void*>();
+			m_player_state = ptr.add(17).as<void*>();
 		});
 		
-		main_batch.add("Player Anim", "E8 2E 08 00 00 44", [this](memory::handle ptr)
+		main_batch.add("Player Anim", "E8 ? ? ? ? 44 38 B5 28", [this](memory::handle ptr)
 		{
-			m_player_anim = ptr.as<void*>();
+			m_player_anim = ptr.add(1).as<void*>();
 		});
 		
 		main_batch.add("Player Health", "E8 6C 26 D3 00", [this](memory::handle ptr)
@@ -484,7 +485,12 @@ namespace big
 			m_bow_gun_effect_apply = ptr.add(14).rip().add(19).rip().as<decltype(m_bow_gun_effect_apply)>();
 		});
 
+		steam_batch.add("Game Overlay", "48 8B ? ? ? ? ? 48 89 ? ? ? 48 8B ? ? ? ? ? 48 89 ? ? ? 89", [this](memory::handle ptr) {
+			m_swapchain = ptr.add(3).rip().sub(40).as<IDXGISwapChain**>();
+		});
+
 		main_batch.run(memory::module(nullptr));
+		steam_batch.run(memory::module("gameoverlayrenderer64.dll"));
 
 		this->m_hwnd = this->window_focus();
 		if (!this->m_hwnd)
@@ -568,7 +574,7 @@ namespace big
 		swapChainDesc.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
 		swapChainDesc.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
 
-		HRESULT hr = ((functions::create_d3d11_device_and_swapchain_t)(create_device_and_swapchain))(NULL, D3D_DRIVER_TYPE_HARDWARE, NULL, 0, featureLevels, 2, D3D11_SDK_VERSION, &swapChainDesc, &this->m_swapchain, &this->m_d3d_device, &featureLevel, &this->m_d3d_context);
+		HRESULT hr = ((functions::create_d3d11_device_and_swapchain_t)(create_device_and_swapchain))(NULL, D3D_DRIVER_TYPE_HARDWARE, NULL, 0, featureLevels, 2, D3D11_SDK_VERSION, &swapChainDesc, &this->m_dummy_swapchain, &this->m_d3d_device, &featureLevel, &this->m_d3d_context);
 		
 		if (FAILED(hr))
 		{
@@ -577,10 +583,10 @@ namespace big
 			return false;
 		}
 
-		::memcpy(this->m_swapchain_methods, *(void***)this->m_swapchain, sizeof(m_swapchain_methods));
+		::memcpy(this->m_swapchain_methods, *(void***)this->m_dummy_swapchain, sizeof(m_swapchain_methods));
 
-		this->m_swapchain->Release();
-		this->m_swapchain = nullptr;
+		this->m_dummy_swapchain->Release();
+		this->m_dummy_swapchain = nullptr;
 
 		this->m_d3d_device->Release();
 		this->m_d3d_device = nullptr;

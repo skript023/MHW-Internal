@@ -64,7 +64,7 @@
 #define CUSTOM_HUD "Madang Hese Udud Hese Teu Boga Duit Wuhan Kontol"
 
 #define WINDOW_CLASS nullptr
-#define WINDOW_NAME "MONSTER HUNTER: WORLD(421740)"
+#define WINDOW_NAME "MONSTER HUNTER: WORLD(421810)"
 #define TARGET_PROCESS "MonsterHunterWorld.exe"
 
 #include "settings.hpp"
