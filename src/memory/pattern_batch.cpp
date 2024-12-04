@@ -19,8 +19,24 @@ namespace memory
 			{
 				if (entry.m_callback)
 				{
-					std::invoke(std::move(entry.m_callback), result);
-					LOG(big::INFO_TO_FILE) << "Found '" << entry.m_name << std::format("' {}+", TARGET_PROCESS) << HEX_TO_UPPER(result.as<DWORD64>() - region.begin().as<DWORD64>());
+					if (m_pattern_cache.is_initialized())
+					{
+						auto offset = m_pattern_cache.get_cached_offset(entry.m_hash.update(region.size()));
+						if (offset.has_value())
+						{
+							LOG(big::INFO_TO_FILE) << "Using cached pattern [" << entry.m_name << "] : [" << HEX_TO_UPPER(region.begin().as<DWORD64>() + offset.value()) << "]";
+							std::invoke(entry.m_callback, handle(region.begin().as<DWORD64>() + offset.value()));
+						}
+						else
+						{
+							std::invoke(std::move(entry.m_callback), result);
+							LOG(big::INFO_TO_FILE) << "Found '" << entry.m_name << std::format("' {}+", TARGET_PROCESS) << HEX_TO_UPPER(result.as<DWORD64>() - region.begin().as<DWORD64>());
+							if (m_pattern_cache.is_initialized())
+							{
+								m_pattern_cache.update_cached_offset(entry.m_hash.update(region.size()), result.as<DWORD64>() - region.begin().as<DWORD64>());
+							}
+						}
+					}
 				}
 				else
 				{

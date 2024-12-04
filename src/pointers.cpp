@@ -15,9 +15,6 @@ namespace big
 {
 	pointers::pointers(): m_resolution(new iVector2(1920, 1080)), m_base_address(memory::module(nullptr).begin().as<uint64_t>())
 	{
-		memory::pattern_batch main_batch;
-		memory::pattern_batch steam_batch;
-
 		/*if (!this->get_swapchain())
 			LOG(WARNING) << "Failed get swapchain";*/
 
@@ -502,6 +499,12 @@ namespace big
 	pointers::~pointers()
 	{
 		g_pointers = nullptr;
+	}
+
+	void pointers::update()
+	{
+		main_batch.update();
+		steam_batch.update();
 	}
 
 	bool pointers::get_swapchain()

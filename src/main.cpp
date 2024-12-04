@@ -8,6 +8,7 @@
 #include "script_mgr.hpp"
 #include "settings.hpp"
 #include "benchmark.hpp"
+#include "file_manager.hpp"
 #include "events/backend_events.hpp"
 
 #include <hook_manager.hpp>
@@ -29,6 +30,11 @@ DWORD APIENTRY main_thread(LPVOID)
 		std::this_thread::sleep_for(1s);
 
 	benchmark initialization_benchmark("Initialization");
+
+	std::filesystem::path base_dir = std::getenv("appdata");
+	base_dir /= FOLDER;
+
+	g_file_manager.init(base_dir);
 
 	auto logger_instance = std::make_unique<logger>("Ellohim");
 	try
@@ -62,6 +68,9 @@ DWORD APIENTRY main_thread(LPVOID)
 
 		auto server_instance = std::make_unique<server_module>();
 		LOG(HACKER) << "Connected to server.";
+
+		pointers_instance->update();
+		LOG(INFO) << "Pointer data cached";
 
 		auto gui_service_instance = std::make_unique<gui_service>();
 		auto notification_instance = std::make_unique<notification_service>();

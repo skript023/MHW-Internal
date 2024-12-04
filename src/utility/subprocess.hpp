@@ -379,10 +379,10 @@ namespace subprocess
             return environment_map_buffer;
         }
 
-        // env_vector_t CreateUpdatedWindowsEnvironmentVector(const env_map_t &changes_map)
+        // env_vector_t CreateupdatedWindowsEnvironmentVector(const env_map_t &changes_map)
         // * Merges host environment with new mapped variables
         // * Creates and returns string vector based on map
-        inline env_vector_t CreateUpdatedWindowsEnvironmentVector(const env_map_t& changes_map) {
+        inline env_vector_t CreateupdatedWindowsEnvironmentVector(const env_map_t& changes_map) {
             // Import the environment map
             env_map_t environment_map = MapFromWindowsEnvironment();
             // Merge in the changes with overwrite
@@ -1512,7 +1512,7 @@ namespace subprocess
         void* environment_string_table_ptr = nullptr;
         env_vector_t environment_string_vector;
         if (this->env_.size()) {
-            environment_string_vector = util::CreateUpdatedWindowsEnvironmentVector(env_);
+            environment_string_vector = util::CreateupdatedWindowsEnvironmentVector(env_);
             environment_string_table_ptr = (void*)environment_string_vector.data();
         }
 

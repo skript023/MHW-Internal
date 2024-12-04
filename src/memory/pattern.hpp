@@ -5,6 +5,7 @@
 #include <vector>
 #include "fwddec.hpp"
 #include "handle.hpp"
+#include "pattern_hash.hpp"
 
 namespace memory
 {
@@ -21,5 +22,6 @@ namespace memory
 		{}
 	private:
 		std::vector<std::optional<std::uint8_t>> m_bytes;
+		pattern_hash m_hash;
 	};
 }

@@ -69,6 +69,7 @@
 
 #include "settings.hpp"
 #include "logger.hpp"
+#include "utility/fnv1a.hpp"
 
 extern "C" uint64_t g_set_item;
 extern "C" uint64_t g_item_box;
