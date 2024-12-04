@@ -1,6 +1,5 @@
 #pragma once
 #include "alpha/alpha_service.hpp"
-#include "alpha/alpha_module.hpp"
 
 namespace big
 {
@@ -12,30 +11,27 @@ namespace big
     public:
         explicit server_module()
         {
-            init();
+            m_alpha_service = std::make_shared<alpha_service>();
 
             g_server_module = this;
         }
 
         ~server_module() noexcept
         {
-            shutdown();
+            g_server_module->shutdown();
         }
 
-        std::unique_ptr<alpha_service>& get_alpha() { return m_alpha_service; }
+        alpha_service* get_alpha() { return m_alpha_service.get(); }
 
         void run()
         {
-            m_alpha_service->poll();
+            if (!m_alpha_service->auto_reconnect())
+            {
+                m_alpha_service->ping();
+                m_alpha_service->send_hardware();
+            }
         }
     private:
-        void init()
-        {
-            alpha_module alpha;
-            m_alpha_service = std::make_unique<alpha_service>(alpha);
-            m_alpha_service->ping();
-        }
-
         void shutdown()
         {
             m_alpha_service.reset();
@@ -43,6 +39,6 @@ namespace big
             g_server_module = nullptr;
         }
     private:
-        std::unique_ptr<alpha_service> m_alpha_service;
+        std::shared_ptr<alpha_service> m_alpha_service;
     };
 }

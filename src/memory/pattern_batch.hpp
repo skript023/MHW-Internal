@@ -9,14 +9,15 @@ namespace memory
 	class pattern_batch
 	{
 	public:
-		explicit pattern_batch() = default;
-		~pattern_batch() noexcept = default;
+		pattern_batch() = default;
+		explicit pattern_batch(std::shared_ptr<pattern_cache> pattern_cache);
+		~pattern_batch() noexcept;
 
 		void add(std::string name, pattern pattern, std::function<void(memory::handle)> callback);
 		void run(range region);
 		void update()
 		{
-			m_pattern_cache.update();
+			m_pattern_cache->update();
 		}
 	
 		struct entry
@@ -36,6 +37,6 @@ namespace memory
 	
 	private:
 		std::vector<entry> m_entries;
-		pattern_cache m_pattern_cache;
+		std::shared_ptr<pattern_cache> m_pattern_cache;
 	};
 }

@@ -4,6 +4,12 @@ project(MHW CXX ASM_MASM)
 
 set(SRC_DIR "${PROJECT_SOURCE_DIR}/src")
 
+set(OPENSSL_ROOT_DIR "${PROJECT_SOURCE_DIR}/openssl")
+set(OPENSSL_CRYPTO_LIBRARY "${PROJECT_SOURCE_DIR}/openssl/lib")
+set(OPENSSL_INCLUDE_DIR "${PROJECT_SOURCE_DIR}/openssl/include")
+
+find_package(OpenSSL REQUIRED)
+
 # Fetch modules
 message("\nFetching modules")
 include(scripts/minhook.cmake)
@@ -12,6 +18,7 @@ include(scripts/g3log.cmake)
 
 message("\nFetching custom modules")
 include(scripts/imgui.cmake)
+include(scripts/asio.cmake)
 include(scripts/websocket.cmake)
 
 
@@ -25,8 +32,6 @@ file(GLOB_RECURSE SRC_MAIN
     "${SRC_DIR}/**.cxx"
     "${SRC_DIR}/**.asm"
 )
-
-add_library(easyws STATIC "${websocket_SOURCE_DIR}/easywsclient.cpp")
 
 add_library(MHW MODULE "${SRC_MAIN}")
 
@@ -42,10 +47,11 @@ target_include_directories(MHW PRIVATE
     "${json_SOURCE_DIR}/single_include"
     "${imgui_SOURCE_DIR}"
     "${websocket_SOURCE_DIR}"
+    "${asio_SOURCE_DIR}/asio/include"
 )
 
 target_precompile_headers(MHW PRIVATE "${SRC_DIR}/common.hpp")
-target_link_libraries(MHW PRIVATE minhook imgui g3log easyws)
+target_link_libraries(MHW PRIVATE minhook imgui g3log websocket OpenSSL::SSL OpenSSL::Crypto)
 
 # Warnings as errors
 set_property(TARGET MHW PROPERTY COMPILE_WARNING_AS_ERROR ON)
@@ -55,5 +61,10 @@ add_compile_definitions(MHW
     "NOMINMAX"
     "WIN32_LEAN_AND_MEAN"
 )
+
+if(MSVC)
+    set(CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} /LTCG /OPT:REF,ICF /GUARD:NO")
+    string(REPLACE "/Ob1" "/Ob3" CMAKE_CXX_FLAGS_RELWITHDEBINFO ${CMAKE_CXX_FLAGS_RELWITHDEBINFO})
+endif()
 
 add_subdirectory(injector)

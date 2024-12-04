@@ -1,7 +1,6 @@
 #include "common.hpp"
 #include "logger.hpp"
 #include "pointers.hpp"
-#include "memory/all.hpp"
 
 uint64_t g_equipment_ret_addr;
 uint64_t g_gs_charge_ret_addr;
@@ -13,7 +12,11 @@ uint64_t g_selected_item_ret_addr;
 
 namespace big
 {
-	pointers::pointers(): m_resolution(new iVector2(1920, 1080)), m_base_address(memory::module(nullptr).begin().as<uint64_t>())
+	pointers::pointers(): 
+		m_resolution(new iVector2(1920, 1080)), 
+		m_base_address(memory::module(nullptr).begin().as<uint64_t>()),
+		main_batch(std::make_shared<memory::pattern_cache>("pattern_cache")),
+		steam_batch(std::make_shared<memory::pattern_cache>("steam_overlay"))
 	{
 		/*if (!this->get_swapchain())
 			LOG(WARNING) << "Failed get swapchain";*/
@@ -489,7 +492,7 @@ namespace big
 		main_batch.run(memory::module(nullptr));
 		steam_batch.run(memory::module("gameoverlayrenderer64.dll"));
 
-		this->m_hwnd = this->window_focus();
+		this->m_hwnd = FindWindowA(WINDOW_CLASS, WINDOW_NAME);
 		if (!this->m_hwnd)
 			throw std::runtime_error("Failed to find the game's window.");
 

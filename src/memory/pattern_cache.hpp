@@ -6,10 +6,11 @@ namespace memory
 	class pattern_cache
 	{
 		bool m_initialized;
+		std::string m_name;
 		std::unordered_map<std::uint64_t, int> m_data;
 	public:
 
-		pattern_cache();
+		pattern_cache(std::string const& name);
 
 		void update();
 

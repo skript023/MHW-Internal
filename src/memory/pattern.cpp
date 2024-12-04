@@ -77,7 +77,7 @@ namespace memory
 			}
 		}
 
-		m_hash = m_hash.update(m_bytes.size());
+		m_hash = m_hash.update(ida_sig.size());
 	}
 
 	pattern::pattern(const void *bytes, std::string_view mask)

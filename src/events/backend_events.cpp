@@ -70,7 +70,6 @@ namespace big
 		{
 			TRY_CLAUSE
 			{
-				g_settings->attempt_save();
 				g_server_module->run();
 				features();
 			} 

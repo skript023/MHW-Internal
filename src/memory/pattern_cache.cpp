@@ -3,9 +3,9 @@
 
 namespace memory
 {
-	pattern_cache::pattern_cache(): m_initialized(false)
+	pattern_cache::pattern_cache(std::string const& name): m_initialized(false), m_name(name)
 	{
-		auto file = big::g_file_manager.get_project_file("./pattern_cache.bin");
+		auto file = big::g_file_manager.get_project_file(std::format("./{}.bin", m_name));
 		if (file.exists())
 		{
 			std::ifstream stream(file.get_path(), std::ios_base::binary);
@@ -25,7 +25,7 @@ namespace memory
 	}
 	void pattern_cache::update()
 	{
-		auto file = big::g_file_manager.get_project_file("./pattern_cache.bin");
+		auto file = big::g_file_manager.get_project_file(std::format("./{}.bin", m_name));
 		std::ofstream stream(file.get_path(), std::ios_base::binary);
 
 		for (auto& [h, offset] : m_data)

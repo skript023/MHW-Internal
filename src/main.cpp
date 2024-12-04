@@ -47,7 +47,7 @@ DWORD APIENTRY main_thread(LPVOID)
 | |  | | (_) | | | \__ \ ||  __/ |    | |  | | |_| | | | | ||  __/ |   _     \  /\  / (_) | |  | | (_| |
 |_|  |_|\___/|_| |_|___/\__\___|_|    |_|  |_|\__,_|_| |_|\__\___|_|  (_)     \/  \/ \___/|_|  |_|\__,_|
 )kek";
-		auto settings_instance = std::make_unique<settings>();
+		auto settings_instance = std::make_unique<settings>(g_file_manager.get_project_file("./settings.json"));
 		g_settings->load();
 		LOG(HACKER) << "Settings initialized.";
 		
@@ -66,9 +66,6 @@ DWORD APIENTRY main_thread(LPVOID)
 		auto hooking_instance = std::make_unique<hooking>();
 		LOG(HACKER) << "Hooking initialized.";
 
-		auto server_instance = std::make_unique<server_module>();
-		LOG(HACKER) << "Connected to server.";
-
 		pointers_instance->update();
 		LOG(INFO) << "Pointer data cached";
 
@@ -81,6 +78,9 @@ DWORD APIENTRY main_thread(LPVOID)
 		auto monster_service_instance = std::make_unique<monster_service>();
 		auto world_service_instance = std::make_unique<world_service>();
 		LOG(HACKER) << "Service registered.";
+
+		auto server_instance = std::make_unique<server_module>();
+		LOG(HACKER) << "Connected to server.";
 
 		g_script_mgr.add_script(std::make_unique<script>(&gui::script_func));
 		g_script_mgr.add_script(std::make_unique<script>(&backend_events::player_event));
@@ -100,6 +100,7 @@ DWORD APIENTRY main_thread(LPVOID)
 		while (g_running)
 		{
 			g_script_mgr.tick();
+			g_settings->attempt_save();
 
 			std::this_thread::sleep_for(1s);
 		}
