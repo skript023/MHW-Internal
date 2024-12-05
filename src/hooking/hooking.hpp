@@ -71,36 +71,6 @@ namespace big
 
 		WNDPROC m_og_wndproc;
 		vmt_hook m_swapchain_hook;
-
-		detour_hook m_convert_thread_to_fiber_hook;
-		/*detour_hook m_swapchain_present_hook;
-		detour_hook m_swapchain_resizebuffers_hook;
-		detour_hook m_swapchain_draw_indexed_hook;*/
-		detour_hook m_set_cursor_pos_hook;
-
-		detour_hook m_ignore_material_hook;
-		detour_hook m_unlock_equipment_hook;
-		detour_hook m_consumable_hook;
-		detour_hook m_use_item_hook;
-		detour_hook m_master_rank_mult_hook;
-		detour_hook m_highrank_mult_hook;
-		detour_hook m_inf_gathering_hook;
-		detour_hook m_research_exp_hook;
-		detour_hook m_equipment_hook;
-		detour_hook m_player_atk_stat_hook;
-		detour_hook m_player_def_stat_hook;
-		detour_hook m_player_affinity_stat_hook;
-		detour_hook m_character_ptr_hook;
-		detour_hook m_weapon_hook;
-		detour_hook m_meal_handler_hook;
-		detour_hook m_palico_exp_handler_hook;
-		detour_hook m_player_forward_hook;
-		detour_hook m_player_position_hook;
-		detour_hook m_waypoint_hook;
-
-		detour_hook m_part_break_handle_hook;
-		detour_hook m_monster_on_map_hook;
-		detour_hook m_bow_gun_effect_hook;
 	};
 
 	inline hooking* g_hooking{};

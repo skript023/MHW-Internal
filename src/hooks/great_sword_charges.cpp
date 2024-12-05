@@ -10,6 +10,6 @@ namespace big
 
 		}
 
-		return 0;
+		return base_hook::get_original<great_sword_charges>()(a1, a2, a3);
 	}
 }

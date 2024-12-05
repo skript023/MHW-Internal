@@ -19,6 +19,6 @@ namespace big
 			v7 = 99999999;
 		*(DWORD*)(v3 + 216) = v7;
 
-		return g_hooking->m_master_rank_mult_hook.get_original<decltype(&hooks::master_rank_experience)>()(a1, a2, a3);
+		return base_hook::get_original<hooks::master_rank_experience>()(a1, a2, a3);
 	}
 }

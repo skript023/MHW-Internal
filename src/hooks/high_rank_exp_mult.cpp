@@ -24,6 +24,6 @@ namespace big
 			v5 = 99999999;
 		*(DWORD*)(v2 + 156) = v5;
 
-		return g_hooking->m_highrank_mult_hook.get_original<decltype(&hooks::high_rank_experience)>()(a1, a2);
+		return base_hook::get_original<hooks::high_rank_experience>()(a1, a2);
 	}
 }

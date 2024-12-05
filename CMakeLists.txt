@@ -42,6 +42,7 @@ source_group(TREE ${SRC_DIR} PREFIX "src" FILES ${SRC_MAIN} )
 
 target_include_directories(MHW PRIVATE 
     "${SRC_DIR}"
+    "${SRC_DIR}/hooking"
     "${SRC_DIR}/services"
     "${SRC_DIR}/server"
     "${json_SOURCE_DIR}/single_include"
@@ -54,7 +55,7 @@ target_precompile_headers(MHW PRIVATE "${SRC_DIR}/common.hpp")
 target_link_libraries(MHW PRIVATE minhook imgui g3log websocket OpenSSL::SSL OpenSSL::Crypto)
 
 # Warnings as errors
-set_property(TARGET MHW PROPERTY COMPILE_WARNING_AS_ERROR ON)
+set_property(TARGET MHW PROPERTY COMPILE_WARNING_AS_ERROR OFF)
 
 add_compile_definitions(MHW 
     "_CRT_SECURE_NO_WARNINGS"

@@ -10,6 +10,6 @@ namespace big
 			g_meal_service->init(a2);
 		}
 
-		return g_hooking->m_meal_handler_hook.get_original<decltype(&hooks::meal_handler)>()(a1, a2);
+		return base_hook::get_original<hooks::meal_handler>()(a1, a2);
 	}
 }

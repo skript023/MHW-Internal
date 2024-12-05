@@ -8,6 +8,6 @@ namespace big
         if (g_settings->crafting.ignore_material)
             return 99;
 
-        return g_hooking->m_ignore_material_hook.get_original<decltype(&material_handler)>()(a1, a2);
+        return base_hook::get_original<material_handler>()(a1, a2);
     }
 }

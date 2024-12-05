@@ -21,6 +21,6 @@ namespace big
 			g_weapon_service->init_ranged(reinterpret_cast<RangedWeapon*>(v9));
 		}
 
-		return g_hooking->m_weapon_hook.get_original<decltype(&hooks::highlighted_weapon)>()(a1);
+		return base_hook::get_original<hooks::highlighted_weapon>()(a1);
 	}
 }

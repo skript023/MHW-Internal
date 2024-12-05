@@ -15,7 +15,6 @@ namespace big
 			*(float*)(v2 + 0x2374) = 1.f;
 		}
 
-		//return g_hooking->m_glaive_spirit_gauge_hook.get_original<decltype(&hooks::glaive_spirit_gauge)>()(a1, a2);
-		return 0;
+		return base_hook::get_original<hooks::glaive_spirit_gauge>()(a1, a2);
 	}
 }

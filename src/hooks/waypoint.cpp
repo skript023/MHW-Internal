@@ -10,6 +10,6 @@ namespace big
 			g_character_service->init(a1);
 		}
 
-		return g_hooking->m_waypoint_hook.get_original<decltype(&hooks::waypoint)>()(a1);
+		return base_hook::get_original<hooks::waypoint>()(a1);
 	}
 }

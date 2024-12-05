@@ -40,6 +40,6 @@ namespace big
             *(int64_t*)(rbx + eax * 4 + 0x2578) -= 1;
         }
 
-        return g_hooking->m_bow_gun_effect_hook.get_original<decltype(&hooks::bow_gun_effect)>()(rbx);
+        return base_hook::get_original<hooks::bow_gun_effect>()(rbx);
 	}
 }

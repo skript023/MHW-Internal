@@ -44,6 +44,6 @@ namespace big
 			return g_pointers->m_use_item(rax.get(), rax->field_0C, 1);
 		}
 
-		return g_hooking->m_consumable_hook.get_original<decltype(&hooks::consumable)>()(a1, a2, a3);
+		return base_hook::get_original<hooks::consumable>()(a1, a2, a3);
 	}
 }

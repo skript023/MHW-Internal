@@ -19,6 +19,6 @@ namespace big
             }
 		}
 
-        return g_hooking->m_use_item_hook.get_original<decltype(&hooks::use_item)>()(rcx, a2, a3);
+        return base_hook::get_original<hooks::use_item>()(rcx, a2, a3);
 	}
 }

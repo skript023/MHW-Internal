@@ -15,6 +15,6 @@ namespace big
 			g_armour_service->init(v10);
 		}
 
-		return g_hooking->m_equipment_hook.get_original<decltype(&hooks::highlighted_armour)>()(a1, a2, a3, a4);
+		return base_hook::get_original<hooks::highlighted_armour>()(a1, a2, a3, a4);
 	}
 }

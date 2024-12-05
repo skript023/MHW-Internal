@@ -8,7 +8,7 @@ namespace big
 		{
 			if (monster->m_body_count != 0)
 			{
-				return g_hooking->m_inf_gathering_hook.get_original<decltype(&infinite_gathering)>()(monster, a2);
+				return base_hook::get_original<infinite_gathering>()(monster, a2);
 			}
 
 			auto temp = monster->m_material_count;
@@ -17,6 +17,6 @@ namespace big
 			temp = 0;
 		}
 
-		return g_hooking->m_inf_gathering_hook.get_original<decltype(&infinite_gathering)>()(monster, a2);
+		return base_hook::get_original<infinite_gathering>()(monster, a2);
 	}
 }

@@ -20,6 +20,6 @@ namespace big
             return result;
         }
 
-        return g_hooking->m_part_break_handle_hook.get_original<decltype(&hooks::monster_part_breaking)>()(a1, a2);
+        return base_hook::get_original<hooks::monster_part_breaking>()(a1, a2);
     }
 }

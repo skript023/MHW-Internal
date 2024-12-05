@@ -10,6 +10,6 @@ namespace big
 			g_character_service->init(a1);
 		}
 
-		return g_hooking->m_player_forward_hook.get_original<decltype(&hooks::player_forward)>()(a1, a2);
+		return base_hook::get_original<hooks::player_forward>()(a1, a2);
 	}
 }

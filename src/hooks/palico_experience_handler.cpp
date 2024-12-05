@@ -26,6 +26,6 @@ namespace big
 			*(DWORD*)(v8 + 1058400) = v10;
 		}
 
-		return g_hooking->m_palico_exp_handler_hook.get_original<decltype(&hooks::palico_experience_handler)>()(a1, a2, a3, a4);
+		return base_hook::get_original<hooks::palico_experience_handler>()(a1, a2, a3, a4);
 	}
 }

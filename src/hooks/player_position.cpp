@@ -12,6 +12,6 @@ namespace big
 			g_character_service->init(rax);
 		}
 
-		return g_hooking->m_player_position_hook.get_original<decltype(&hooks::player_position)>()(a1);
+		return base_hook::get_original<hooks::player_position>()(a1);
 	}
 }

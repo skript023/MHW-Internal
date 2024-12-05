@@ -21,6 +21,6 @@ namespace big
 			return 3;
 		}
 
-		return g_hooking->m_monster_on_map_hook.get_original<decltype(&hooks::monster_on_map)>()(a1, a2, a3);
+		return base_hook::get_original < hooks::monster_on_map>()(a1, a2, a3);
 	}
 }
