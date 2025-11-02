@@ -2,11 +2,14 @@ cmake_minimum_required(VERSION 3.20)
 
 project(MHW CXX ASM_MASM)
 
+set(CMAKE_POLICY_VERSION_MINIMUM 3.5)
 set(SRC_DIR "${PROJECT_SOURCE_DIR}/src")
 
+# OpenSSL configuration
 set(OPENSSL_ROOT_DIR "${PROJECT_SOURCE_DIR}/openssl")
-set(OPENSSL_CRYPTO_LIBRARY "${PROJECT_SOURCE_DIR}/openssl/lib")
-set(OPENSSL_INCLUDE_DIR "${PROJECT_SOURCE_DIR}/openssl/include")
+set(OPENSSL_INCLUDE_DIR "${OPENSSL_ROOT_DIR}/include")   # opsional
+set(OPENSSL_LIBRARIES "${OPENSSL_ROOT_DIR}/lib")         # opsional
+set(ZLIB_LIBRARIES "${OPENSSL_LIBRARIES}/zlib.lib")
 
 find_package(OpenSSL REQUIRED)
 
@@ -52,7 +55,7 @@ target_include_directories(MHW PRIVATE
 )
 
 target_precompile_headers(MHW PRIVATE "${SRC_DIR}/common.hpp")
-target_link_libraries(MHW PRIVATE minhook imgui g3log websocket OpenSSL::SSL OpenSSL::Crypto)
+target_link_libraries(MHW PRIVATE minhook imgui g3log websocket ${ZLIB_LIBRARIES} OpenSSL::SSL OpenSSL::Crypto Crypt32)
 
 # Warnings as errors
 set_property(TARGET MHW PROPERTY COMPILE_WARNING_AS_ERROR OFF)

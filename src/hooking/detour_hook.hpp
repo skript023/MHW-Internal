@@ -18,7 +18,10 @@ namespace big
 		void* get_original_ptr();
 
 		template <typename T>
-		T get_original();
+		inline T get_original()
+		{
+			return static_cast<T>(get_original_ptr());
+		}
 
 		void fix_hook_address();
 	private:
@@ -26,10 +29,4 @@ namespace big
 		void* m_detour;
 		void* m_original{};
 	};
-
-	template <typename T>
-	inline T detour_hook::get_original()
-	{
-		return static_cast<decltype(T)>(get_original_ptr());
-	}
 }

@@ -11,7 +11,7 @@ namespace big
 	public:
 		explicit alpha_service() : m_status(eIntegrationStatus::UNKNOWN)
 		{
-			m_alpha_gateway = std::make_shared<socket_client>("server.imost.id/ws/alpha");
+			m_alpha_gateway = std::make_shared<socket_client>("quantum.rena.my.id/ws/auth");
 			m_alpha_gateway->on_message_received([](std::string const& message) {
 				g_notification_service->info("Server Notification", message);
 				LOG(INFO) << message;
