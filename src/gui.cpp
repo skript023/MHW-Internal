@@ -1,6 +1,5 @@
 #include "common.hpp"
 #include "gui.hpp"
-#include "logger.hpp"
 #include "script.hpp"
 #include "settings.hpp"
 #include "pointers.hpp"

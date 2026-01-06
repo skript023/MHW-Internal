@@ -48,6 +48,7 @@ target_include_directories(MHW PRIVATE
     "${SRC_DIR}/hooking"
     "${SRC_DIR}/services"
     "${SRC_DIR}/server"
+    "${minhook_SOURCE_DIR}/src/hde"
     "${json_SOURCE_DIR}/single_include"
     "${imgui_SOURCE_DIR}"
     "${websocket_SOURCE_DIR}"
@@ -55,7 +56,7 @@ target_include_directories(MHW PRIVATE
 )
 
 target_precompile_headers(MHW PRIVATE "${SRC_DIR}/common.hpp")
-target_link_libraries(MHW PRIVATE minhook imgui g3log websocket ${ZLIB_LIBRARIES} OpenSSL::SSL OpenSSL::Crypto Crypt32)
+target_link_libraries(MHW PRIVATE minhook imgui AsyncLogger dbghelp websocket ${ZLIB_LIBRARIES} OpenSSL::SSL OpenSSL::Crypto Crypt32)
 
 # Warnings as errors
 set_property(TARGET MHW PROPERTY COMPILE_WARNING_AS_ERROR OFF)

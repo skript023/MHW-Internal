@@ -1,5 +1,4 @@
 #include "common.hpp"
-#include "logger.hpp"
 #include "pointers.hpp"
 
 uint64_t g_equipment_ret_addr;

@@ -68,7 +68,7 @@
 #define TARGET_PROCESS "MonsterHunterWorld.exe"
 
 #include "settings.hpp"
-#include "logger.hpp"
+#include "logger/logger.hpp"
 #include "utility/fnv1a.hpp"
 
 extern "C" uint64_t g_set_item;

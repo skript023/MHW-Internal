@@ -70,7 +70,7 @@ namespace big
 		{
 			TRY_CLAUSE
 			{
-				g_server_module->run();
+				//g_server_module->run();
 				features();
 			} 
 			EXCEPT_CLAUSE

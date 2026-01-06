@@ -1,7 +1,6 @@
 ﻿#include "common.hpp"
 #include "fiber_pool.hpp"
 #include "gui.hpp"
-#include "logger.hpp"
 #include "hooking.hpp"
 #include "pointers.hpp"
 #include "renderer.hpp"
@@ -36,10 +35,10 @@ DWORD APIENTRY main_thread(LPVOID)
 
 	g_file_manager.init(base_dir);
 
-	auto logger_instance = std::make_unique<logger>("Ellohim");
+	logger::initialize(LOG_FILENAME, g_file_manager.get_project_file(std::format("./{}.log", FOLDER)), true);
 	try
 	{
-		LOG(RAW_GREEN_TO_CONSOLE) << R"kek(
+		LOG(INFO) << R"kek(
  __  __                 _              _    _             _               __          __        _     _ 
 |  \/  |               | |            | |  | |           | |           _  \ \        / /       | |   | |
 | \  / | ___  _ __  ___| |_ ___ _ __  | |__| |_   _ _ __ | |_ ___ _ __(_)  \ \  /\  / /__  _ __| | __| |
@@ -49,22 +48,22 @@ DWORD APIENTRY main_thread(LPVOID)
 )kek";
 		auto settings_instance = std::make_unique<settings>(g_file_manager.get_project_file("./settings.json"));
 		g_settings->load();
-		LOG(HACKER) << "Settings initialized.";
+		LOG(INFO) << "Settings initialized.";
 		
 		auto pointers_instance = std::make_unique<pointers>();
-		LOG(HACKER) << "Pointers initialized.";
+		LOG(INFO) << "Pointers initialized.";
 
 		auto renderer_instance = std::make_unique<renderer>();
-		LOG(HACKER) << "Renderer initialized.";
+		LOG(INFO) << "Renderer initialized.";
 
 		auto fiber_pool_instance = std::make_unique<fiber_pool>(10);
-		LOG(HACKER) << "Fiber pool initialized.";
+		LOG(INFO) << "Fiber pool initialized.";
 
 		auto thread_pool_instance = std::make_unique<thread_pool>();
-		LOG(HACKER) << "Thread Pool initialized.";
+		LOG(INFO) << "Thread Pool initialized.";
 
 		auto hooking_instance = std::make_unique<hooking>();
-		LOG(HACKER) << "Hooking initialized.";
+		LOG(INFO) << "Hooking initialized.";
 
 		pointers_instance->update();
 		LOG(INFO) << "Pointer data cached";
@@ -77,22 +76,22 @@ DWORD APIENTRY main_thread(LPVOID)
 		auto meal_service_instance = std::make_unique<meal_service>();
 		auto monster_service_instance = std::make_unique<monster_service>();
 		auto world_service_instance = std::make_unique<world_service>();
-		LOG(HACKER) << "Service registered.";
+		LOG(INFO) << "Service registered.";
 
-		auto server_instance = std::make_unique<server_module>();
-		LOG(HACKER) << "Connected to server.";
+		//auto server_instance = std::make_unique<server_module>();
+		LOG(INFO) << "Connected to server.";
 
 		g_script_mgr.add_script(std::make_unique<script>(&gui::script_func));
 		g_script_mgr.add_script(std::make_unique<script>(&backend_events::player_event));
 		g_script_mgr.add_script(std::make_unique<script>(&backend_events::weapon_event));
 		g_script_mgr.add_script(std::make_unique<script>(&backend_events::script_func));
-		LOG(HACKER) << "Scripts registered.";
+		LOG(INFO) << "Scripts registered.";
 
 		g_hooking->enable();
-		LOG(HACKER) << "Hooking enabled.";
+		LOG(INFO) << "Hooking enabled.";
 
 		auto midfunc_hook_mgr_instance = std::make_unique<hook_manager>();
-		LOG(HACKER) << "Midfunction hook registered.";
+		LOG(INFO) << "Midfunction hook registered.";
 
 		initialization_benchmark.get_runtime();
 		initialization_benchmark.reset();
@@ -106,15 +105,15 @@ DWORD APIENTRY main_thread(LPVOID)
 		}
 
 		midfunc_hook_mgr_instance.reset();
-		LOG(HACKER) << "Midfunction hook registered.";
+		LOG(INFO) << "Midfunction hook registered.";
 
 		g_hooking->disable();
-		LOG(HACKER) << "Hooking disabled.";
+		LOG(INFO) << "Hooking disabled.";
 
 		std::this_thread::sleep_for(1000ms);
 
 		g_script_mgr.remove_all_scripts();
-		LOG(HACKER) << "Scripts unregistered.";
+		LOG(INFO) << "Scripts unregistered.";
 
 		notification_instance.reset();
 		gui_service_instance.reset();
@@ -124,32 +123,32 @@ DWORD APIENTRY main_thread(LPVOID)
 		meal_service_instance.reset();
 		monster_service_instance.reset();
 		world_service_instance.reset();
-		LOG(HACKER) << "Service unregistered.";
+		LOG(INFO) << "Service unregistered.";
 
-		server_instance.reset();
-		LOG(HACKER) << "Disconnected from server.";
+		//server_instance.reset();
+		LOG(INFO) << "Disconnected from server.";
 
 		hooking_instance.reset();
-		LOG(HACKER) << "Hooking uninitialized.";
+		LOG(INFO) << "Hooking uninitialized.";
 
 		fiber_pool_instance.reset();
-		LOG(HACKER) << "Fiber pool uninitialized.";
+		LOG(INFO) << "Fiber pool uninitialized.";
 
 		g_thread_pool->destroy();
-		LOG(HACKER) << "Destroyed thread pool.";
+		LOG(INFO) << "Destroyed thread pool.";
 
 		thread_pool_instance.reset();
-		LOG(HACKER) << "Thread Pool uninitialized.";
+		LOG(INFO) << "Thread Pool uninitialized.";
 
 		renderer_instance.reset();
-		LOG(HACKER) << "Renderer uninitialized.";
+		LOG(INFO) << "Renderer uninitialized.";
 
 		pointers_instance.reset();
-		LOG(HACKER) << "Pointers uninitialized.";
+		LOG(INFO) << "Pointers uninitialized.";
 
 		g_settings->attempt_save();
 		settings_instance.reset();
-		LOG(HACKER) << "Settings saved and uninitialized.";
+		LOG(INFO) << "Settings saved and uninitialized.";
 	}
 	catch (std::exception const& ex)
 	{
@@ -157,8 +156,8 @@ DWORD APIENTRY main_thread(LPVOID)
 		MessageBoxA(nullptr, ex.what(), nullptr, MB_OK | MB_ICONEXCLAMATION);
 	}
 
-	LOG(HACKER) << "Farewell!";
-	logger_instance.reset();
+	LOG(INFO) << "Farewell!";
+	logger::destroy();
 
 	CloseHandle(g_main_thread);
 	FreeLibraryAndExitThread(g_hmodule, 0);

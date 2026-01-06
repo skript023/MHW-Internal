@@ -21,7 +21,7 @@ namespace big
 
 			ImGui::SeparatorText("Character Info");
 
-			ImGui::Text("Name : %s", g_character_service->get_name());
+			ImGui::Text("Name : %s", g_character_service->get_name().c_str());
 			ImGui::Text("Zeni : %d", g_character_service->get_zeni());
 			ImGui::Text("HR EXP : %d", g_character_service->get_high_rank_experience());
 			ImGui::Text("HR Level : %d", g_character_service->get_high_rank_level());
@@ -33,7 +33,7 @@ namespace big
 			ImGui::SeparatorText("World Info");
 
 			ImGui::Text("Time of Days : %f", g_world_service->get_time_of_date());
-			ImGui::Text("Weather : %s", g_world_service->get_weather());
+			ImGui::Text("Weather : %s", g_world_service->get_weather().c_str());
 
 			ImGui::SeparatorText("Monster Info");
 

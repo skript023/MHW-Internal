@@ -15,7 +15,7 @@ namespace big
 
 		if (auto status = MH_CreateHook(m_target, m_detour, &m_original); status == MH_OK)
 		{
-			LOG(INFO_TO_FILE) << "Created hook '" << m_name << "'.";
+			LOG(VERBOSE) << "Created hook '" << m_name << "'.";
 		}
 		else
 		{
@@ -42,7 +42,7 @@ namespace big
 			return true;
 		}
 
-		LOG(INFO_TO_FILE) << "Enabled hook '" << m_name << "'.";
+		LOG(VERBOSE) << "Enabled hook '" << m_name << "'.";
 
 		return false;
 	}
@@ -56,7 +56,7 @@ namespace big
 			return true;
 		}
 
-		LOG(INFO_TO_FILE) << "Disabled hook '" << m_name << "'.";
+		LOG(VERBOSE) << "Disabled hook '" << m_name << "'.";
 
 		return false;
 	}
@@ -65,7 +65,7 @@ namespace big
 	{
 		if (auto status = MH_EnableHook(m_target); status == MH_OK)
 		{
-			LOG(INFO_TO_FILE) << "Enabled hook '" << m_name << "'.";
+			LOG(VERBOSE) << "Enabled hook '" << m_name << "'.";
 		}
 		else
 		{
@@ -77,7 +77,7 @@ namespace big
 	{
 		if (auto status = MH_DisableHook(m_target); status == MH_OK)
 		{
-			LOG(INFO_TO_FILE) << "Disabled hook '" << m_name << "'.";
+			LOG(VERBOSE) << "Disabled hook '" << m_name << "'.";
 		}
 		else
 		{
