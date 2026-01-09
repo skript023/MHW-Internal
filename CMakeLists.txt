@@ -23,7 +23,7 @@ message("\nFetching custom modules")
 include(scripts/imgui.cmake)
 include(scripts/asio.cmake)
 include(scripts/websocket.cmake)
-
+include(scripts/quickjs.cmake)
 
 # MHW
 message(STATUS "MHW")
@@ -56,7 +56,7 @@ target_include_directories(MHW PRIVATE
 )
 
 target_precompile_headers(MHW PRIVATE "${SRC_DIR}/common.hpp")
-target_link_libraries(MHW PRIVATE minhook imgui AsyncLogger dbghelp websocket ${ZLIB_LIBRARIES} OpenSSL::SSL OpenSSL::Crypto Crypt32)
+target_link_libraries(MHW PRIVATE quickjs minhook imgui AsyncLogger dbghelp websocket ${ZLIB_LIBRARIES} OpenSSL::SSL OpenSSL::Crypto Crypt32)
 
 # Warnings as errors
 set_property(TARGET MHW PROPERTY COMPILE_WARNING_AS_ERROR OFF)

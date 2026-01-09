@@ -5,6 +5,7 @@ namespace big
 {
 	class detour_hook : public base_hook
 	{
+		void fix_hook_address();
 	public:
 		explicit detour_hook(const std::string_view name, void* target, void* detour);
 		~detour_hook() noexcept;
@@ -23,7 +24,11 @@ namespace big
 			return static_cast<T>(get_original_ptr());
 		}
 
-		void fix_hook_address();
+		template <auto T>
+		static void add(std::string name, void* target)
+		{
+			base_hook::add<T>(new detour_hook(name, target, T));
+		}
 	private:
 		void* m_target;
 		void* m_detour;
