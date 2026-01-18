@@ -12,8 +12,8 @@ namespace big
 
 		void init(MealStats* instance);
 		MealStats* instance() { return m_meal_stat == nullptr ? nullptr : m_meal_stat; };
-		std::string get_buff(uint32_t skill);
-		std::string get_buff_category();
+		std::string_view get_buff(uint32_t skill);
+		std::string_view get_buff_category();
 	private:
 		MealStats* m_meal_stat = nullptr;
 	};

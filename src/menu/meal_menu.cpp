@@ -10,11 +10,11 @@ namespace big
 			ImGui::Text("Meal Base: %X", meal);
 
 			ImGui::Text("Meal Buff 1");
-			if (ImGui::BeginCombo("##buff", g_meal_service->get_buff(meal->m_skill_a).c_str()))
+			if (ImGui::BeginCombo("##buff", g_meal_service->get_buff(meal->m_skill_a).data()))
 			{
 				for (auto& buff : meal_data::meal_buff)
 				{
-					if (ImGui::Selectable(buff.second.c_str(), meal->m_skill_a == buff.first))
+					if (ImGui::Selectable(buff.second.data(), meal->m_skill_a == buff.first))
 					{
 						meal->m_skill_a = buff.first;
 					}
@@ -26,11 +26,11 @@ namespace big
 			}
 
 			ImGui::Text("Meal Buff 2");
-			if (ImGui::BeginCombo("##buff2", g_meal_service->get_buff(meal->m_skill_b).c_str()))
+			if (ImGui::BeginCombo("##buff2", g_meal_service->get_buff(meal->m_skill_b).data()))
 			{
 				for (auto& buff : meal_data::meal_buff)
 				{
-					if (ImGui::Selectable(buff.second.c_str(), meal->m_skill_b == buff.first))
+					if (ImGui::Selectable(buff.second.data(), meal->m_skill_b == buff.first))
 					{
 						meal->m_skill_b = buff.first;
 					}
@@ -42,11 +42,11 @@ namespace big
 			}
 
 			ImGui::Text("Meal Buff 3");
-			if (ImGui::BeginCombo("##buff3", g_meal_service->get_buff(meal->m_skill_c).c_str()))
+			if (ImGui::BeginCombo("##buff3", g_meal_service->get_buff(meal->m_skill_c).data()))
 			{
 				for (auto& buff : meal_data::meal_buff)
 				{
-					if (ImGui::Selectable(buff.second.c_str(), meal->m_skill_c == buff.first))
+					if (ImGui::Selectable(buff.second.data(), meal->m_skill_c == buff.first))
 					{
 						meal->m_skill_c = buff.first;
 					}

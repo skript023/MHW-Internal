@@ -14,25 +14,31 @@ namespace big
 	{
 		m_meal_stat = instance;
 	}
-	std::string meal_service::get_buff(uint32_t skill)
+	std::string_view meal_service::get_buff(uint32_t skill)
 	{
 		if (m_meal_stat)
 		{
-			if (auto it = meal_data::meal_buff.find(skill); it != meal_data::meal_buff.end())
+			for (const auto& [id, name] : meal_data::meal_buff)
 			{
-				return it->second;
+				if (skill == id)
+				{
+					return name;
+				}
 			}
 		}
 
 		return "No buff found";
 	}
-	std::string meal_service::get_buff_category()
+	std::string_view meal_service::get_buff_category()
 	{
 		if (m_meal_stat)
 		{
-			if (auto it = meal_data::skill_category.find(m_meal_stat->m_skill_category); it != meal_data::skill_category.end())
+			for (const auto& [id, name] : meal_data::skill_category)
 			{
-				return it->second;
+				if (m_meal_stat->m_skill_category == id)
+				{
+					return name;
+				}
 			}
 		}
 

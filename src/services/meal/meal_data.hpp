@@ -2,7 +2,7 @@
 
 namespace big::meal_data
 {
-	inline std::map<uint8_t, std::string> meal_buff = {
+	static constexpr std::array<std::pair<uint8_t, std::string_view>, 57> meal_buff = {{
         {0, "Felyne Polisher"},
         {1, "Felyne Rider"},
         {2, "Felyne Heroics"},
@@ -60,8 +60,9 @@ namespace big::meal_data
         {54, "Felyne Biologist"},
         {55, "Felyne Macrozoologist"},
         {56, "Felyne Microzoologist"}
-    };
-    inline std::map<uint8_t, std::string> skill_category = {
+    }};
+    
+    static constexpr std::array<std::pair<uint8_t, std::string_view>, 7> skill_category = {{
         {0, "Courage"},
         {1, "Resilience"},
         {2, "Vigor"},
@@ -69,5 +70,5 @@ namespace big::meal_data
         {4, "Artillery"},
         {5, "Perception"},
         {6, "Fortune"}
-    };
+    }};
 }
