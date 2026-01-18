@@ -57,12 +57,12 @@ namespace big
 		
 		main_batch.add("Player State", "48 83 EC 28 48 8B 89 58 76 00 00 48 85 C9 74 05 E8 ? ? ? ? 33 C0 48 83 C4 28 C3", [this](memory::handle ptr)
 		{
-			m_player_state = ptr.add(17).as<void*>();
+			m_player_state = ptr.add(16).as<void*>();
 		});
 		
 		main_batch.add("Player Anim", "E8 ? ? ? ? 44 38 B5 28", [this](memory::handle ptr)
 		{
-			m_player_anim = ptr.add(1).as<void*>();
+			m_player_anim = ptr.as<void*>();
 		});
 		
 		main_batch.add("Player Health", "E8 6C 26 D3 00", [this](memory::handle ptr)
