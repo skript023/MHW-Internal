@@ -73,7 +73,6 @@ DWORD APIENTRY main_thread(LPVOID)
 		auto character_service_instance = std::make_unique<character_service>();
 		auto armour_service_instance = std::make_unique<armour_service>();
 		auto weapon_service_instance = std::make_unique<weapon_service>();
-		auto meal_service_instance = std::make_unique<meal_service>();
 		auto monster_service_instance = std::make_unique<monster_service>();
 		auto world_service_instance = std::make_unique<world_service>();
 		LOG(INFO) << "Service registered.";
@@ -120,7 +119,6 @@ DWORD APIENTRY main_thread(LPVOID)
 		character_service_instance.reset();
 		armour_service_instance.reset();
 		weapon_service_instance.reset();
-		meal_service_instance.reset();
 		monster_service_instance.reset();
 		world_service_instance.reset();
 		LOG(INFO) << "Service unregistered.";
