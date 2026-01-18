@@ -2,19 +2,11 @@
 
 namespace big
 {
-	meal_service::meal_service()
-	{
-		g_meal_service = this;
-	}
-	meal_service::~meal_service() noexcept
-	{
-		g_meal_service = nullptr;
-	}
-	void meal_service::init(MealStats* instance)
+	void meal_service::init_impl(MealStats* instance)
 	{
 		m_meal_stat = instance;
 	}
-	std::string_view meal_service::get_buff(uint32_t skill)
+	std::string_view meal_service::get_buff_impl(uint32_t skill)
 	{
 		if (m_meal_stat)
 		{
@@ -29,7 +21,7 @@ namespace big
 
 		return "No buff found";
 	}
-	std::string_view meal_service::get_buff_category()
+	std::string_view meal_service::get_buff_category_impl()
 	{
 		if (m_meal_stat)
 		{

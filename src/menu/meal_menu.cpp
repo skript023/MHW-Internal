@@ -5,12 +5,12 @@ namespace big
 {
 	void meal_menu::render_menu()
 	{
-		if (auto meal = g_meal_service->instance())
+		if (auto meal = meal_service::get_stats())
 		{
-			ImGui::Text("Meal Base: %X", meal);
+			ImGui::Text("Meal Base: %X", (uintptr_t)meal);
 
 			ImGui::Text("Meal Buff 1");
-			if (ImGui::BeginCombo("##buff", g_meal_service->get_buff(meal->m_skill_a).data()))
+			if (ImGui::BeginCombo("##buff", meal_service::get_buff(meal->m_skill_a).data()))
 			{
 				for (auto& buff : meal_data::meal_buff)
 				{
@@ -26,7 +26,7 @@ namespace big
 			}
 
 			ImGui::Text("Meal Buff 2");
-			if (ImGui::BeginCombo("##buff2", g_meal_service->get_buff(meal->m_skill_b).data()))
+			if (ImGui::BeginCombo("##buff2", meal_service::get_buff(meal->m_skill_b).data()))
 			{
 				for (auto& buff : meal_data::meal_buff)
 				{
@@ -42,7 +42,7 @@ namespace big
 			}
 
 			ImGui::Text("Meal Buff 3");
-			if (ImGui::BeginCombo("##buff3", g_meal_service->get_buff(meal->m_skill_c).data()))
+			if (ImGui::BeginCombo("##buff3", meal_service::get_buff(meal->m_skill_c).data()))
 			{
 				for (auto& buff : meal_data::meal_buff)
 				{

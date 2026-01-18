@@ -7,7 +7,7 @@ namespace big
 	{
 		if (a1)
 		{
-			g_meal_service->init(a2);
+			meal_service::init(a2);
 		}
 
 		return base_hook::get_original<hooks::meal_handler>()(a1, a2);
