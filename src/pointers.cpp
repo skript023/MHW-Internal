@@ -17,8 +17,8 @@ namespace big
 		main_batch(std::make_shared<memory::pattern_cache>("pattern_cache")),
 		steam_batch(std::make_shared<memory::pattern_cache>("steam_overlay"))
 	{
-		/*if (!this->get_swapchain())
-			LOG(WARNING) << "Failed get swapchain";*/
+		if (!this->get_swapchain())
+			LOG(WARNING) << "Failed get swapchain";
 
 		/*main_batch.add("Screen Resolution", "48 8D 05 ? ? ? ? 4C 89 74 24 ? 48 89 44 24 ? 0F 57 D2 48 8D 05", [this](memory::handle ptr)
 		{
@@ -485,7 +485,7 @@ namespace big
 		});
 
 		steam_batch.add("Game Overlay", "48 8B ? ? ? ? ? 48 89 ? ? ? 48 8B ? ? ? ? ? 48 89 ? ? ? 89", [this](memory::handle ptr) {
-			m_swapchain = ptr.add(3).rip().sub(40).as<IDXGISwapChain**>();
+			m_swapchain = ptr.add(3).rip().sub(0x28).as<IDXGISwapChain**>();
 		});
 
 		main_batch.run(memory::module(nullptr));

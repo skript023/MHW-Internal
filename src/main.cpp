@@ -62,11 +62,11 @@ DWORD APIENTRY main_thread(LPVOID)
 		auto thread_pool_instance = std::make_unique<thread_pool>();
 		LOG(INFO) << "Thread Pool initialized.";
 
-		auto hooking_instance = std::make_unique<hooking>();
-		LOG(INFO) << "Hooking initialized.";
-
 		pointers_instance->update();
 		LOG(INFO) << "Pointer data cached";
+
+		auto hooking_instance = std::make_unique<hooking>();
+		LOG(INFO) << "Hooking initialized.";
 
 		auto gui_service_instance = std::make_unique<gui_service>();
 		auto notification_instance = std::make_unique<notification_service>();

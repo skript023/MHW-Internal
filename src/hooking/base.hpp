@@ -71,6 +71,6 @@ namespace big
 	template<auto detour_function>
 	inline auto base_hook::get_original()
 	{
-		return static_cast<decltype(detour_function)>(detour_helper<detour_function>::m_hook->get_original_ptr());
+		return reinterpret_cast<decltype(detour_function)>(detour_helper<detour_function>::m_hook->get_original_ptr());
 	}
 }

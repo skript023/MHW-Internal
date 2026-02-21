@@ -10,10 +10,12 @@
 
 namespace big
 {
-	hooking::hooking() : m_swapchain_hook(*g_pointers->m_swapchain, hooks::swapchain_num_funcs)
+	hooking::hooking() //: m_swapchain_hook(*g_pointers->m_swapchain, hooks::swapchain_num_funcs)
 	{
-		m_swapchain_hook.hook(hooks::swapchain_present_index, hooks::swapchain_present);
-		m_swapchain_hook.hook(hooks::swapchain_resizebuffers_index, hooks::swapchain_resizebuffers);
+		// m_swapchain_hook.hook(hooks::swapchain_present_index, hooks::swapchain_present);
+		// m_swapchain_hook.hook(hooks::swapchain_resizebuffers_index, hooks::swapchain_resizebuffers);
+		detour_hook::add<hooks::swapchain_present>("SwapChainPresent", g_pointers->m_swapchain_methods[hooks::swapchain_present_index]),
+		detour_hook::add<hooks::swapchain_resizebuffers>("SwapChainResizeBuffers", g_pointers->m_swapchain_methods[hooks::swapchain_resizebuffers_index]),
 
 		detour_hook::add<hooks::set_cursor_pos>("SetCursorPos", memory::module("user32.dll").get_export("SetCursorPos").as<void*>());
 		detour_hook::add<hooks::convert_thread_to_fiber>("ConvertThreadToFiber", memory::module("kernel32.dll").get_export("ConvertThreadToFiber").as<void*>());
@@ -53,7 +55,7 @@ namespace big
 
 	void hooking::enable()
 	{
-		m_swapchain_hook.enable();
+		//m_swapchain_hook.enable();
 
 		m_og_wndproc = reinterpret_cast<WNDPROC>(SetWindowLongPtr(g_pointers->m_hwnd, GWLP_WNDPROC, reinterpret_cast<LONG_PTR>(&hooks::wndproc)));
 		base_hook::enable_all();
@@ -71,7 +73,7 @@ namespace big
 
 		SetWindowLongPtr(g_pointers->m_hwnd, GWLP_WNDPROC, reinterpret_cast<LONG_PTR>(m_og_wndproc));
 
-		m_swapchain_hook.disable();
+		//m_swapchain_hook.disable();
 
 		MH_ApplyQueued();
 

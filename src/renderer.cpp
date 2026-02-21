@@ -15,6 +15,7 @@ namespace big
 {
 	renderer::renderer()
 	{
+		
 		g_renderer = this;
 	}
 

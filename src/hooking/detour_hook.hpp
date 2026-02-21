@@ -27,7 +27,7 @@ namespace big
 		template <auto T>
 		static void add(std::string name, void* target)
 		{
-			base_hook::add<T>(new detour_hook(name, target, T));
+			base_hook::add<T>(new detour_hook(name, target, reinterpret_cast<void*>(T)));
 		}
 	private:
 		void* m_target;
