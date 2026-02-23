@@ -70,7 +70,7 @@ namespace big
 		minhook_keepalive m_minhook_keepalive;
 
 		WNDPROC m_og_wndproc;
-		//vmt_hook m_swapchain_hook;
+		vmt_hook m_swapchain_hook;
 	};
 
 	inline hooking* g_hooking{};

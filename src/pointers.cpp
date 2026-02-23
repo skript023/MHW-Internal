@@ -485,7 +485,7 @@ namespace big
 		});
 
 		steam_batch.add("Game Overlay", "48 8B ? ? ? ? ? 48 89 ? ? ? 48 8B ? ? ? ? ? 48 89 ? ? ? 89", [this](memory::handle ptr) {
-			m_swapchain = ptr.add(3).rip().sub(0x28).as<IDXGISwapChain**>();
+			m_swapchain = ptr.add(3).rip().add(0x20).as<IDXGISwapChain**>();
 		});
 
 		main_batch.run(memory::module(nullptr));
