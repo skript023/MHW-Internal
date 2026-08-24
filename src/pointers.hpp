@@ -44,8 +44,8 @@ namespace big
 		void* m_player_health{};
 		void* m_player_stamina{};
 		void* m_consumable{};
-		void* m_use_item{};
-		void* m_master_rank_exp{};
+		functions::use_item_t m_use_item{};
+		void* m_master_rank_exp{};  // originally void*; now typed as function pointer for direct calls to m_use_item() in hooks and detour registration
 		void* m_highrank_exp{};
 		void* m_maxed_effect_set{};
 		void* m_maxed_attribute{};
