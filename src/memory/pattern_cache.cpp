@@ -1,9 +1,12 @@
 #include "pattern_cache.hpp"
+
 #include "file_manager.hpp"
 
 namespace memory
 {
-	pattern_cache::pattern_cache(std::string const& name): m_initialized(false), m_name(name)
+	pattern_cache::pattern_cache(std::string const& name) :
+	    m_initialized(false),
+	    m_name(name)
 	{
 		auto file = big::g_file_manager.get_project_file(std::format("./{}.bin", m_name));
 		if (file.exists())
@@ -43,7 +46,5 @@ namespace memory
 		return std::nullopt;
 	}
 	void pattern_cache::update_cached_offset(pattern_hash hash, int offset)
-	{
-		m_data[hash.get_hash()] = offset;
-	}
+	{ m_data[hash.get_hash()] = offset; }
 }

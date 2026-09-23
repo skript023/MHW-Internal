@@ -1,28 +1,24 @@
-#include "../common.hpp"
 #include "range.hpp"
+
+#include "../common.hpp"
 #include "pattern.hpp"
 
 namespace memory
 {
 	range::range(handle base, std::size_t size) :
-		m_base(base), m_size(size)
+	    m_base(base),
+	    m_size(size)
 	{
 	}
 
 	handle range::begin()
-	{
-		return m_base;
-	}
+	{ return m_base; }
 
 	handle range::end()
-	{
-		return m_base.add(m_size);
-	}
+	{ return m_base.add(m_size); }
 
 	std::size_t range::size()
-	{
-		return m_size;
-	}
+	{ return m_size; }
 
 	bool range::contains(handle h)
 	{
@@ -35,8 +31,8 @@ namespace memory
 		std::size_t max_idx = length - 1;
 
 		//Get wildcard index, and store max shiftable byte count
-		std::size_t wild_card_idx{ static_cast<size_t>(-1) };
-		for (int i{ static_cast<int>(max_idx - 1) }; i >= 0; --i)
+		std::size_t wild_card_idx{static_cast<size_t>(-1)};
+		for (int i{static_cast<int>(max_idx - 1)}; i >= 0; --i)
 		{
 			if (!sig[i])
 			{
@@ -54,7 +50,7 @@ namespace memory
 		}
 
 		//Fill shift table with sig bytes
-		for (std::size_t i{ wild_card_idx + 1 }; i != max_idx; ++i)
+		for (std::size_t i{wild_card_idx + 1}; i != max_idx; ++i)
 		{
 			shift_table[*sig[i]] = max_idx - i;
 		}
@@ -63,7 +59,7 @@ namespace memory
 		const auto scan_end = module_size - length;
 		for (std::size_t current_idx{}; current_idx <= scan_end;)
 		{
-			for (std::ptrdiff_t sig_idx{ (std::ptrdiff_t)max_idx }; sig_idx >= 0; --sig_idx)
+			for (std::ptrdiff_t sig_idx{(std::ptrdiff_t)max_idx}; sig_idx >= 0; --sig_idx)
 			{
 				if (sig[sig_idx] && *begin.add(current_idx + sig_idx).as<uint8_t*>() != *sig[sig_idx])
 				{
@@ -90,7 +86,7 @@ namespace memory
 		return true;
 	};
 
-	handle range::scan(pattern const &sig)
+	handle range::scan(pattern const& sig)
 	{
 		auto data = sig.m_bytes.data();
 		auto length = sig.m_bytes.size();
@@ -103,7 +99,7 @@ namespace memory
 		return nullptr;
 	}
 
-	std::vector<handle> range::scan_all(pattern const &sig)
+	std::vector<handle> range::scan_all(pattern const& sig)
 	{
 		std::vector<handle> result;
 

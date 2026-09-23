@@ -1,4 +1,5 @@
 #include "weapon_menu.h"
+
 #include "features/weapon.hpp"
 
 namespace big

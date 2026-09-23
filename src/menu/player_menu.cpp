@@ -1,6 +1,7 @@
+#include "player_menu.h"
+
 #include "imgui.h"
 #include "script.hpp"
-#include "player_menu.h"
 #include "settings.hpp"
 #include "utility/mhw.hpp"
 
@@ -76,5 +77,5 @@ namespace big
 			ImGui::InputInt("Palico EXP Multiplier", &g_settings->player.palico_exp_mult, 1, 1000);
 		}
 	}
-    
+
 }

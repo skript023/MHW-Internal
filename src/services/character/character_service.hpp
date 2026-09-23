@@ -1,5 +1,6 @@
 #pragma once
 #include "common.hpp"
+
 #include <mhw/fwddec.hpp>
 
 namespace big
@@ -25,7 +26,7 @@ namespace big
 		[[nodiscard]] uint32_t get_master_rank_experience() const;
 		[[nodiscard]] Vector3 get_position() const;
 		[[nodiscard]] Vector3 get_waypoint_pos() const;
-		
+
 		void set_name(std::string_view const& name);
 		void set_zeni(uint32_t zeni);
 		void set_high_rank_level(uint32_t level);
@@ -37,6 +38,7 @@ namespace big
 		void set_player_coords(Vector3 vec3);
 		void set_player_to_waypoint();
 		void set_player_forward();
+
 	private:
 		Character m_character;
 		PlayerPosition* m_position = nullptr;

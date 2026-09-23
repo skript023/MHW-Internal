@@ -1,10 +1,11 @@
 #include "folder.hpp"
+
 #include "file.hpp"
 
 namespace big
 {
 	folder::folder(const std::filesystem::path& folder_path) :
-		m_folder_path(folder_path)
+	    m_folder_path(folder_path)
 	{
 	}
 
@@ -28,7 +29,5 @@ namespace big
 	}
 
 	const std::filesystem::path folder::get_path() const
-	{
-		return m_folder_path;
-	}
+	{ return m_folder_path; }
 }

@@ -1,25 +1,25 @@
-﻿#include "common.hpp"
+﻿#include "benchmark.hpp"
+#include "common.hpp"
+#include "events/backend_events.hpp"
 #include "fiber_pool.hpp"
+#include "file_manager.hpp"
 #include "gui.hpp"
 #include "hooking.hpp"
 #include "pointers.hpp"
 #include "renderer.hpp"
 #include "script_mgr.hpp"
 #include "settings.hpp"
-#include "benchmark.hpp"
-#include "file_manager.hpp"
-#include "events/backend_events.hpp"
 
-#include <hook_manager.hpp>
-#include <gui/gui_service.hpp>
-#include <meal/meal_service.hpp>
-#include <world/world_service.hpp>
-#include <server/server_module.hpp>
-#include <monster/monster_service.hpp>
-#include <equipment/weapon_service.hpp>
-#include <equipment/armour_service.hpp>
 #include <character/character_service.hpp>
+#include <equipment/armour_service.hpp>
+#include <equipment/weapon_service.hpp>
+#include <gui/gui_service.hpp>
+#include <hook_manager.hpp>
+#include <meal/meal_service.hpp>
+#include <monster/monster_service.hpp>
 #include <notification/notification_service.hpp>
+#include <server/server_module.hpp>
+#include <world/world_service.hpp>
 
 DWORD APIENTRY main_thread(LPVOID)
 {
@@ -49,7 +49,7 @@ DWORD APIENTRY main_thread(LPVOID)
 		auto settings_instance = std::make_unique<settings>(g_file_manager.get_project_file("./settings.json"));
 		g_settings->load();
 		LOG(INFO) << "Settings initialized.";
-		
+
 		auto pointers_instance = std::make_unique<pointers>();
 		LOG(INFO) << "Pointers initialized.";
 
@@ -77,7 +77,7 @@ DWORD APIENTRY main_thread(LPVOID)
 		auto world_service_instance = std::make_unique<world_service>();
 		LOG(INFO) << "Service registered.";
 
-		//auto server_instance = std::make_unique<server_module>();
+		auto server_instance = std::make_unique<server_module>();
 		LOG(INFO) << "Connected to server.";
 
 		g_script_mgr.add_script(std::make_unique<script>(&gui::script_func));
@@ -123,7 +123,7 @@ DWORD APIENTRY main_thread(LPVOID)
 		world_service_instance.reset();
 		LOG(INFO) << "Service unregistered.";
 
-		//server_instance.reset();
+		server_instance.reset();
 		LOG(INFO) << "Disconnected from server.";
 
 		hooking_instance.reset();
@@ -175,9 +175,7 @@ BOOL APIENTRY DllMain(HMODULE hmod, DWORD reason, PVOID)
 		g_hmodule = hmod;
 		g_main_thread = CreateThread(nullptr, 0, &main_thread, nullptr, 0, &g_main_thread_id);
 		break;
-	case DLL_PROCESS_DETACH:
-		g_running = false;
-		break;
+	case DLL_PROCESS_DETACH: g_running = false; break;
 	}
 
 	return true;

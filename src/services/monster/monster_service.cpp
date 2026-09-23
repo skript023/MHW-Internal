@@ -1,16 +1,13 @@
 #include "monster_service.hpp"
+
 #include <pointers.hpp>
 
 namespace big
 {
 	monster_service::monster_service()
-	{
-		g_monster_service = this;
-	}
+	{ g_monster_service = this; }
 	monster_service::~monster_service() noexcept
-	{
-		g_monster_service = nullptr;
-	}
+	{ g_monster_service = nullptr; }
 	bool monster_service::get_entry(int index)
 	{
 		if (auto data = *g_pointers->m_monster_data)

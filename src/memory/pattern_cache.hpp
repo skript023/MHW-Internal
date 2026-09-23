@@ -8,8 +8,8 @@ namespace memory
 		bool m_initialized;
 		std::string m_name;
 		std::unordered_map<std::uint64_t, int> m_data;
-	public:
 
+	public:
 		pattern_cache(std::string const& name);
 
 		void update();
@@ -19,8 +19,6 @@ namespace memory
 		void update_cached_offset(pattern_hash hash, int offset);
 
 		bool is_initialized() const
-		{
-			return m_initialized;
-		}
+		{ return m_initialized; }
 	};
 }

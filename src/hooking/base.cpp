@@ -3,16 +3,12 @@
 namespace big
 {
 	base_hook::base_hook(const std::string_view name) :
-		m_name(name),
-		m_enabled(false)
-	{
-		m_base_hooks.emplace_back(this);
-	}
+	    m_name(name),
+	    m_enabled(false)
+	{ m_base_hooks.emplace_back(this); }
 
 	std::vector<base_hook*>& base_hook::hooks()
-	{
-		return m_base_hooks;
-	}
+	{ return m_base_hooks; }
 
 	bool base_hook::enable_all()
 	{

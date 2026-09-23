@@ -11,7 +11,7 @@ namespace big
 			g_renderer->on_present();
 
 		//return g_hooking->m_swapchain_hook.get_original<decltype(&swapchain_present)>(swapchain_present_index)(this_, sync_interval, flags);
-	
+
 		return base_hook::get_original<hooks::swapchain_present>()(this_, sync_interval, flags);
 	}
 
@@ -22,8 +22,7 @@ namespace big
 			g_renderer->pre_reset();
 
 			//auto result = g_hooking->m_swapchain_hook.get_original<decltype(&swapchain_resizebuffers)>(swapchain_resizebuffers_index)
-			auto result = base_hook::get_original<hooks::swapchain_resizebuffers>()
-				(this_, buffer_count, width, height, new_format, swapchain_flags);
+			auto result = base_hook::get_original<hooks::swapchain_resizebuffers>()(this_, buffer_count, width, height, new_format, swapchain_flags);
 
 			if (SUCCEEDED(result))
 			{
@@ -34,8 +33,7 @@ namespace big
 		}
 
 		//return g_hooking->m_swapchain_hook.get_original<decltype(&swapchain_resizebuffers)>(swapchain_resizebuffers_index)
-		return base_hook::get_original<hooks::swapchain_resizebuffers>()	
-			(this_, buffer_count, width, height, new_format, swapchain_flags);
+		return base_hook::get_original<hooks::swapchain_resizebuffers>()(this_, buffer_count, width, height, new_format, swapchain_flags);
 	}
 
 	void APIENTRY hooks::swapchain_draw_indexed(ID3D11DeviceContext* pContext, UINT IndexCount, UINT StartIndexLocation, INT BaseVertexLocation)

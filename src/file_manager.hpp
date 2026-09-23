@@ -28,7 +28,6 @@ namespace big
 
 	private:
 		std::filesystem::path m_base_dir;
-
 	};
 
 	inline file_manager g_file_manager;

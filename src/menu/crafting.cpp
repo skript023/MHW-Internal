@@ -1,7 +1,9 @@
 #include "crafting.h"
+
 #include "imgui.h"
 #include "script.hpp"
 #include "settings.hpp"
+
 #include <hook_manager.hpp>
 
 namespace big

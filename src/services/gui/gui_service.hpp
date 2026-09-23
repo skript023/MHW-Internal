@@ -1,16 +1,17 @@
 #pragma once
 #include "menu/crafting.h"
+#include "menu/equipment_menu.h"
 #include "menu/meal_menu.h"
 #include "menu/player_menu.h"
-#include "menu/weapon_menu.h"
 #include "menu/setting_menu.h"
 #include "menu/teleport_menu.h"
-#include "menu/equipment_menu.h"
 #include "menu/weapon_buff_menu.h"
+#include "menu/weapon_menu.h"
 
 namespace big
 {
-	enum class tabs {
+	enum class tabs
+	{
 		NONE,
 
 		MAIN,
@@ -44,21 +45,34 @@ namespace big
 		bool switched_view = true;
 
 		std::map<tabs, navigation_struct> nav = {
-			{tabs::PLAYER_MENU, { "Player", player_menu::render_menu, {
-				{ tabs::MEAL_MENU, { "Meal Editor", meal_menu::render_menu }},
-				{ tabs::TELEPORT_MENU, { "Teleport", teleport_menu::render_menu }},
-			}}},
-			{tabs::WEAPON, { "Weapon", weapon_menu::render_menu, {
-				{ tabs::EQUIPMENT, { "Equipment", equipment_menu::render_menu }},
-				{ tabs::WEAPON_BUFF, { "Weapon Buff", weapon_buff_menu::render_menu }},
-			}}},
-			{tabs::CRAFTING, { "Crafting", crafting::render_menu, {
+		    {tabs::PLAYER_MENU,
+		        {"Player",
+		            player_menu::render_menu,
+		            {
+		                {tabs::MEAL_MENU, {"Meal Editor", meal_menu::render_menu}},
+		                {tabs::TELEPORT_MENU, {"Teleport", teleport_menu::render_menu}},
+		            }}},
+		    {tabs::WEAPON,
+		        {"Weapon",
+		            weapon_menu::render_menu,
+		            {
+		                {tabs::EQUIPMENT, {"Equipment", equipment_menu::render_menu}},
+		                {tabs::WEAPON_BUFF, {"Weapon Buff", weapon_buff_menu::render_menu}},
+		            }}},
+		    {tabs::CRAFTING,
+		        {"Crafting",
+		            crafting::render_menu,
+		            {
 
-			}}},
-			{tabs::SETTING, { "Settings", nullptr, {
-				{ tabs::GUI_SETTINGS, { "Menu Settings", setting_menu::gui_settings }},
-			}}},
+		            }}},
+		    {tabs::SETTING,
+		        {"Settings",
+		            nullptr,
+		            {
+		                {tabs::GUI_SETTINGS, {"Menu Settings", setting_menu::gui_settings}},
+		            }}},
 		};
+
 	public:
 		gui_service();
 		virtual ~gui_service();

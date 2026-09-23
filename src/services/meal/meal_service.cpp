@@ -3,9 +3,7 @@
 namespace big
 {
 	void meal_service::init_impl(MealStats* instance)
-	{
-		m_meal_stat = instance;
-	}
+	{ m_meal_stat = instance; }
 	std::string_view meal_service::get_buff_impl(uint32_t skill)
 	{
 		if (m_meal_stat)

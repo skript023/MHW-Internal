@@ -1,19 +1,19 @@
-#include "common.hpp"
 #include "gui.hpp"
-#include "script.hpp"
-#include "settings.hpp"
-#include "pointers.hpp"
-#include "renderer.hpp"
-#include "fiber_pool.hpp"
 
+#include "common.hpp"
+#include "fiber_pool.hpp"
 #include "memory/module.hpp"
 #include "memory/pattern.hpp"
+#include "menu/navigation_menu.h"
+#include "menu/notification.h"
+#include "pointers.hpp"
+#include "renderer.hpp"
+#include "script.hpp"
+#include "server/server_module.hpp"
+#include "services/notification/notification_service.hpp"
+#include "settings.hpp"
 
 #include <imgui.h>
-
-#include "menu/notification.h"
-#include "menu/navigation_menu.h"
-#include "services/notification/notification_service.hpp"
 #include <menu/overlay.h>
 
 namespace big
@@ -91,17 +91,31 @@ namespace big
 		navigation::render_menu();
 		navigation::active_view();
 		ImGui::PopStyleColor();
+
+		astra::page page;
+		page.id = "license";
+		page.title = "Astra Session";
+		page.tabs = {"Session"};
+		page.breadcrumbs = {"Astra Session"};
+		astra::control status;
+		status.id = "license_status";
+		status.label = g_server_module && g_server_module->authorized() ? "License session active" : "License session unavailable";
+		status.description = "The session is renewed in the background.";
+		status.kind = astra::control_kind::action;
+		page.controls.push_back(std::move(status));
+		m_astra_canvas.draw(astra::layout::window, "Astra Session###astra_session", page, m_astra_opened, astra::preset_theme(4));
 	}
 
 	void gui::script_init()
 	{
 		g_gui.m_opened = true;
-		g_notification_service->success("Welcome", "Monster Hunter World Trainer Successfully Injected. Press insert to open");
+		g_notification_service->success("Welcome",
+		    "Monster Hunter World Trainer Successfully "
+		    "Injected. Press insert to open");
 	}
 
 	void gui::script_on_tick()
 	{
-		
 	}
 
 	void gui::script_func()
@@ -112,4 +126,4 @@ namespace big
 			script::get_current()->yield();
 		}
 	}
-}
+} // namespace big

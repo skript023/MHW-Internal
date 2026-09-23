@@ -25,6 +25,11 @@ include(scripts/asio.cmake)
 include(scripts/websocket.cmake)
 include(scripts/quickjs.cmake)
 
+set(ASTRA_SOURCE_DIR "L:/Coding/Experiment/astra" CACHE PATH "Local Astra source directory")
+set(ASTRA_BACKENDS "" CACHE STRING "Use the host's existing ImGui backends")
+add_subdirectory("${ASTRA_SOURCE_DIR}" "${CMAKE_BINARY_DIR}/astra")
+target_include_directories(astra PUBLIC "${imgui_SOURCE_DIR}")
+
 # MHW
 message(STATUS "MHW")
 file(GLOB_RECURSE SRC_MAIN
@@ -53,10 +58,11 @@ target_include_directories(MHW PRIVATE
     "${imgui_SOURCE_DIR}"
     "${websocket_SOURCE_DIR}"
     "${asio_SOURCE_DIR}/asio/include"
+    "${ASTRA_SOURCE_DIR}/include"
 )
 
 target_precompile_headers(MHW PRIVATE "${SRC_DIR}/common.hpp")
-target_link_libraries(MHW PRIVATE quickjs minhook imgui AsyncLogger dbghelp websocket ${ZLIB_LIBRARIES} OpenSSL::SSL OpenSSL::Crypto Crypt32)
+target_link_libraries(MHW PRIVATE quickjs minhook imgui astra::ui AsyncLogger dbghelp websocket ${ZLIB_LIBRARIES} OpenSSL::SSL OpenSSL::Crypto Crypt32)
 
 # Warnings as errors
 set_property(TARGET MHW PROPERTY COMPILE_WARNING_AS_ERROR OFF)

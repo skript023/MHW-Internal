@@ -1,5 +1,6 @@
-#include "common.hpp"
 #include "fiber_pool.hpp"
+
+#include "common.hpp"
 #include "script.hpp"
 #include "script_mgr.hpp"
 
@@ -16,9 +17,7 @@ namespace big
 	}
 
 	fiber_pool::~fiber_pool()
-	{
-		g_fiber_pool = nullptr;
-	}
+	{ g_fiber_pool = nullptr; }
 
 	void fiber_pool::queue_job(std::function<void()> func)
 	{

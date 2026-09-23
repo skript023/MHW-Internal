@@ -7,9 +7,9 @@
 namespace big
 {
 	detour_hook::detour_hook(const std::string_view name, void* target, void* detour) :
-		base_hook(name),
-		m_target(target),
-		m_detour(detour)
+	    base_hook(name),
+	    m_target(target),
+	    m_detour(detour)
 	{
 		fix_hook_address();
 
@@ -86,15 +86,11 @@ namespace big
 	}
 
 	void* detour_hook::get_original_ptr()
-	{
-		return m_original;
-	}
+	{ return m_original; }
 
 	DWORD exp_handler(PEXCEPTION_POINTERS exp, const std::string_view name)
 	{
-		return exp->ExceptionRecord->ExceptionCode == STATUS_ACCESS_VIOLATION
-			? EXCEPTION_EXECUTE_HANDLER
-			: EXCEPTION_CONTINUE_SEARCH;
+		return exp->ExceptionRecord->ExceptionCode == STATUS_ACCESS_VIOLATION ? EXCEPTION_EXECUTE_HANDLER : EXCEPTION_CONTINUE_SEARCH;
 	}
 
 	void detour_hook::fix_hook_address()
@@ -112,10 +108,9 @@ namespace big
 		}
 		__except (exp_handler(GetExceptionInformation(), m_name))
 		{
-			[this]()
-				{
-					throw std::runtime_error(std::format("Failed to fix hook address for '{}'", m_name));
-				}();
+			[this]() {
+				throw std::runtime_error(std::format("Failed to fix hook address for '{}'", m_name));
+			}();
 		}
 	}
 }

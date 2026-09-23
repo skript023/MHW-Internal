@@ -1,6 +1,7 @@
 #include "player.hpp"
-#include "pointers.hpp"
+
 #include "hook_manager.hpp"
+#include "pointers.hpp"
 
 namespace big
 {

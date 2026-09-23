@@ -1,37 +1,28 @@
 #include "file.hpp"
+
 #include "file_manager.hpp"
 
 namespace big
 {
 	file::file(const std::filesystem::path& file_path) :
-		m_file_path(file_path)
+	    m_file_path(file_path)
 	{
 	}
 
 	void file::operator=(const file& other)
-	{
-		m_file_path = other.m_file_path;
-	}
+	{ m_file_path = other.m_file_path; }
 
 	file::operator std::filesystem::path()
-	{
-		return m_file_path;
-	}
+	{ return m_file_path; }
 
-	file::operator std::filesystem::path& ()
-	{
-		return m_file_path;
-	}
+	file::operator std::filesystem::path&()
+	{ return m_file_path; }
 
 	bool file::exists() const
-	{
-		return std::filesystem::exists(m_file_path);
-	}
+	{ return std::filesystem::exists(m_file_path); }
 
 	const std::filesystem::path file::get_path() const
-	{
-		return m_file_path;
-	}
+	{ return m_file_path; }
 
 	file file::move(std::filesystem::path new_path)
 	{
@@ -43,6 +34,6 @@ namespace big
 		if (std::filesystem::exists(m_file_path))
 			std::filesystem::rename(m_file_path, new_path);
 
-		return { new_path };
+		return {new_path};
 	}
 }

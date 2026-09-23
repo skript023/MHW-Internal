@@ -4,15 +4,15 @@ namespace big
 {
 	__int64 __fastcall hooks::high_rank_experience(__int64 a1, int a2)
 	{
-		__int64 v2; // rdi@1
-		int v3; // esi@1
-		char i; // bp@1
-		int v5; // ecx@1
-		int v6; // er15@3
-		char v7; // al@3
-		signed int v8; // er14@3
-		__int64 v9; // rsi@12
-		int v10; // eax@54
+		__int64 v2;       // rdi@1
+		int v3;           // esi@1
+		char i;           // bp@1
+		int v5;           // ecx@1
+		int v6;           // er15@3
+		char v7;          // al@3
+		signed int v8;    // er14@3
+		__int64 v9;       // rsi@12
+		int v10;          // eax@54
 		unsigned int v11; // eax@60
 
 		v2 = a1;

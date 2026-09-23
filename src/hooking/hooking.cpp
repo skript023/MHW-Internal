@@ -1,7 +1,8 @@
+#include "hooking.hpp"
+
 #include "common.hpp"
 #include "function_types.hpp"
 #include "gui.hpp"
-#include "hooking.hpp"
 #include "memory/module.hpp"
 #include "pointers.hpp"
 #include "renderer.hpp"
@@ -10,7 +11,8 @@
 
 namespace big
 {
-	hooking::hooking() : m_swapchain_hook(*g_pointers->m_swapchain, hooks::swapchain_num_funcs)
+	hooking::hooking() :
+	    m_swapchain_hook(*g_pointers->m_swapchain, hooks::swapchain_num_funcs)
 	{
 		m_swapchain_hook.hook(hooks::swapchain_present_index, hooks::swapchain_present);
 		m_swapchain_hook.hook(hooks::swapchain_resizebuffers_index, hooks::swapchain_resizebuffers);
@@ -18,7 +20,8 @@ namespace big
 		// detour_hook::add<hooks::swapchain_resizebuffers>("SwapChainResizeBuffers", g_pointers->m_swapchain_methods[hooks::swapchain_resizebuffers_index]),
 
 		detour_hook::add<hooks::set_cursor_pos>("SetCursorPos", memory::module("user32.dll").get_export("SetCursorPos").as<void*>());
-		detour_hook::add<hooks::convert_thread_to_fiber>("ConvertThreadToFiber", memory::module("kernel32.dll").get_export("ConvertThreadToFiber").as<void*>());
+		detour_hook::add<hooks::convert_thread_to_fiber>(
+		    "ConvertThreadToFiber", memory::module("kernel32.dll").get_export("ConvertThreadToFiber").as<void*>());
 		detour_hook::add<hooks::material_handler>("Ignore Material", g_pointers->m_ignore_material);
 		detour_hook::add<hooks::equipment_crafting>("Unlock Equipment", g_pointers->m_equipment_unlock);
 		detour_hook::add<hooks::consumable>("Consumable", g_pointers->m_consumable);
@@ -84,14 +87,10 @@ namespace big
 	}
 
 	minhook_keepalive::minhook_keepalive()
-	{
-		MH_Initialize();
-	}
+	{ MH_Initialize(); }
 
 	minhook_keepalive::~minhook_keepalive()
-	{
-		MH_Uninitialize();
-	}
+	{ MH_Uninitialize(); }
 
 	void* hooks::convert_thread_to_fiber(void* param)
 	{

@@ -1,5 +1,7 @@
 #include "backend_events.hpp"
+
 #include "script.hpp"
+
 #include <features/player.hpp>
 #include <features/weapon.hpp>
 #include <server_module.hpp>
@@ -8,7 +10,6 @@ namespace big
 {
 	void backend_events::features()
 	{
-		
 	}
 
 	void backend_events::player_event()
@@ -72,7 +73,7 @@ namespace big
 			{
 				//g_server_module->run();
 				features();
-			} 
+			}
 			EXCEPT_CLAUSE
 			script::get_current()->yield();
 		}

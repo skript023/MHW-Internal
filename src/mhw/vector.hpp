@@ -6,17 +6,27 @@ namespace big
 	struct iVector2
 	{
 		iVector2() = default;
-		iVector2(int x, int y) : x(x), y(y) {}
+		iVector2(int x, int y) :
+		    x(x),
+		    y(y)
+		{
+		}
 		int x{};
 		int y{};
 
-		iVector2 operator/(const iVector2 a) const { return { x / a.x, y / a.y }; }
+		iVector2 operator/(const iVector2 a) const
+		{ return {x / a.x, y / a.y}; }
 	};
 
 	struct iVector3
 	{
 		iVector3() = default;
-		iVector3(int x, int y, int z) : x(x), y(y), z(z) {}
+		iVector3(int x, int y, int z) :
+		    x(x),
+		    y(y),
+		    z(z)
+		{
+		}
 		int x{};
 		int y{};
 		int z{};
@@ -33,35 +43,40 @@ namespace big
 	struct Vector2
 	{
 		Vector2() = default;
-		Vector2(float x, float y) : x(x), y(y) {}
+		Vector2(float x, float y) :
+		    x(x),
+		    y(y)
+		{
+		}
 		float x;
 		float y;
 
 		float distance(const Vector2 b) const
-		{ 
+		{
 			float x = this->x - b.x;
 			float y = this->y - b.y;
 			return sqrtf((x * x) + (y * y)) * 0.03048f;
 		}
 
 		float dot(Vector2 vec2)
-		{
-			return (x * vec2.x) + (y * vec2.y);
-		}
+		{ return (x * vec2.x) + (y * vec2.y); }
 	};
 
 	struct Vector3
 	{
 		Vector3() = default;
-		Vector3(float x, float y, float z) : x(x), y(y), z(z) {}
+		Vector3(float x, float y, float z) :
+		    x(x),
+		    y(y),
+		    z(z)
+		{
+		}
 		float x{};
 		float y{};
 		float z{};
 
 		float dot(Vector3 vec3)
-		{
-			return x * vec3.x + y * vec3.y + z * vec3.z;
-		}
+		{ return x * vec3.x + y * vec3.y + z * vec3.z; }
 
 		float distance(Vector3 v) const
 		{
@@ -72,90 +87,127 @@ namespace big
 			return sqrtf((x * x) + (y * y) + (z * z)) * 0.03048f;
 		}
 
-		Vector3 operator-(const Vector3 vec3) const { return { vec3.x - x, vec3.y - y, vec3.z - z }; }
-		Vector3 operator*(const Vector3& a) const { return { x * a.x, y * a.y, z * a.z }; }
-		Vector3 operator+(const Vector3& vec3) const { return { x + vec3.x, y * vec3.y, z * vec3.z }; }
-		Vector3 operator/(const Vector3& vec3) const { return { vec3.x / x, vec3.y / y, vec3.z / z }; }
-		bool operator==(const Vector3 a) const { return x == a.x && y == a.y && z == a.z; }
+		Vector3 operator-(const Vector3 vec3) const
+		{ return {vec3.x - x, vec3.y - y, vec3.z - z}; }
+		Vector3 operator*(const Vector3& a) const
+		{ return {x * a.x, y * a.y, z * a.z}; }
+		Vector3 operator+(const Vector3& vec3) const
+		{ return {x + vec3.x, y * vec3.y, z * vec3.z}; }
+		Vector3 operator/(const Vector3& vec3) const
+		{ return {vec3.x / x, vec3.y / y, vec3.z / z}; }
+		bool operator==(const Vector3 a) const
+		{ return x == a.x && y == a.y && z == a.z; }
 	};
 
 	struct Rotator
 	{
 		Rotator() = default;
-		Rotator(float pitch, float yaw, float roll) : pitch(pitch), yaw(yaw), roll(roll) {}
+		Rotator(float pitch, float yaw, float roll) :
+		    pitch(pitch),
+		    yaw(yaw),
+		    roll(roll)
+		{
+		}
 		float pitch{};
 		float yaw{};
 		float roll{};
 
-		Rotator operator-(const Rotator vec3) const { return { vec3.pitch - pitch, vec3.yaw - yaw, vec3.roll - roll }; }
-		Rotator operator*(const Rotator& a) const { return { pitch * a.pitch, yaw * a.yaw, roll * a.roll }; }
-		Rotator operator+(const Rotator& vec3) const { return { pitch + vec3.pitch, yaw * vec3.yaw, roll * vec3.roll }; }
-		Rotator operator/(const Rotator& vec3) const { return { vec3.pitch / pitch, vec3.yaw / yaw, vec3.roll / roll }; }
-		bool operator==(const Rotator a) const { return pitch == a.pitch && yaw == a.yaw && roll == a.roll; }
+		Rotator operator-(const Rotator vec3) const
+		{ return {vec3.pitch - pitch, vec3.yaw - yaw, vec3.roll - roll}; }
+		Rotator operator*(const Rotator& a) const
+		{ return {pitch * a.pitch, yaw * a.yaw, roll * a.roll}; }
+		Rotator operator+(const Rotator& vec3) const
+		{ return {pitch + vec3.pitch, yaw * vec3.yaw, roll * vec3.roll}; }
+		Rotator operator/(const Rotator& vec3) const
+		{ return {vec3.pitch / pitch, vec3.yaw / yaw, vec3.roll / roll}; }
+		bool operator==(const Rotator a) const
+		{ return pitch == a.pitch && yaw == a.yaw && roll == a.roll; }
 	};
 
 	struct Vector4
 	{
 		Vector4() = default;
-		Vector4(float x, float y, float z, float w): x(x), y(y), z(z), w(w) {}
+		Vector4(float x, float y, float z, float w) :
+		    x(x),
+		    y(y),
+		    z(z),
+		    w(w)
+		{
+		}
 		float x{};
 		float y{};
 		float z{};
 		float w{};
 
 		float dot(Vector4 vec4)
-		{
-			return (x * vec4.x) + (y * vec4.y) + (z * vec4.z) + (w * vec4.w);
-		}
+		{ return (x * vec4.x) + (y * vec4.y) + (z * vec4.z) + (w * vec4.w); }
 
 		float bitwise_and_first(int v)
-		{
-			return float((int)x & v);
-		}
+		{ return float((int)x & v); }
 
-		Vector4 operator&(const Vector4& v) { return {float((int)v.x & (int)x), float((int)v.y & (int)y), float((int)v.z & (int)z), float((int)v.w & (int)w) }; };
+		Vector4 operator&(const Vector4& v)
+		{
+			return {float((int)v.x & (int)x), float((int)v.y & (int)y), float((int)v.z & (int)z), float((int)v.w & (int)w)};
+		};
 	};
 
 	struct FVector_NetQuantize : public Vector3
 	{
 		FVector_NetQuantize()
-		{}
+		{
+		}
 
-		FVector_NetQuantize(float x, float y, float z)
-			: Vector3(x, y, z)
-		{}
+		FVector_NetQuantize(float x, float y, float z) :
+		    Vector3(x, y, z)
+		{
+		}
 
-		FVector_NetQuantize operator=(const Vector3 vec3) const { return { vec3.x, vec3.y, vec3.z }; }
-		FVector_NetQuantize operator-() const { return { -x, -y, -z }; }
+		FVector_NetQuantize operator=(const Vector3 vec3) const
+		{ return {vec3.x, vec3.y, vec3.z}; }
+		FVector_NetQuantize operator-() const
+		{ return {-x, -y, -z}; }
 	};
 
 	struct FVector_NetQuantizeNormal : public Vector3
 	{
 		FVector_NetQuantizeNormal()
-		{}
+		{
+		}
 
-		FVector_NetQuantizeNormal(float InX, float InY, float InZ)
-			: Vector3(InX, InY, InZ)
-		{}
+		FVector_NetQuantizeNormal(float InX, float InY, float InZ) :
+		    Vector3(InX, InY, InZ)
+		{
+		}
 
-		FVector_NetQuantizeNormal operator=(const Vector3 vec3) const { return { vec3.x, vec3.y, vec3.z }; }
-		FVector_NetQuantizeNormal operator-() const { return { -x, -y, -z }; }
+		FVector_NetQuantizeNormal operator=(const Vector3 vec3) const
+		{ return {vec3.x, vec3.y, vec3.z}; }
+		FVector_NetQuantizeNormal operator-() const
+		{ return {-x, -y, -z}; }
 	};
 
-	class FLinearColor 
+	class FLinearColor
 	{
 	public:
 		float R, G, B, A;
-		FLinearColor() : R(0.f), G(0.f), B(0.f), A(0.f) {};
-		FLinearColor(float R, float G, float B, float A) : R(R), G(G), B(B), A(A) {};
+		FLinearColor() :
+		    R(0.f),
+		    G(0.f),
+		    B(0.f),
+		    A(0.f) {};
+		FLinearColor(float R, float G, float B, float A) :
+		    R(R),
+		    G(G),
+		    B(B),
+		    A(A) {};
 	};
 
 	struct Matrix
 	{
 		float m[4][4];
 
-		Matrix() { ZeroMemory(this, sizeof(Matrix)); }
-		Matrix(const Vector3& rotation, const Vector3& origin = { 0.f, 0.f, 0.f })
+		Matrix()
+		{ ZeroMemory(this, sizeof(Matrix)); }
+		Matrix(const Vector3& rotation, const Vector3& origin = {0.f, 0.f, 0.f})
 		{
 			float radPitch = rotation.x * float(M_PI) / 180.f;
 			float radYaw = rotation.y * float(M_PI) / 180.f;
@@ -204,7 +256,8 @@ namespace big
 
 			return out;
 		}
-		__forceinline void operator*=(const Matrix& m2) { *this = this->operator*(m2); }
+		__forceinline void operator*=(const Matrix& m2)
+		{ *this = this->operator*(m2); }
 	};
 
 	using FVector = Vector3;

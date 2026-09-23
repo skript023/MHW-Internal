@@ -18,8 +18,9 @@ namespace big
 		_NODISCARD float get_timer(int index);
 		_NODISCARD float get_max_timer(int index);
 		_NODISCARD float get_size(int index);
+
 	private:
-		std::vector<MonsterEntry*> m_entry = { nullptr, nullptr, nullptr };
+		std::vector<MonsterEntry*> m_entry = {nullptr, nullptr, nullptr};
 	};
 
 	inline monster_service* g_monster_service{};

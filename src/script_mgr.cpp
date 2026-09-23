@@ -1,6 +1,7 @@
+#include "script_mgr.hpp"
+
 #include "common.hpp"
 #include "pointers.hpp"
-#include "script_mgr.hpp"
 
 namespace big
 {
@@ -17,16 +18,14 @@ namespace big
 	}
 
 	void script_mgr::tick()
-	{
-		execute_as_script(std::mem_fn(&script_mgr::tick_internal), this);
-	}
+	{ execute_as_script(std::mem_fn(&script_mgr::tick_internal), this); }
 
 	void script_mgr::tick_internal()
 	{
 		static bool ensure_main_fiber = (ConvertThreadToFiber(nullptr), true);
 
 		std::lock_guard lock(m_mutex);
-		for (auto const &script : m_scripts)
+		for (auto const& script : m_scripts)
 		{
 			script->tick();
 		}

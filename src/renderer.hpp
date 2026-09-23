@@ -1,5 +1,6 @@
 #pragma once
 #include "common.hpp"
+
 #include <imgui.h>
 
 namespace big
@@ -21,11 +22,13 @@ namespace big
 		void merge_icon_with_latest_font(float font_size, bool FontDataOwnedByAtlas = false);
 
 		bool wndproc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam);
+
 	public:
 		ImFont* m_font = nullptr;
 		ImFont* m_monospace_font = nullptr;
 
 		HWND m_window = NULL;
+
 	private:
 		ID3D11Device* m_d3d_device = nullptr;
 		ID3D11DeviceContext* m_d3d_context = nullptr;

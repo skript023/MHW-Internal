@@ -1,5 +1,6 @@
 #pragma once
 #include "file_manager.hpp"
+
 #include <AsyncLogger/Logger.hpp>
 using namespace al;
 
@@ -37,7 +38,7 @@ namespace big
 		bool m_did_console_exist = false;
 		bool m_is_console_open = false;
 
-		void (logger::* m_console_logger)(const LogMessagePtr msg) = &logger::format_console;
+		void (logger::*m_console_logger)(const LogMessagePtr msg) = &logger::format_console;
 
 		std::string_view m_console_title;
 		DWORD m_original_console_mode = 0;
@@ -53,32 +54,31 @@ namespace big
 		virtual ~logger() = default;
 
 		static void initialize(const std::string_view console_title, file file, bool attach_console = true)
-		{
-			get().initialize_impl(console_title, file, attach_console);
-		}
+		{ get().initialize_impl(console_title, file, attach_console); }
 
 		static void destroy()
-		{
-			get().destroy_impl();
-		}
+		{ get().destroy_impl(); }
 
 		static void toggle_external_console(bool toggle)
-		{
-			get().toggle_external_console_impl(toggle);
-		}
+		{ get().toggle_external_console_impl(toggle); }
+
 	private:
-		static logger& get(){ static logger i{}; return i; }
-		
+		static logger& get()
+		{
+			static logger i{};
+			return i;
+		}
+
 		void initialize_impl(const std::string_view console_title, file file, bool attach_console = true);
 		void destroy_impl();
 
 		void toggle_external_console_impl(bool toggle);
+
 	private:
 		void create_backup();
 
 		void format_console(const LogMessagePtr msg);
 		void format_console_simple(const LogMessagePtr msg);
 		void format_file(const LogMessagePtr msg);
-
 	};
 }

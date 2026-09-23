@@ -1,12 +1,13 @@
-#include "gui.hpp"
-#include "pointers.hpp"
 #include "renderer.hpp"
+
 #include "fonts/font_list.hpp"
 #include "fonts/icon_list.hpp"
+#include "gui.hpp"
+#include "pointers.hpp"
 
-#include <imgui.h>
 #include <backends/imgui_impl_dx11.h>
 #include <backends/imgui_impl_win32.h>
+#include <imgui.h>
 #include <imgui_internal.h>
 
 IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
@@ -14,10 +15,7 @@ IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARA
 namespace big
 {
 	renderer::renderer()
-	{
-		
-		g_renderer = this;
-	}
+	{ g_renderer = this; }
 
 	renderer::~renderer()
 	{
@@ -201,7 +199,7 @@ namespace big
 
 	void renderer::merge_icon_with_latest_font(float font_size, bool FontDataOwnedByAtlas)
 	{
-		static const ImWchar icons_ranges[3] = { ICON_MIN_FA, ICON_MAX_FA, 0 };
+		static const ImWchar icons_ranges[3] = {ICON_MIN_FA, ICON_MAX_FA, 0};
 
 		ImFontConfig icons_config;
 		icons_config.MergeMode = true;

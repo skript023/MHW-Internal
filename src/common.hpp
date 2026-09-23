@@ -1,56 +1,43 @@
 #pragma once
 
+#include <D3D11.h>
+#include <Psapi.h>
 #include <SDKDDKVer.h>
 #include <Windows.h>
-#include <D3D11.h>
-#include <wrl/client.h>
-
+#include <algorithm>
+#include <any>
+#include <atomic>
+#include <chrono>
 #include <cinttypes>
 #include <cstddef>
 #include <cstdint>
-
-#include <chrono>
 #include <ctime>
-
+#include <exception>
 #include <filesystem>
+#include <format>
 #include <fstream>
-#include <iostream>
+#include <functional>
 #include <iomanip>
-
-#include <atomic>
-#include <mutex>
-#include <thread>
-
+#include <iostream>
 #include <memory>
+#include <mutex>
 #include <new>
-
+#include <nlohmann/json.hpp>
+#include <optional>
+#include <regex>
 #include <sstream>
+#include <stack>
+#include <stdexcept>
 #include <string>
 #include <string_view>
-
-#include <algorithm>
-#include <functional>
-#include <utility>
-
-#include <stack>
-#include <vector>
-
-#include <typeinfo>
-#include <type_traits>
-
-#include <exception>
-#include <stdexcept>
-
-#include <any>
-#include <optional>
-#include <variant>
-
-#include <regex>
+#include <thread>
 #include <tlhelp32.h>
-#include <Psapi.h>
-#include <format>
-
-#include <nlohmann/json.hpp>
+#include <type_traits>
+#include <typeinfo>
+#include <utility>
+#include <variant>
+#include <vector>
+#include <wrl/client.h>
 
 #define FOLDER "Monter Hunter World Trainer"
 #define LOG_FILENAME "Monster Hunter World"
@@ -67,8 +54,8 @@
 #define WINDOW_NAME "MONSTER HUNTER: WORLD(421810)"
 #define TARGET_PROCESS "MonsterHunterWorld.exe"
 
-#include "settings.hpp"
 #include "logger/logger.hpp"
+#include "settings.hpp"
 #include "utility/fnv1a.hpp"
 
 extern "C" uint64_t g_set_item;
@@ -77,12 +64,12 @@ extern "C" uint64_t g_item_box;
 namespace big
 {
 	using namespace std::chrono_literals;
-	
-	template <typename T>
+
+	template<typename T>
 	using comptr = Microsoft::WRL::ComPtr<T>;
 
 	inline HMODULE g_hmodule{};
 	inline HANDLE g_main_thread{};
 	inline DWORD g_main_thread_id{};
-	inline std::atomic_bool g_running{ true };
+	inline std::atomic_bool g_running{true};
 }

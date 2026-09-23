@@ -11,6 +11,7 @@ namespace big
 
 		void init(Equipment* eq);
 		Equipment* get();
+
 	private:
 		Equipment* m_equipment = nullptr;
 	};

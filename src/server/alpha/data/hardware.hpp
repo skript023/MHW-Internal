@@ -7,11 +7,12 @@ namespace big
 		Hardware() = default;
 
 		Hardware(std::string const& os, std::string const& cpu, std::string const& gpu, std::string const& motherboard) :
-			os(os),
-			cpu(cpu),
-			gpu(gpu),
-			motherboard(motherboard)
-		{}
+		    os(os),
+		    cpu(cpu),
+		    gpu(gpu),
+		    motherboard(motherboard)
+		{
+		}
 
 		Hardware(const Hardware&) = default;
 		Hardware& operator=(const Hardware&) = default;
@@ -24,9 +25,7 @@ namespace big
 		std::string motherboard;
 
 		nlohmann::json to_json()
-		{
-			return *this;
-		}
+		{ return *this; }
 
 		NLOHMANN_DEFINE_TYPE_INTRUSIVE(Hardware, os, cpu, gpu, motherboard)
 	};

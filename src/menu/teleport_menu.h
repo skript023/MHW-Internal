@@ -6,9 +6,9 @@ namespace big
 	static void to_json(nlohmann::json& j, const Vector3& attachment)
 	{
 		j = nlohmann::json{
-			{"position_x", attachment.x},
-			{"position_y", attachment.y},
-			{"position_z", attachment.z},
+		    {"position_x", attachment.x},
+		    {"position_y", attachment.y},
+		    {"position_z", attachment.z},
 		};
 	}
 

@@ -1,15 +1,17 @@
 #pragma once
-#include <socket_client.hpp>
 #include "data/status.hpp"
 #include "interfaces/subscribe/message.hpp"
 #include "notification/notification_service.hpp"
+
+#include <socket_client.hpp>
 
 namespace big
 {
 	class alpha_service
 	{
 	public:
-		explicit alpha_service() : m_status(eIntegrationStatus::UNKNOWN)
+		explicit alpha_service() :
+		    m_status(eIntegrationStatus::UNKNOWN)
 		{
 			m_alpha_gateway = std::make_shared<socket_client>("quantum.rena.my.id/ws/auth");
 			m_alpha_gateway->on_message_received([](std::string const& message) {
@@ -19,22 +21,16 @@ namespace big
 		}
 
 		~alpha_service() noexcept
-		{
-			m_alpha_gateway.reset();
-		}
+		{ m_alpha_gateway.reset(); }
 
 		void find()
 		{
 			m_event.event = "findAllAlpha";
 
 			m_alpha_gateway->send_message(m_event.to_json_string(), [this](const std::string& message) {
-				if (message.empty())
-				{
-
-				}
+				if (message.empty()) {}
 				else
 				{
-
 				}
 			});
 		}
@@ -50,7 +46,6 @@ namespace big
 				}
 				else
 				{
-
 				}
 			});
 		}
@@ -104,9 +99,8 @@ namespace big
 		}
 
 		bool is_integrated() const
-		{
-			return m_status == eIntegrationStatus::CONNECTED;
-		}
+		{ return m_status == eIntegrationStatus::CONNECTED; }
+
 	private:
 		std::shared_ptr<socket_client> m_alpha_gateway;
 		Gateway m_event;

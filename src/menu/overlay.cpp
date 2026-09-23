@@ -1,8 +1,9 @@
-#include <gui.hpp>
 #include "overlay.h"
-#include <world/world_service.hpp>
-#include <monster/monster_service.hpp>
+
 #include <character/character_service.hpp>
+#include <gui.hpp>
+#include <monster/monster_service.hpp>
+#include <world/world_service.hpp>
 
 namespace big
 {
@@ -12,8 +13,9 @@ namespace big
 		ImGui::SetNextWindowBgAlpha(0.5f);
 
 		auto window_flags = ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoFocusOnAppearing | ImGuiWindowFlags_NoNav;
-		
-		if (!g_gui.m_opened) window_flags |= ImGuiWindowFlags_NoMouseInputs;
+
+		if (!g_gui.m_opened)
+			window_flags |= ImGuiWindowFlags_NoMouseInputs;
 
 		if (ImGui::Begin("overlay", nullptr, window_flags))
 		{

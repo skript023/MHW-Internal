@@ -1,27 +1,25 @@
 #pragma once
-#include "logger/logger.hpp"
-#include "imgui.h"
 #include "file_manager.hpp"
+#include "imgui.h"
+#include "logger/logger.hpp"
 
 namespace big
 {
 	class settings;
 	inline settings* g_settings{};
 
-	class settings 
+	class settings
 	{
 		nlohmann::json default_options;
 		nlohmann::json options;
+
 	public:
-		settings(file setting): settings_location(setting.get_path())
-		{
-			g_settings = this;
-		}
+		settings(file setting) :
+		    settings_location(setting.get_path())
+		{ g_settings = this; }
 
 		~settings()
-		{
-			g_settings = nullptr;
-		}
+		{ g_settings = nullptr; }
 
 		void attempt_save()
 		{
@@ -69,6 +67,7 @@ namespace big
 
 			return true;
 		}
+
 	private:
 		std::filesystem::path settings_location;
 
@@ -126,6 +125,7 @@ namespace big
 
 			return true;
 		}
+
 	public:
 		struct player
 		{
@@ -156,29 +156,7 @@ namespace big
 			float critical_boost = 1.25f;
 			float research_exp = 2.f;
 
-			NLOHMANN_DEFINE_TYPE_INTRUSIVE(player, 
-				invulnerable, 
-				inf_stamina, 
-				reveal_monster, 
-				inf_item, 
-				hr_ex_mult, 
-				critical_boost, 
-				easy_part_breaker, 
-				part_breaker, 
-				maxed_stat_set, 
-				maxed_armor_effect,
-				max_sharpness,
-				inf_mount,
-				mount_reset,
-				inf_gathering,
-				research_exp_mult,
-				inf_lucky_voucher,
-				cannon_always_loaded,
-				inf_cannon_fire,
-				unlock_all_pet,
-				scoutfly_max_level,
-				palico_gadget_cd
-			);
+			NLOHMANN_DEFINE_TYPE_INTRUSIVE(player, invulnerable, inf_stamina, reveal_monster, inf_item, hr_ex_mult, critical_boost, easy_part_breaker, part_breaker, maxed_stat_set, maxed_armor_effect, max_sharpness, inf_mount, mount_reset, inf_gathering, research_exp_mult, inf_lucky_voucher, cannon_always_loaded, inf_cannon_fire, unlock_all_pet, scoutfly_max_level, palico_gadget_cd);
 		} player;
 
 		struct weapon
@@ -198,15 +176,7 @@ namespace big
 			float frostcraft_drawn = 1.5f;
 			float frostcraft_heat = 30.f;
 
-			NLOHMANN_DEFINE_TYPE_INTRUSIVE(weapon, 
-				inst_chrgs_gs, 
-				inf_frostcraft, 
-				frostcraft_recharge, 
-				frostcraft_drawn, 
-				frostcraft_heat,
-				max_slot_armor,
-				inf_slinger_ammo
-			);
+			NLOHMANN_DEFINE_TYPE_INTRUSIVE(weapon, inst_chrgs_gs, inf_frostcraft, frostcraft_recharge, frostcraft_drawn, frostcraft_heat, max_slot_armor, inf_slinger_ammo);
 		} weapon;
 
 		struct crafting

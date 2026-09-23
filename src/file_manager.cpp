@@ -11,9 +11,7 @@ namespace big
 	}
 
 	const std::filesystem::path& file_manager::get_base_dir()
-	{
-		return m_base_dir;
-	}
+	{ return m_base_dir; }
 
 	file file_manager::get_project_file(std::filesystem::path file_path)
 	{

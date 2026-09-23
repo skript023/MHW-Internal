@@ -3,29 +3,17 @@
 namespace big
 {
 	weapon_service::weapon_service()
-	{
-		g_weapon_service = this;
-	}
+	{ g_weapon_service = this; }
 	weapon_service::~weapon_service() noexcept
-	{
-		g_weapon_service = nullptr;
-	}
+	{ g_weapon_service = nullptr; }
 	void weapon_service::init_melee(MeleeWeapon* wep)
-	{
-		m_melee_weapon = wep;
-	}
+	{ m_melee_weapon = wep; }
 	void weapon_service::init_ranged(RangedWeapon* wep)
-	{
-		m_ranged_weapon = wep;
-	}
+	{ m_ranged_weapon = wep; }
 	MeleeWeapon* weapon_service::get_melee()
-	{
-		return m_melee_weapon == nullptr ? nullptr : m_melee_weapon;
-	}
+	{ return m_melee_weapon == nullptr ? nullptr : m_melee_weapon; }
 	RangedWeapon* weapon_service::get_ranged()
-	{
-		return m_ranged_weapon == nullptr ? nullptr : m_ranged_weapon;
-	}
+	{ return m_ranged_weapon == nullptr ? nullptr : m_ranged_weapon; }
 	std::string weapon_service::get_melee_elemental()
 	{
 		if (m_melee_weapon)

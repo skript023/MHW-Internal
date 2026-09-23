@@ -1,11 +1,12 @@
 #include "weapon.hpp"
+
 #include "hook_manager.hpp"
 
 float g_frostcraft_drawn;
 float g_frostcraft_sheathed;
 uint64_t g_equipment_ptr;
- //bool g_is_frostcraft_drawn;
- //bool g_is_frostcraft_sheathed;
+//bool g_is_frostcraft_drawn;
+//bool g_is_frostcraft_sheathed;
 
 namespace big
 {

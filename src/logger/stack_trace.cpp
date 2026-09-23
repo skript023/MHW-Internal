@@ -6,20 +6,14 @@
 namespace big
 {
 	stack_trace::stack_trace() :
-		m_frame_pointers(32)
-	{
-		SymInitialize(GetCurrentProcess(), nullptr, true);
-	}
+	    m_frame_pointers(32)
+	{ SymInitialize(GetCurrentProcess(), nullptr, true); }
 
 	stack_trace::~stack_trace()
-	{
-		SymCleanup(GetCurrentProcess());
-	}
+	{ SymCleanup(GetCurrentProcess()); }
 
 	const std::vector<uint64_t>& stack_trace::frame_pointers()
-	{
-		return m_frame_pointers;
-	}
+	{ return m_frame_pointers; }
 
 	void stack_trace::new_stack_trace(EXCEPTION_POINTERS* exception_info)
 	{
@@ -42,9 +36,7 @@ namespace big
 	}
 
 	std::string stack_trace::str() const
-	{
-		return m_dump.str();
-	}
+	{ return m_dump.str(); }
 
 	// I'd prefer to make some sort of global instance that cache all modules once instead of doing this every time
 	void stack_trace::dump_module_info()
@@ -75,8 +67,7 @@ namespace big
 			{
 				auto mod_info = module_info(table_entry->FullDllName.Buffer, table_entry->DllBase);
 
-				m_dump << mod_info.m_name << " Base Address: " << HEX_TO_UPPER(mod_info.m_base)
-					<< " Size: " << mod_info.m_size << '\n';
+				m_dump << mod_info.m_name << " Base Address: " << HEX_TO_UPPER(mod_info.m_base) << " Size: " << mod_info.m_size << '\n';
 
 				m_modules.emplace_back(std::move(mod_info));
 			}
@@ -88,22 +79,22 @@ namespace big
 		const auto context = m_exception_info->ContextRecord;
 
 		m_dump << "Dumping registers:\n"
-			<< "RAX: " << HEX_TO_UPPER(context->Rax) << '\n'
-			<< "RCX: " << HEX_TO_UPPER(context->Rcx) << '\n'
-			<< "RDX: " << HEX_TO_UPPER(context->Rdx) << '\n'
-			<< "RBX: " << HEX_TO_UPPER(context->Rbx) << '\n'
-			<< "RSI: " << HEX_TO_UPPER(context->Rsi) << '\n'
-			<< "RDI: " << HEX_TO_UPPER(context->Rdi) << '\n'
-			<< "RSP: " << HEX_TO_UPPER(context->Rsp) << '\n'
-			<< "RBP: " << HEX_TO_UPPER(context->Rbp) << '\n'
-			<< "R8:  " << HEX_TO_UPPER(context->R8) << '\n'
-			<< "R9:  " << HEX_TO_UPPER(context->R9) << '\n'
-			<< "R10: " << HEX_TO_UPPER(context->R10) << '\n'
-			<< "R11: " << HEX_TO_UPPER(context->R11) << '\n'
-			<< "R12: " << HEX_TO_UPPER(context->R12) << '\n'
-			<< "R13: " << HEX_TO_UPPER(context->R13) << '\n'
-			<< "R14: " << HEX_TO_UPPER(context->R14) << '\n'
-			<< "R15: " << HEX_TO_UPPER(context->R15) << '\n';
+		       << "RAX: " << HEX_TO_UPPER(context->Rax) << '\n'
+		       << "RCX: " << HEX_TO_UPPER(context->Rcx) << '\n'
+		       << "RDX: " << HEX_TO_UPPER(context->Rdx) << '\n'
+		       << "RBX: " << HEX_TO_UPPER(context->Rbx) << '\n'
+		       << "RSI: " << HEX_TO_UPPER(context->Rsi) << '\n'
+		       << "RDI: " << HEX_TO_UPPER(context->Rdi) << '\n'
+		       << "RSP: " << HEX_TO_UPPER(context->Rsp) << '\n'
+		       << "RBP: " << HEX_TO_UPPER(context->Rbp) << '\n'
+		       << "R8:  " << HEX_TO_UPPER(context->R8) << '\n'
+		       << "R9:  " << HEX_TO_UPPER(context->R9) << '\n'
+		       << "R10: " << HEX_TO_UPPER(context->R10) << '\n'
+		       << "R11: " << HEX_TO_UPPER(context->R11) << '\n'
+		       << "R12: " << HEX_TO_UPPER(context->R12) << '\n'
+		       << "R13: " << HEX_TO_UPPER(context->R13) << '\n'
+		       << "R14: " << HEX_TO_UPPER(context->R14) << '\n'
+		       << "R15: " << HEX_TO_UPPER(context->R15) << '\n';
 	}
 
 	void stack_trace::dump_stacktrace()
@@ -168,8 +159,8 @@ namespace big
 		if (m_exception_info->ExceptionRecord->ExceptionCode == msvc_exception_code)
 		{
 			m_dump
-				<< '\n'
-				<< reinterpret_cast<const std::exception*>(m_exception_info->ExceptionRecord->ExceptionInformation[1])->what() << '\n';
+			    << '\n'
+			    << reinterpret_cast<const std::exception*>(m_exception_info->ExceptionRecord->ExceptionInformation[1])->what() << '\n';
 		}
 	}
 
@@ -213,7 +204,7 @@ namespace big
 	{                         \
 		x, #x                 \
 	}
-		static const std::map<DWORD, std::string> exceptions = { MAP_PAIR_STRINGIFY(EXCEPTION_ACCESS_VIOLATION), MAP_PAIR_STRINGIFY(EXCEPTION_ARRAY_BOUNDS_EXCEEDED), MAP_PAIR_STRINGIFY(EXCEPTION_DATATYPE_MISALIGNMENT), MAP_PAIR_STRINGIFY(EXCEPTION_FLT_DENORMAL_OPERAND), MAP_PAIR_STRINGIFY(EXCEPTION_FLT_DIVIDE_BY_ZERO), MAP_PAIR_STRINGIFY(EXCEPTION_FLT_INEXACT_RESULT), MAP_PAIR_STRINGIFY(EXCEPTION_FLT_INEXACT_RESULT), MAP_PAIR_STRINGIFY(EXCEPTION_FLT_INVALID_OPERATION), MAP_PAIR_STRINGIFY(EXCEPTION_FLT_OVERFLOW), MAP_PAIR_STRINGIFY(EXCEPTION_FLT_STACK_CHECK), MAP_PAIR_STRINGIFY(EXCEPTION_FLT_UNDERFLOW), MAP_PAIR_STRINGIFY(EXCEPTION_ILLEGAL_INSTRUCTION), MAP_PAIR_STRINGIFY(EXCEPTION_IN_PAGE_ERROR), MAP_PAIR_STRINGIFY(EXCEPTION_INT_DIVIDE_BY_ZERO), MAP_PAIR_STRINGIFY(EXCEPTION_INT_OVERFLOW), MAP_PAIR_STRINGIFY(EXCEPTION_INVALID_DISPOSITION), MAP_PAIR_STRINGIFY(EXCEPTION_NONCONTINUABLE_EXCEPTION), MAP_PAIR_STRINGIFY(EXCEPTION_PRIV_INSTRUCTION), MAP_PAIR_STRINGIFY(EXCEPTION_STACK_OVERFLOW), MAP_PAIR_STRINGIFY(EXCEPTION_BREAKPOINT), MAP_PAIR_STRINGIFY(EXCEPTION_SINGLE_STEP) };
+		static const std::map<DWORD, std::string> exceptions = {MAP_PAIR_STRINGIFY(EXCEPTION_ACCESS_VIOLATION), MAP_PAIR_STRINGIFY(EXCEPTION_ARRAY_BOUNDS_EXCEEDED), MAP_PAIR_STRINGIFY(EXCEPTION_DATATYPE_MISALIGNMENT), MAP_PAIR_STRINGIFY(EXCEPTION_FLT_DENORMAL_OPERAND), MAP_PAIR_STRINGIFY(EXCEPTION_FLT_DIVIDE_BY_ZERO), MAP_PAIR_STRINGIFY(EXCEPTION_FLT_INEXACT_RESULT), MAP_PAIR_STRINGIFY(EXCEPTION_FLT_INEXACT_RESULT), MAP_PAIR_STRINGIFY(EXCEPTION_FLT_INVALID_OPERATION), MAP_PAIR_STRINGIFY(EXCEPTION_FLT_OVERFLOW), MAP_PAIR_STRINGIFY(EXCEPTION_FLT_STACK_CHECK), MAP_PAIR_STRINGIFY(EXCEPTION_FLT_UNDERFLOW), MAP_PAIR_STRINGIFY(EXCEPTION_ILLEGAL_INSTRUCTION), MAP_PAIR_STRINGIFY(EXCEPTION_IN_PAGE_ERROR), MAP_PAIR_STRINGIFY(EXCEPTION_INT_DIVIDE_BY_ZERO), MAP_PAIR_STRINGIFY(EXCEPTION_INT_OVERFLOW), MAP_PAIR_STRINGIFY(EXCEPTION_INVALID_DISPOSITION), MAP_PAIR_STRINGIFY(EXCEPTION_NONCONTINUABLE_EXCEPTION), MAP_PAIR_STRINGIFY(EXCEPTION_PRIV_INSTRUCTION), MAP_PAIR_STRINGIFY(EXCEPTION_STACK_OVERFLOW), MAP_PAIR_STRINGIFY(EXCEPTION_BREAKPOINT), MAP_PAIR_STRINGIFY(EXCEPTION_SINGLE_STEP)};
 
 		if (const auto& it = exceptions.find(code); it != exceptions.end())
 			return it->second;

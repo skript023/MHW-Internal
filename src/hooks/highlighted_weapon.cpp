@@ -1,5 +1,6 @@
 #include "hooking.hpp"
 #include "pointers.hpp"
+
 #include <services/equipment/weapon_service.hpp>
 
 namespace big

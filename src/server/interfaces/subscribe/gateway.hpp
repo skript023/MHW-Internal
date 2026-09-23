@@ -2,25 +2,19 @@
 
 namespace big
 {
-    struct Gateway
-    {
-        std::string event;
+	struct Gateway
+	{
+		std::string event;
 
-        nlohmann::json to_json()
-        {
-            return *this;
-        }
+		nlohmann::json to_json()
+		{ return *this; }
 
-        std::string to_json_string()
-        {
-            return nlohmann::json(*this).dump();
-        }
+		std::string to_json_string()
+		{ return nlohmann::json(*this).dump(); }
 
-        void operator=(nlohmann::json const& data)
-        {
-            *this = data.get<Gateway>();
-        }
+		void operator=(nlohmann::json const& data)
+		{ *this = data.get<Gateway>(); }
 
-        NLOHMANN_DEFINE_TYPE_INTRUSIVE(Gateway, event)
-    };
+		NLOHMANN_DEFINE_TYPE_INTRUSIVE(Gateway, event)
+	};
 }

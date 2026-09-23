@@ -12,7 +12,7 @@ namespace big
 	{
 	public:
 		static void render_menu();
+
 	public:
-		
 	};
 }

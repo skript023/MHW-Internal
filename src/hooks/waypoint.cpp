@@ -1,4 +1,5 @@
 #include "hooking.hpp"
+
 #include <services/character/character_service.hpp>
 
 namespace big

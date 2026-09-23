@@ -1,9 +1,8 @@
 #pragma once
 #include "common.hpp"
 #include "detour_hook.hpp"
-#include "vmt_hook.hpp"
-
 #include "mhw/fwddec.hpp"
+#include "vmt_hook.hpp"
 
 extern "C" void equipment();
 extern "C" void player_atk_stat();
@@ -59,12 +58,14 @@ namespace big
 	class hooking
 	{
 		friend hooks;
+
 	public:
 		explicit hooking();
 		~hooking();
 
 		void enable();
 		void disable();
+
 	private:
 		bool m_enabled{};
 		minhook_keepalive m_minhook_keepalive;

@@ -6,6 +6,7 @@ namespace big
 	class navigation
 	{
 		inline static ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoNav;
+
 	public:
 		static void render_menu();
 		static void header();

@@ -1,10 +1,12 @@
 #pragma once
 #include "common.hpp"
 #include "function_types.hpp"
-#include <mhw/vector.hpp>
 #include "memory/all.hpp"
 
-extern "C" {
+#include <mhw/vector.hpp>
+
+extern "C"
+{
 	extern uint64_t g_equipment_ret_addr;
 	extern uint64_t g_gs_charge_ret_addr;
 	extern uint64_t g_atk_ret_addr;
@@ -25,15 +27,18 @@ namespace big
 		~pointers();
 
 		void update();
+
 	public:
 		HWND m_hwnd{};
 		void* m_swapchain_methods[19];
 		IDXGISwapChain** m_swapchain;
+
 	public:
 		iVector2* m_resolution{};
 		uint64_t m_base_address{};
 		void* m_ignore_material{};
 		void* m_equipment_unlock{};
+
 	public:
 		void* m_part_breaker{};
 		void* m_easy_breaker{};
@@ -45,7 +50,7 @@ namespace big
 		void* m_player_stamina{};
 		void* m_consumable{};
 		functions::use_item_t m_use_item{};
-		void* m_master_rank_exp{};  // originally void*; now typed as function pointer for direct calls to m_use_item() in hooks and detour registration
+		void* m_master_rank_exp{}; // originally void*; now typed as function pointer for direct calls to m_use_item() in hooks and detour registration
 		void* m_highrank_exp{};
 		void* m_maxed_effect_set{};
 		void* m_maxed_attribute{};
@@ -113,6 +118,7 @@ namespace big
 		void* m_inf_wyvern_blast{};
 		void* m_bow_gun_effect{};
 		functions::bow_gun_effect_apply_t m_bow_gun_effect_apply{};
+
 	private:
 		memory::pattern_batch main_batch;
 		memory::pattern_batch steam_batch;
@@ -129,6 +135,7 @@ namespace big
 		LPCSTR m_title;
 		LPCSTR m_classname;
 		LPCSTR m_path;
+
 	public:
 		inline DWORD get_process_id(LPCSTR ProcessName)
 		{
@@ -151,5 +158,5 @@ namespace big
 		}
 	};
 
-	inline pointers *g_pointers{};
+	inline pointers* g_pointers{};
 }

@@ -1,4 +1,5 @@
 #include "equipment_menu.h"
+
 #include <equipment/armour_service.hpp>
 #include <equipment/weapon_service.hpp>
 
