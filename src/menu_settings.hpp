@@ -225,6 +225,10 @@ namespace big
 			bool input         = false;
 			bool censor        = true;
 			bool overlay       = false;
+			bool overlay_monster = true;
+			bool overlay_crown   = true;
+			bool overlay_enrage_bar = true;
+			bool overlay_hunter  = true;
 			bool js_eval       = false;
 
 			uint32_t open_key{VK_INSERT};
@@ -273,7 +277,7 @@ namespace big
 			int m_tabbar_switch = 150;
 			bool m_sounds = false;
 
-			NLOHMANN_DEFINE_TYPE_INTRUSIVE(window, layout, theme, banner, color, gui_scale, transparency, custom_background, custom_panel, custom_text, mouse_active, censor, overlay, open_key, back_key, enter_key, up_key, down_key, left_key, right_key, left_tab_key, right_tab_key, m_pos, m_width, m_option_per_page, m_sounds, m_open_delay, m_enter_delay, m_back_delay, m_horizontal_delay, m_vectical_delay, m_tabbar_switch, m_submenu_bar_background_color, m_submenu_bar_text_color, m_toggle_on_color, m_toggle_off_color, m_submenu_rect_color, m_option_selected_background_color, m_option_unselected_background_color, m_option_selected_text_color, m_option_unselected_text_color, m_footer_background_color, m_tab_selected_color, m_tab_unselected_color, m_tab_selected_text_color, m_tab_unselected_text_color, description_background_color, description_text_color)
+			NLOHMANN_DEFINE_TYPE_INTRUSIVE(window, layout, theme, banner, color, gui_scale, transparency, custom_background, custom_panel, custom_text, mouse_active, censor, overlay, overlay_monster, overlay_crown, overlay_enrage_bar, overlay_hunter, open_key, back_key, enter_key, up_key, down_key, left_key, right_key, left_tab_key, right_tab_key, m_pos, m_width, m_option_per_page, m_sounds, m_open_delay, m_enter_delay, m_back_delay, m_horizontal_delay, m_vectical_delay, m_tabbar_switch, m_submenu_bar_background_color, m_submenu_bar_text_color, m_toggle_on_color, m_toggle_off_color, m_submenu_rect_color, m_option_selected_background_color, m_option_unselected_background_color, m_option_selected_text_color, m_option_unselected_text_color, m_footer_background_color, m_tab_selected_color, m_tab_unselected_color, m_tab_selected_text_color, m_tab_unselected_text_color, description_background_color, description_text_color)
 		} window;
 
 		NLOHMANN_DEFINE_TYPE_INTRUSIVE(menu_settings, crafting, window, player, weapon);

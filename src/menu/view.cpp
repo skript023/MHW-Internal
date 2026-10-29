@@ -299,6 +299,10 @@ namespace big
 	{
 		canvas::add_settings_tab(SubmenuSettings, SubmenuSettingsInput, [](regular_submenu* sub) {
 			sub->add_option<bool_option<bool>>("Show Overlay", "Display hunter, world, and monster info overlay on screen.", &g_settings.window.overlay);
+			sub->add_option<bool_option<bool>>("Monster Health Bar", "Show monster health bar, size, and coordinates.", &g_settings.window.overlay_monster);
+			sub->add_option<bool_option<bool>>("Crown Size Badges", "Show Mini Crown / Giant Gold Crown indicators.", &g_settings.window.overlay_crown);
+			sub->add_option<bool_option<bool>>("Monster Enrage Bar", "Show monster enrage / state timer progress bar.", &g_settings.window.overlay_enrage_bar);
+			sub->add_option<bool_option<bool>>("Hunter Info Panel", "Display hunter name, ranks, zeni, and world weather.", &g_settings.window.overlay_hunter);
 			sub->add_option<reguler_option>("Unload", "Safely unhook and eject the DLL.", [] {
 				g_running = false;
 			});
