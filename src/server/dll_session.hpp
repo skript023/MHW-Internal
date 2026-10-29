@@ -1,8 +1,12 @@
 #pragma once
+#include <windows.h>
+#include <winhttp.h>
+#include <wincrypt.h>
 #include "utility/hwid.hpp"
 
 #include <atomic>
 #include <chrono>
+#include <condition_variable>
 #include <filesystem>
 #include <fstream>
 #include <mutex>
@@ -12,9 +16,6 @@
 #include <string>
 #include <thread>
 #include <vector>
-#include <wincrypt.h>
-#include <windows.h>
-#include <winhttp.h>
 #pragma comment(lib, "winhttp.lib")
 #pragma comment(lib, "Crypt32.lib")
 
@@ -27,8 +28,7 @@ namespace big
 		{
 			const auto bootstrap = read_bootstrap();
 			if (!bootstrap)
-				throw std::runtime_error("DLL session ticket missing or expired. Launch "
-				                         "this game through Loader again.");
+				throw std::runtime_error("DLL session ticket missing or expired. Launch this game through Loader again.");
 			m_hwid = utils::get_hwid();
 			const auto server = load_config();
 			const nlohmann::json request{{"hwid", m_hwid},
@@ -56,7 +56,11 @@ namespace big
 
 		~dll_session_client() noexcept
 		{
-			m_stop = true;
+			{
+				std::lock_guard lock(m_mutex);
+				m_stop = true;
+			}
+			m_wake.notify_all();
 			if (m_thread.joinable())
 				m_thread.join();
 			const auto server = load_config();
@@ -236,9 +240,15 @@ namespace big
 		{
 			while (!m_stop)
 			{
-				std::this_thread::sleep_for(std::chrono::seconds(20));
-				if (m_stop)
-					break;
+				{
+					std::unique_lock lock(m_mutex);
+					if (m_wake.wait_for(lock, std::chrono::seconds(20), [this] {
+						    return m_stop.load();
+					    }))
+					{
+						break;
+					}
+				}
 				std::string response;
 				int status{};
 				const auto ok = post(server, "/dll-session/heartbeat", "{}", {{"Authorization", "Bearer " + m_token}, {"X-HWID", m_hwid}}, response, status);
@@ -249,7 +259,7 @@ namespace big
 					std::lock_guard lock(m_mutex);
 					m_lease_deadline = clock::now() + std::chrono::seconds(data->value("lease_seconds", 0));
 				}
-				else if (status == 401 || status == 403)
+				else if (status == 401 || status == 403 || (ok && status == 200 && !json.is_discarded() && !json.value("success", true)))
 				{
 					std::lock_guard lock(m_mutex);
 					m_revoked = true;
@@ -263,7 +273,8 @@ namespace big
 		std::thread m_thread;
 		std::atomic_bool m_stop{false};
 		mutable std::mutex m_mutex;
+		std::condition_variable m_wake;
 		clock::time_point m_lease_deadline{};
 		bool m_revoked{false};
 	};
-} // namespace big
+}

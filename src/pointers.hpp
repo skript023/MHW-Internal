@@ -30,7 +30,9 @@ namespace big
 
 	public:
 		HWND m_hwnd{};
-		void* m_swapchain_methods[19];
+		void* m_swapchain_methods[19]{};
+		void* m_command_queue_execute_command_lists{};
+		bool m_is_dx12{false};
 		IDXGISwapChain** m_swapchain;
 
 	public:
@@ -116,6 +118,15 @@ namespace big
 		void* m_bow_gun_charge{};
 		void* m_bow_coatings{};
 		void* m_inf_wyvern_blast{};
+		void* m_cb_sword{};
+		void* m_cb_shield{};
+		void* m_ig_extract{};
+		void* m_ig_stamina{};
+		void* m_ig_jump{};
+		void* m_bowgun_no_reload{};
+		void* m_wyvernheart{};
+		void* m_wyvernheart_rapidfire{};
+		void* m_bowgun_no_recoil{};
 		void* m_bow_gun_effect{};
 		functions::bow_gun_effect_apply_t m_bow_gun_effect_apply{};
 

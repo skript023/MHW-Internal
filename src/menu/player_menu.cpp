@@ -2,7 +2,7 @@
 
 #include "imgui.h"
 #include "script.hpp"
-#include "settings.hpp"
+#include "menu_settings.hpp"
 #include "utility/mhw.hpp"
 
 float g_atk_addr = 30.f;

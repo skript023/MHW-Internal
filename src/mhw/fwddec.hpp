@@ -299,7 +299,9 @@ namespace big
 	class MonsterEntry
 	{
 	public:
-		char pad_0000[392];                        //0x0000
+		char pad_0000[352];                        //0x0000
+		Vector3 m_position;                        //0x0160
+		char pad_016C[28];                         //0x016C
 		float m_size;                              //0x0188
 		char pad_018C[29924];                      //0x018C
 		MonsterStats* m_monster_stats;             //0x7670

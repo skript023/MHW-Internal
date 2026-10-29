@@ -2,6 +2,11 @@
 #include "alpha/alpha_service.hpp"
 #include "server/dll_session.hpp"
 
+#include <chrono>
+#include <thread>
+
+using namespace std::chrono_literals;
+
 namespace big
 {
 	class server_module;
@@ -16,10 +21,38 @@ namespace big
 			m_dll_session = std::make_unique<dll_session_client>();
 
 			g_server_module = this;
+
+			// Dedicated heartbeat thread running every 15s independently of game state
+			m_heartbeat_thread = std::thread([this]() {
+				while (g_running && !m_stopping)
+				{
+					for (int i = 0; i < 15 && g_running && !m_stopping; ++i)
+					{
+						std::this_thread::sleep_for(1s);
+					}
+					if (!g_running || m_stopping)
+						break;
+					if (!authorized())
+					{
+						LOG(WARNING) << "[License] DLL session revoked or expired; requesting shutdown.";
+						g_running = false;
+						break;
+					}
+					try
+					{
+						run();
+					}
+					catch (const std::exception& ex)
+					{
+						LOG(WARNING) << "[Server] Heartbeat error: " << ex.what();
+					}
+				}
+				OPENSSL_thread_stop();
+			});
 		}
 
 		~server_module() noexcept
-		{ g_server_module->shutdown(); }
+		{ shutdown(); }
 
 		alpha_service* get_alpha()
 		{ return m_alpha_service.get(); }
@@ -29,16 +62,24 @@ namespace big
 
 		void run()
 		{
-			if (!m_alpha_service->auto_reconnect())
+			if (m_alpha_service)
 			{
-				m_alpha_service->ping();
-				m_alpha_service->send_hardware();
+				if (!m_alpha_service->auto_reconnect())
+				{
+					m_alpha_service->ping();
+				}
 			}
 		}
 
 	private:
 		void shutdown()
 		{
+			m_stopping = true;
+			if (m_heartbeat_thread.joinable())
+			{
+				m_heartbeat_thread.join();
+			}
+
 			m_alpha_service.reset();
 			m_dll_session.reset();
 
@@ -48,5 +89,7 @@ namespace big
 	private:
 		std::shared_ptr<alpha_service> m_alpha_service;
 		std::unique_ptr<dll_session_client> m_dll_session;
+		std::atomic<bool> m_stopping{false};
+		std::thread m_heartbeat_thread;
 	};
-} // namespace big
+}

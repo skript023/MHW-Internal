@@ -1,23 +1,26 @@
-﻿#include "benchmark.hpp"
+#include "benchmark.hpp"
 #include "common.hpp"
 #include "events/backend_events.hpp"
 #include "fiber_pool.hpp"
+#include "thread_pool.hpp"
 #include "file_manager.hpp"
 #include "gui.hpp"
 #include "hooking.hpp"
 #include "pointers.hpp"
 #include "renderer.hpp"
 #include "script_mgr.hpp"
-#include "settings.hpp"
+#include "menu_settings.hpp"
+#include "commands/commands.hpp"
+#include "features/features.hpp"
 
 #include <character/character_service.hpp>
 #include <equipment/armour_service.hpp>
 #include <equipment/weapon_service.hpp>
-#include <gui/gui_service.hpp>
 #include <hook_manager.hpp>
 #include <meal/meal_service.hpp>
 #include <monster/monster_service.hpp>
 #include <notification/notification_service.hpp>
+#include <openssl/crypto.h>
 #include <server/server_module.hpp>
 #include <world/world_service.hpp>
 
@@ -46,8 +49,8 @@ DWORD APIENTRY main_thread(LPVOID)
 | |  | | (_) | | | \__ \ ||  __/ |    | |  | | |_| | | | | ||  __/ |   _     \  /\  / (_) | |  | | (_| |
 |_|  |_|\___/|_| |_|___/\__\___|_|    |_|  |_|\__,_|_| |_|\__\___|_|  (_)     \/  \/ \___/|_|  |_|\__,_|
 )kek";
-		auto settings_instance = std::make_unique<settings>(g_file_manager.get_project_file("./settings.json"));
-		g_settings->load();
+		g_settings.set_file(g_file_manager.get_project_file("./settings.json"));
+		g_settings.load();
 		LOG(INFO) << "Settings initialized.";
 
 		auto pointers_instance = std::make_unique<pointers>();
@@ -60,62 +63,73 @@ DWORD APIENTRY main_thread(LPVOID)
 		LOG(INFO) << "Fiber pool initialized.";
 
 		auto thread_pool_instance = std::make_unique<thread_pool>();
-		LOG(INFO) << "Thread Pool initialized.";
-
-		pointers_instance->update();
-		LOG(INFO) << "Pointer data cached";
+		LOG(INFO) << "Thread pool initialized.";
 
 		auto hooking_instance = std::make_unique<hooking>();
 		LOG(INFO) << "Hooking initialized.";
 
-		auto gui_service_instance = std::make_unique<gui_service>();
-		auto notification_instance = std::make_unique<notification_service>();
 		auto character_service_instance = std::make_unique<character_service>();
-		auto armour_service_instance = std::make_unique<armour_service>();
-		auto weapon_service_instance = std::make_unique<weapon_service>();
-		auto monster_service_instance = std::make_unique<monster_service>();
-		auto world_service_instance = std::make_unique<world_service>();
-		LOG(INFO) << "Service registered.";
+		auto armour_service_instance    = std::make_unique<armour_service>();
+		auto weapon_service_instance    = std::make_unique<weapon_service>();
+		auto monster_service_instance   = std::make_unique<monster_service>();
+		auto world_service_instance     = std::make_unique<world_service>();
+		auto notification_instance      = std::make_unique<notification_service>();
+		LOG(INFO) << "Services initialized.";
 
-		auto server_instance = std::make_unique<server_module>();
-		LOG(INFO) << "Connected to server.";
+		auto midfunc_hook_mgr_instance = std::make_unique<hook_manager>();
+		LOG(INFO) << "Byte patch manager initialized.";
 
 		g_script_mgr.add_script(std::make_unique<script>(&gui::script_func));
+		g_script_mgr.add_script(std::make_unique<script>(&backend_events::script_func));
 		g_script_mgr.add_script(std::make_unique<script>(&backend_events::player_event));
 		g_script_mgr.add_script(std::make_unique<script>(&backend_events::weapon_event));
-		g_script_mgr.add_script(std::make_unique<script>(&backend_events::script_func));
 		LOG(INFO) << "Scripts registered.";
 
 		g_hooking->enable();
 		LOG(INFO) << "Hooking enabled.";
 
-		auto midfunc_hook_mgr_instance = std::make_unique<hook_manager>();
-		LOG(INFO) << "Midfunction hook registered.";
+#ifdef PRODUCTION
+		auto server_instance = std::make_unique<server_module>();
+		LOG(INFO) << "Server module initialized.";
+#endif
 
 		initialization_benchmark.get_runtime();
-		initialization_benchmark.reset();
+
+		commands::enable_bool_commands();
+		LOG(INFO) << "Commands enabled.";
 
 		while (g_running)
 		{
+#ifdef PRODUCTION
+			if (g_server_module && !g_server_module->authorized())
+			{
+				LOG(WARNING) << "[License] DLL session revoked or expired; shutting down safely.";
+				g_running = false;
+				break;
+			}
+#endif
+			commands::run_looped_command();
 			g_script_mgr.tick();
 			g_settings->attempt_save();
 
-			std::this_thread::sleep_for(1s);
+			std::this_thread::sleep_for(10ms);
 		}
 
+		commands::shutdown();
+		LOG(INFO) << "Commands shutdown.";
+
 		midfunc_hook_mgr_instance.reset();
-		LOG(INFO) << "Midfunction hook registered.";
+		LOG(INFO) << "Byte patches restored.";
 
 		g_hooking->disable();
 		LOG(INFO) << "Hooking disabled.";
 
-		std::this_thread::sleep_for(1000ms);
+		std::this_thread::sleep_for(500ms);
 
 		g_script_mgr.remove_all_scripts();
 		LOG(INFO) << "Scripts unregistered.";
 
 		notification_instance.reset();
-		gui_service_instance.reset();
 		character_service_instance.reset();
 		armour_service_instance.reset();
 		weapon_service_instance.reset();
@@ -123,8 +137,10 @@ DWORD APIENTRY main_thread(LPVOID)
 		world_service_instance.reset();
 		LOG(INFO) << "Service unregistered.";
 
+#ifdef PRODUCTION
 		server_instance.reset();
 		LOG(INFO) << "Disconnected from server.";
+#endif
 
 		hooking_instance.reset();
 		LOG(INFO) << "Hooking uninitialized.";
@@ -136,7 +152,7 @@ DWORD APIENTRY main_thread(LPVOID)
 		LOG(INFO) << "Destroyed thread pool.";
 
 		thread_pool_instance.reset();
-		LOG(INFO) << "Thread Pool uninitialized.";
+		LOG(INFO) << "Thread pool uninitialized.";
 
 		renderer_instance.reset();
 		LOG(INFO) << "Renderer uninitialized.";
@@ -144,8 +160,7 @@ DWORD APIENTRY main_thread(LPVOID)
 		pointers_instance.reset();
 		LOG(INFO) << "Pointers uninitialized.";
 
-		g_settings->attempt_save();
-		settings_instance.reset();
+		g_settings.attempt_save();
 		LOG(INFO) << "Settings saved and uninitialized.";
 	}
 	catch (std::exception const& ex)
@@ -154,6 +169,13 @@ DWORD APIENTRY main_thread(LPVOID)
 		MessageBoxA(nullptr, ex.what(), nullptr, MB_OK | MB_ICONEXCLAMATION);
 	}
 
+	if (!detour_base::hooks().empty())
+	{
+		LOG(WARNING) << "DLL retained because another program still calls into its hooks. Restart the game before injecting again.";
+		return 0;
+	}
+
+	OPENSSL_cleanup();
 	LOG(INFO) << "Farewell!";
 	logger::destroy();
 
@@ -172,10 +194,12 @@ BOOL APIENTRY DllMain(HMODULE hmod, DWORD reason, PVOID)
 	case DLL_PROCESS_ATTACH:
 		DisableThreadLibraryCalls(hmod);
 
-		g_hmodule = hmod;
+		g_hmodule     = hmod;
 		g_main_thread = CreateThread(nullptr, 0, &main_thread, nullptr, 0, &g_main_thread_id);
 		break;
-	case DLL_PROCESS_DETACH: g_running = false; break;
+	case DLL_PROCESS_DETACH:
+		g_running = false;
+		break;
 	}
 
 	return true;

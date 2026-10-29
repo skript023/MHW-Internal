@@ -10,6 +10,9 @@ namespace big
 	{ g_monster_service = nullptr; }
 	bool monster_service::get_entry(int index)
 	{
+		if (index < 0 || index >= static_cast<int>(m_entry.size()))
+			return false;
+
 		if (auto data = *g_pointers->m_monster_data)
 		{
 			switch (index)
@@ -45,29 +48,38 @@ namespace big
 	}
 	float monster_service::get_health(int index)
 	{
-		if (auto stat = m_entry[index]->m_monster_stats)
+		if (index >= 0 && index < static_cast<int>(m_entry.size()) && m_entry[index])
 		{
-			return std::round(stat->m_health);
+			if (auto stat = m_entry[index]->m_monster_stats)
+			{
+				return std::round(stat->m_health);
+			}
 		}
 
 		return 0.0f;
 	}
 	float monster_service::get_max_health(int index)
 	{
-		if (auto stat = m_entry[index]->m_monster_stats)
+		if (index >= 0 && index < static_cast<int>(m_entry.size()) && m_entry[index])
 		{
-			return std::round(stat->m_max);
+			if (auto stat = m_entry[index]->m_monster_stats)
+			{
+				return std::round(stat->m_max);
+			}
 		}
 
 		return 0.0f;
 	}
 	std::string monster_service::get_monster_name(int index)
 	{
-		if (auto wt = m_entry[index]->m_monster_world_stats)
+		if (index >= 0 && index < static_cast<int>(m_entry.size()) && m_entry[index])
 		{
-			if (auto it = monster_data::monster_data.find(wt->m_monster_id); it != monster_data::monster_data.end())
+			if (auto wt = m_entry[index]->m_monster_world_stats)
 			{
-				return it->second;
+				if (auto it = monster_data::monster_data.find(wt->m_monster_id); it != monster_data::monster_data.end())
+				{
+					return it->second;
+				}
 			}
 		}
 
@@ -75,26 +87,38 @@ namespace big
 	}
 	float monster_service::get_timer(int index)
 	{
-		if (auto wt = m_entry[index]->m_monster_world_stats)
+		if (index >= 0 && index < static_cast<int>(m_entry.size()) && m_entry[index])
 		{
-			return wt->m_timer;
+			if (auto wt = m_entry[index]->m_monster_world_stats)
+			{
+				return wt->m_timer;
+			}
 		}
 
 		return 0.0f;
 	}
 	float monster_service::get_max_timer(int index)
 	{
-		if (auto wt = m_entry[index]->m_monster_world_stats)
+		if (index >= 0 && index < static_cast<int>(m_entry.size()) && m_entry[index])
 		{
-			return wt->m_max_timer;
+			if (auto wt = m_entry[index]->m_monster_world_stats)
+			{
+				return wt->m_max_timer;
+			}
 		}
 
 		return 0.0f;
 	}
 	float monster_service::get_size(int index)
 	{
-		if (m_entry[index])
+		if (index >= 0 && index < static_cast<int>(m_entry.size()) && m_entry[index])
 			return m_entry[index]->m_size;
 		return 0.0f;
+	}
+	Vector3 monster_service::get_position(int index)
+	{
+		if (index >= 0 && index < static_cast<int>(m_entry.size()) && m_entry[index])
+			return m_entry[index]->m_position;
+		return Vector3(0.f, 0.f, 0.f);
 	}
 }

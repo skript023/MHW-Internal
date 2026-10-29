@@ -1,109 +1,122 @@
 #pragma once
-#include "data/status.hpp"
-#include "interfaces/subscribe/message.hpp"
+#include "data/hardware.hpp"
 #include "notification/notification_service.hpp"
-
-#include <socket_client.hpp>
+#include "server/auth_client.hpp"
+#include "server/interfaces/subscribe/message.hpp"
+#include "server/socket_client.hpp"
 
 namespace big
 {
 	class alpha_service
 	{
 	public:
-		explicit alpha_service() :
-		    m_status(eIntegrationStatus::UNKNOWN)
-		{
-			m_alpha_gateway = std::make_shared<socket_client>("quantum.rena.my.id/ws/auth");
-			m_alpha_gateway->on_message_received([](std::string const& message) {
-				g_notification_service->info("Server Notification", message);
-				LOG(INFO) << message;
-			});
-		}
+		explicit alpha_service()
+		{ init_connection(); }
 
 		~alpha_service() noexcept
-		{ m_alpha_gateway.reset(); }
-
-		void find()
 		{
-			m_event.event = "findAllAlpha";
+			if (m_alpha_gateway)
+			{
+				m_alpha_gateway->disconnect();
+				m_alpha_gateway.reset();
+			}
+		}
 
-			m_alpha_gateway->send_message(m_event.to_json_string(), [this](const std::string& message) {
-				if (message.empty()) {}
-				else
+		void init_connection()
+		{
+			if (m_alpha_gateway)
+				m_alpha_gateway->disconnect();
+			m_auth_invalidated = false;
+			m_auth_info = auth_client::authenticate();
+			if (!m_auth_info.success)
+			{
+				m_next_auth_attempt = std::chrono::steady_clock::now() + m_auth_retry;
+				m_auth_retry = std::min(m_auth_retry * 2, std::chrono::seconds(300));
+				LOG(WARNING) << "[AlphaService] Authentication failed: " << m_auth_info.error_message;
+				if (g_notification_service)
+					g_notification_service->info("Ellohim Server", "Authentication required. Please launch from Loader.");
+				return;
+			}
+			m_auth_retry = std::chrono::seconds(15);
+
+			m_alpha_gateway = std::make_shared<socket_client>(
+			    m_auth_info.ws_endpoint, m_auth_info.is_ssl, m_auth_info.token, m_auth_info.hwid, m_auth_info.device_name);
+
+			m_alpha_gateway->on_message_received([this](const std::string& message) {
+				if (message == "pong")
 				{
+					LOG(INFO) << "[AlphaService] Heartbeat ACK (pong) received.";
 				}
+				else if (message.find("Connected to server successfully") != std::string::npos)
+				{
+					LOG(INFO) << "[AlphaService] Server WebSocket handshake success!";
+					if (g_notification_service)
+						g_notification_service->info("Ellohim Server", "Connected to server successfully");
+				}
+				else if (message.find("Unauthorized WebSocket connection") != std::string::npos)
+				{
+					LOG(WARNING) << "[AlphaService] Unauthorized connection. Invalidating session token for re-auth...";
+					m_auth_invalidated = true;
+				}
+				else if (!message.empty())
+				{
+					LOG(INFO) << "[AlphaService] Received: " << message;
+				}
+			});
+
+			m_alpha_gateway->on_force_logout([](const std::string& reason) {
+				LOG(FATAL) << "[AlphaService] Logged out by server: " << reason;
 			});
 		}
 
 		void ping()
 		{
-			m_event.event = "pingAlpha";
-
-			m_alpha_gateway->send_message(m_event.to_json_string(), [this](std::string const& message) {
-				if (message.empty())
-				{
-					LOG(WARNING) << "Received an empty message";
-				}
-				else
-				{
-				}
-			});
-		}
-
-		void send_hardware()
-		{
-			/*Message<Hardware> subs;
-			subs.event = "createAlpha";
-
-			auto os = g_hardware_service.get_os_info();
-			auto cpu = g_hardware_service.get_cpu_info();
-			auto gpu = g_hardware_service.get_gpu_info();
-			auto motherboard = g_hardware_service.get_motherboard_info();
-
-			subs.data = { os, cpu.Name, std::format("{}, Memory: {}", gpu.Name, gpu.AdapterRAM), std::format("{} {}", motherboard.Manufacturer, motherboard.Product)};
-
-			m_alpha_gateway->send_message(subs.to_json_string(), [this](std::string const& message) {
-				if (message.empty())
-				{
-					LOG(WARNING) << "Received an empty message";
-				}
-				else
-				{
-					LOG(INFO) << "Received: " << message;
-					m_status = eIntegrationStatus::CONNECTED;
-				}
-			});*/
+			if (m_alpha_gateway && m_alpha_gateway->is_connected())
+			{
+				m_alpha_gateway->send_message("ping");
+			}
 		}
 
 		bool auto_reconnect()
 		{
-			if (!m_alpha_gateway->is_connected())
+			if (m_auth_invalidated.exchange(false))
 			{
-				m_status = eIntegrationStatus::DISCONNECTED;
-
-				g_notification_service->info("Ellohim Server", "Reconnecting to Ellohim Server.");
-
-				if (auto reconnect = m_alpha_gateway->reconnect(); !reconnect)
+				m_auth_info.token.clear();
+				m_auth_info.success = false;
+			}
+			if (!m_auth_info.success || !m_alpha_gateway || !m_alpha_gateway->is_connected())
+			{
+				if (!m_auth_info.success || m_auth_info.token.empty())
 				{
-					g_notification_service->info("Ellohim Server", "Reconnect Failed.");
-
-					return false;
+					if (std::chrono::steady_clock::now() < m_next_auth_attempt)
+					{
+						return false;
+					}
+					init_connection();
+					return m_alpha_gateway && m_alpha_gateway->is_connected();
 				}
 
-				m_status = eIntegrationStatus::CONNECTED;
+				if (m_alpha_gateway && m_alpha_gateway->reconnect())
+				{
+					return true;
+				}
 
-				return true;
+				init_connection();
+				return m_alpha_gateway && m_alpha_gateway->is_connected();
 			}
 
 			return false;
 		}
 
-		bool is_integrated() const
-		{ return m_status == eIntegrationStatus::CONNECTED; }
+		bool is_connected() const
+		{ return m_alpha_gateway && m_alpha_gateway->is_connected(); }
 
 	private:
+		std::atomic<bool> m_auth_invalidated{false};
+		std::chrono::steady_clock::time_point m_next_auth_attempt{};
+		std::chrono::seconds m_auth_retry{15};
+		ServerAuthInfo m_auth_info;
 		std::shared_ptr<socket_client> m_alpha_gateway;
-		Gateway m_event;
-		eIntegrationStatus m_status;
+		Message<Gateway> m_event;
 	};
 }

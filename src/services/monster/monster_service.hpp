@@ -18,6 +18,7 @@ namespace big
 		_NODISCARD float get_timer(int index);
 		_NODISCARD float get_max_timer(int index);
 		_NODISCARD float get_size(int index);
+		_NODISCARD Vector3 get_position(int index);
 
 	private:
 		std::vector<MonsterEntry*> m_entry = {nullptr, nullptr, nullptr};

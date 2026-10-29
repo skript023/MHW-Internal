@@ -81,6 +81,11 @@ namespace big
 				g_running = false;
 			}
 			ImGui::PopStyleColor();
+			ImGui::End();
+		}
+		else
+		{
+			ImGui::End();
 		}
 	}
 

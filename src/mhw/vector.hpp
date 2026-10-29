@@ -60,6 +60,8 @@ namespace big
 
 		float dot(Vector2 vec2)
 		{ return (x * vec2.x) + (y * vec2.y); }
+
+		NLOHMANN_DEFINE_TYPE_INTRUSIVE(Vector2, x, y)
 	};
 
 	struct Vector3

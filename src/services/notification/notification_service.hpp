@@ -10,7 +10,7 @@ namespace big
 		DANGER,
 	};
 
-	struct notification
+	struct legacy_notification
 	{
 		NotificationType type;
 		const std::string title;
@@ -22,13 +22,13 @@ namespace big
 
 	class notification_service final
 	{
-		std::unordered_map<std::size_t, notification> notifications;
+		std::unordered_map<std::size_t, legacy_notification> notifications;
 
 	public:
 		notification_service();
 		virtual ~notification_service();
 
-		void push(notification);
+		void push(legacy_notification);
 		void push(std::string, std::string);
 		void push_warning(std::string, std::string);
 		void push_error(std::string, std::string);
@@ -41,7 +41,7 @@ namespace big
 		void protection(std::string);
 		void report(std::string);
 
-		std::vector<notification> get();
+		std::vector<legacy_notification> get();
 
 		std::map<NotificationType, ImVec4> notification_colors = {
 		    {NotificationType::INFO, ImVec4(0.80f, 0.80f, 0.83f, 1.00f)},

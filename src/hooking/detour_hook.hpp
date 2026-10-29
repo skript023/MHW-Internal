@@ -1,12 +1,18 @@
 #pragma once
-#include "base.hpp"
+#include "detour_base.hpp"
+
+#include <memory>
+#include <string_view>
+
+namespace ellohim
+{
+	class detour_hook;
+}
 
 namespace big
 {
-	class detour_hook : public base_hook
+	class detour_hook : public detour_base
 	{
-		void fix_hook_address();
-
 	public:
 		explicit detour_hook(const std::string_view name, void* target, void* detour);
 		~detour_hook() noexcept;
@@ -20,16 +26,20 @@ namespace big
 		void* get_original_ptr();
 
 		template<typename T>
-		inline T get_original()
-		{ return static_cast<T>(get_original_ptr()); }
+		T get_original()
+		{
+			return static_cast<T>(get_original_ptr());
+		}
 
 		template<auto T>
-		static void add(std::string name, void* target)
-		{ base_hook::add<T>(new detour_hook(name, target, reinterpret_cast<void*>(T))); }
+		static void add(std::string_view name, void* target)
+		{
+			detour_base::add<T>(new detour_hook(name, target, reinterpret_cast<void*>(T)));
+		}
+
+		void fix_hook_address();
 
 	private:
-		void* m_target;
-		void* m_detour;
-		void* m_original{};
+		std::unique_ptr<ellohim::detour_hook> m_backend;
 	};
 }

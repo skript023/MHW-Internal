@@ -2,7 +2,7 @@
 
 #include "imgui.h"
 #include "script.hpp"
-#include "settings.hpp"
+#include "menu_settings.hpp"
 
 #include <hook_manager.hpp>
 
@@ -17,7 +17,5 @@ namespace big
 		ImGui::Checkbox("Unlock Equipment", &g_settings->crafting.unlock_equipment);
 
 		ImGui::EndGroup();
-
-		ImGui::EndTabItem();
 	}
 }

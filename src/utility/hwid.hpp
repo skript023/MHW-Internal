@@ -1,15 +1,17 @@
 #pragma once
-#include <algorithm>
-#include <cctype>
-#include <intrin.h>
-#include <iomanip>
-#include <iphlpapi.h>
-#include <sstream>
-#include <string>
-#include <vector>
-#include <wincrypt.h>
+#include <winsock2.h>
+#include <ws2tcpip.h>
 #include <windows.h>
 #include <winioctl.h>
+#include <intrin.h>
+#include <iphlpapi.h>
+#include <wincrypt.h>
+#include <string>
+#include <sstream>
+#include <iomanip>
+#include <vector>
+#include <algorithm>
+#include <cctype>
 
 #pragma comment(lib, "Advapi32.lib")
 #pragma comment(lib, "Crypt32.lib")
@@ -52,7 +54,9 @@ namespace utils
 	}
 
 	inline std::string get_device_name()
-	{ return get_computer_name(); }
+	{
+		return get_computer_name();
+	}
 
 	inline std::string get_machine_guid()
 	{
@@ -129,26 +133,7 @@ namespace utils
 				if (!allZero && !allFF)
 				{
 					char uuidStr[64]{};
-					sprintf_s(uuidStr,
-					    sizeof(uuidStr),
-					    "%02X%02X%02X%02X-%02X%02X-%02X%02X-%02X%02X-%02X%02X%02X%"
-					    "02X%02X%02X",
-					    u[3],
-					    u[2],
-					    u[1],
-					    u[0],
-					    u[5],
-					    u[4],
-					    u[7],
-					    u[6],
-					    u[8],
-					    u[9],
-					    u[10],
-					    u[11],
-					    u[12],
-					    u[13],
-					    u[14],
-					    u[15]);
+					sprintf_s(uuidStr, sizeof(uuidStr), "%02X%02X%02X%02X-%02X%02X-%02X%02X-%02X%02X-%02X%02X%02X%02X%02X%02X", u[3], u[2], u[1], u[0], u[5], u[4], u[7], u[6], u[8], u[9], u[10], u[11], u[12], u[13], u[14], u[15]);
 					system_uuid = uuidStr;
 				}
 			}
@@ -187,7 +172,8 @@ namespace utils
 		for (int driveIdx = 0; driveIdx < 4; ++driveIdx)
 		{
 			std::wstring drivePath = L"\\\\.\\PhysicalDrive" + std::to_wstring(driveIdx);
-			HANDLE hDevice = CreateFileW(drivePath.c_str(),
+			HANDLE hDevice = CreateFileW(
+			    drivePath.c_str(),
 			    0, // Query access only (does NOT require administrator privileges)
 			    FILE_SHARE_READ | FILE_SHARE_WRITE,
 			    nullptr,
@@ -224,8 +210,7 @@ namespace utils
 			}
 		}
 
-		// Fallback to Volume Serial Number for C: drive if direct IOCTL query is not
-		// accessible
+		// Fallback to Volume Serial Number for C: drive if direct IOCTL query is not accessible
 		DWORD volumeSerial = 0;
 		if (GetVolumeInformationA("C:\\", nullptr, 0, &volumeSerial, nullptr, nullptr, nullptr, 0))
 		{
@@ -245,7 +230,10 @@ namespace utils
 
 		std::ostringstream oss;
 		oss << std::hex << std::setfill('0');
-		oss << std::setw(8) << cpuInfo[0] << "-" << std::setw(8) << ebx_clean << "-" << std::setw(8) << cpuInfo[2] << "-" << std::setw(8) << cpuInfo[3];
+		oss << std::setw(8) << cpuInfo[0] << "-"
+		    << std::setw(8) << ebx_clean << "-"
+		    << std::setw(8) << cpuInfo[2] << "-"
+		    << std::setw(8) << cpuInfo[3];
 
 		__cpuid(cpuInfo, 0x80000000);
 		unsigned int nExIds = static_cast<unsigned int>(cpuInfo[0]);
@@ -301,12 +289,7 @@ namespace utils
 				std::wstring combined = desc + L" " + friendly;
 				std::transform(combined.begin(), combined.end(), combined.begin(), ::towlower);
 
-				if (combined.find(L"virtual") != std::wstring::npos || combined.find(L"vmware") != std::wstring::npos
-				    || combined.find(L"virtualbox") != std::wstring::npos || combined.find(L"hyper-v") != std::wstring::npos
-				    || combined.find(L"tap") != std::wstring::npos || combined.find(L"vpn") != std::wstring::npos
-				    || combined.find(L"npcap") != std::wstring::npos || combined.find(L"loopback") != std::wstring::npos
-				    || combined.find(L"bluetooth") != std::wstring::npos || combined.find(L"wsl") != std::wstring::npos
-				    || combined.find(L"host-only") != std::wstring::npos)
+				if (combined.find(L"virtual") != std::wstring::npos || combined.find(L"vmware") != std::wstring::npos || combined.find(L"virtualbox") != std::wstring::npos || combined.find(L"hyper-v") != std::wstring::npos || combined.find(L"tap") != std::wstring::npos || combined.find(L"vpn") != std::wstring::npos || combined.find(L"npcap") != std::wstring::npos || combined.find(L"loopback") != std::wstring::npos || combined.find(L"bluetooth") != std::wstring::npos || combined.find(L"wsl") != std::wstring::npos || combined.find(L"host-only") != std::wstring::npos)
 				{
 					continue;
 				}
@@ -387,10 +370,14 @@ namespace utils
 		return raw.str();
 	}
 
-	inline std::string get_hwid()
+	inline std::string get_hwid(const std::string& raw_str)
 	{
-		std::string raw_str = get_hwid_raw();
 		std::string hash = sha256_hex(raw_str);
 		return hash.empty() ? raw_str : hash;
 	}
-} // namespace utils
+
+	inline std::string get_hwid()
+	{
+		return get_hwid(get_hwid_raw());
+	}
+}

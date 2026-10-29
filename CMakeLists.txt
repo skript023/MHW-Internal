@@ -15,7 +15,7 @@ find_package(OpenSSL REQUIRED)
 
 # Fetch modules
 message("\nFetching modules")
-include(scripts/minhook.cmake)
+include(scripts/ellohim_hook.cmake)
 include(scripts/json.cmake)
 include(scripts/g3log.cmake)
 
@@ -24,6 +24,7 @@ include(scripts/imgui.cmake)
 include(scripts/asio.cmake)
 include(scripts/websocket.cmake)
 include(scripts/quickjs.cmake)
+include(scripts/stbi.cmake)
 
 set(ASTRA_SOURCE_DIR "L:/Coding/Experiment/astra" CACHE PATH "Local Astra source directory")
 set(ASTRA_BACKENDS "" CACHE STRING "Use the host's existing ImGui backends")
@@ -41,28 +42,41 @@ file(GLOB_RECURSE SRC_MAIN
     "${SRC_DIR}/**.asm"
 )
 
+if (MSVC)
+  add_compile_options(/bigobj)
+endif()
+
 add_library(MHW MODULE "${SRC_MAIN}")
 
-set_property(GLOBAL PROPERTY USE_FOLDERS ON)
-set_property(TARGET MHW PROPERTY CXX_STANDARD 23) # 23 Because std::format is not avalible in std:c++20 for some reason. Maybe it's because i use v142 toolset.
+target_sources(MHW PRIVATE
+    "${ASTRA_SOURCE_DIR}/host/canvas.cpp"
+    "${ASTRA_SOURCE_DIR}/host/notification.cpp"
+    "${ASTRA_SOURCE_DIR}/host/settings.cpp"
+    "${ASTRA_SOURCE_DIR}/host/hotkeys.cpp"
+)
 
-source_group(TREE ${SRC_DIR} PREFIX "src" FILES ${SRC_MAIN} )
+set_property(GLOBAL PROPERTY USE_FOLDERS ON)
+set_property(TARGET MHW PROPERTY CXX_STANDARD 23)
+
+source_group(TREE ${SRC_DIR} PREFIX "src" FILES ${SRC_MAIN})
 
 target_include_directories(MHW PRIVATE 
     "${SRC_DIR}"
     "${SRC_DIR}/hooking"
     "${SRC_DIR}/services"
     "${SRC_DIR}/server"
-    "${minhook_SOURCE_DIR}/src/hde"
+    "${ellohim_hook_SOURCE_DIR}/src/hooking/core/hde"
+    "${ellohim_hook_SOURCE_DIR}/include"
     "${json_SOURCE_DIR}/single_include"
     "${imgui_SOURCE_DIR}"
     "${websocket_SOURCE_DIR}"
     "${asio_SOURCE_DIR}/asio/include"
     "${ASTRA_SOURCE_DIR}/include"
+    "${stbi_SOURCE_DIR}"
 )
 
 target_precompile_headers(MHW PRIVATE "${SRC_DIR}/common.hpp")
-target_link_libraries(MHW PRIVATE quickjs minhook imgui astra::ui AsyncLogger dbghelp websocket ${ZLIB_LIBRARIES} OpenSSL::SSL OpenSSL::Crypto Crypt32)
+target_link_libraries(MHW PRIVATE quickjs EllohimHook imgui astra::ui astra::banners AsyncLogger dbghelp websocket winhttp iphlpapi d3d11 d3d12 dxgi ${ZLIB_LIBRARIES} OpenSSL::SSL OpenSSL::Crypto Crypt32)
 
 # Warnings as errors
 set_property(TARGET MHW PROPERTY COMPILE_WARNING_AS_ERROR OFF)

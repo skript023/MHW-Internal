@@ -1,7 +1,7 @@
 #include "setting_menu.h"
 
 #include "imgui.h"
-#include "settings.hpp"
+#include "menu_settings.hpp"
 
 #include <script.hpp>
 

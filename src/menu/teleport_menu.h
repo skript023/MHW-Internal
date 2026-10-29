@@ -23,8 +23,6 @@ namespace big
 	{
 	public:
 		static void render_menu();
-
-	private:
 		static std::filesystem::path get_config_file();
 		static nlohmann::json get_json();
 		static std::vector<std::string> location_list();

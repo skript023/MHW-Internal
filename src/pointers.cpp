@@ -142,11 +142,11 @@ namespace big
 			m_cannon_fire = ptr.as<void*>();
 		});
 
-		main_batch.add("Barrel Placement Max", "7F 0A C7 83 D0 0E 00 00 07 00 00 00", [this](memory::handle ptr) {
+		main_batch.add("Barrel Placement Max", "FF 84 BB 38 08 00 00", [this](memory::handle ptr) {
 			m_barrel_placement_max = ptr.as<void*>();
 		});
 
-		main_batch.add("Barrel Placement Count", "7F 0A C7 83 D0 0E 00 00 07 00 00 00", [this](memory::handle ptr) {
+		main_batch.add("Barrel Placement Count", "FF 8C BB 38 08 00 00", [this](memory::handle ptr) {
 			m_barrel_placement_count = ptr.as<void*>();
 		});
 
@@ -170,11 +170,11 @@ namespace big
 			m_max_slot_armor_melee = ptr.as<void*>();
 		});
 
-		main_batch.add("Scoutfly Max", "0F B6 46 2D 89 83 44 1D 00 00", [this](memory::handle ptr) {
+		main_batch.add("Scoutfly Max", "F3 0F 10 84 98 A8 62 0F 00", [this](memory::handle ptr) {
 			m_scoutfly_max = ptr.as<void*>();
 		});
 
-		main_batch.add("Scoutfly Level", "0F B6 46 2D 89 83 44 1D 00 00", [this](memory::handle ptr) {
+		main_batch.add("Scoutfly Level", "F3 0F 10 B4 B8 A8 62 0F 00", [this](memory::handle ptr) {
 			m_scoutfly_level = ptr.as<void*>();
 		});
 
@@ -389,6 +389,42 @@ namespace big
 			m_inf_wyvern_blast = ptr.as<void*>();
 		});
 
+		main_batch.add("CB Sword Charge", "F3 0F 10 83 7C 23 00 00 0F", [this](memory::handle ptr) {
+			m_cb_sword = ptr.as<void*>();
+		});
+
+		main_batch.add("CB Shield Charge", "F3 0F 10 8B 78 23 00 00 0F 2F 8F", [this](memory::handle ptr) {
+			m_cb_shield = ptr.as<void*>();
+		});
+
+		main_batch.add("IG Extract Duration", "0F 2F 84 81 68 23 00 00", [this](memory::handle ptr) {
+			m_ig_extract = ptr.as<void*>();
+		});
+
+		main_batch.add("IG Stamina", "F3 0F 11 87 8C 0A 00 00 EB", [this](memory::handle ptr) {
+			m_ig_stamina = ptr.as<void*>();
+		});
+
+		main_batch.add("IG Jumping Attack", "FF 81 28 24 00 00", [this](memory::handle ptr) {
+			m_ig_jump = ptr.as<void*>();
+		});
+
+		main_batch.add("Bowgun No Reload", "83 BC D7 A8 23 00 00 00", [this](memory::handle ptr) {
+			m_bowgun_no_reload = ptr.as<void*>();
+		});
+
+		main_batch.add("Inf Wyvernheart", "F3 0F 11 91 58 23 00 00", [this](memory::handle ptr) {
+			m_wyvernheart = ptr.as<void*>();
+		});
+
+		main_batch.add("Wyvernheart Rapidfire", "F3 0F 10 83 C4 09 00 00 F3 0F 58 86 98", [this](memory::handle ptr) {
+			m_wyvernheart_rapidfire = ptr.as<void*>();
+		});
+
+		main_batch.add("Bowgun No Recoil", "48 63 86 74 38 01 00", [this](memory::handle ptr) {
+			m_bowgun_no_recoil = ptr.as<void*>();
+		});
+
 		main_batch.add("Bow Gun Effect", "48 89 5C 24 ? 57 48 83 EC 20 48 8B D9 E8", [this](memory::handle ptr) {
 			m_bow_gun_effect = ptr.add(14).rip().as<void*>();
 			m_bow_gun_effect_apply = ptr.add(14).rip().add(19).rip().as<decltype(m_bow_gun_effect_apply)>();
@@ -419,117 +455,166 @@ namespace big
 
 	bool pointers::get_swapchain()
 	{
-		WNDCLASSEX windowClass;
+		WNDCLASSEX windowClass = {};
 		windowClass.cbSize = sizeof(WNDCLASSEX);
 		windowClass.style = CS_HREDRAW | CS_VREDRAW;
 		windowClass.lpfnWndProc = DefWindowProc;
-		windowClass.cbClsExtra = 0;
-		windowClass.cbWndExtra = 0;
 		windowClass.hInstance = GetModuleHandle(NULL);
-		windowClass.hIcon = NULL;
-		windowClass.hCursor = NULL;
-		windowClass.hbrBackground = NULL;
-		windowClass.lpszMenuName = NULL;
-		windowClass.lpszClassName = "UnrealWindow";
-		windowClass.hIconSm = NULL;
+		windowClass.lpszClassName = "EllohimDummyWindow";
 
 		::RegisterClassEx(&windowClass);
 
-		this->m_window = ::CreateWindow(
-		    windowClass.lpszClassName, "UnrealWindow", WS_OVERLAPPEDWINDOW, 0, 0, 100, 100, NULL, NULL, windowClass.hInstance, NULL);
+		HWND dummy_window = ::CreateWindow(
+		    windowClass.lpszClassName, "EllohimDummyWindow", WS_OVERLAPPEDWINDOW, 0, 0, 100, 100, NULL, NULL, windowClass.hInstance, NULL);
 
-		if (this->m_window == NULL)
+		if (!dummy_window)
 		{
-			return false;
-		}
-
-		HMODULE d3d11 = ::GetModuleHandle("d3d11.dll");
-		if (d3d11 == NULL)
-		{
-			::DestroyWindow(this->m_window);
 			::UnregisterClass(windowClass.lpszClassName, windowClass.hInstance);
 			return false;
 		}
 
-		void* create_device_and_swapchain = ::GetProcAddress(d3d11, "D3D11CreateDeviceAndSwapChain");
-		if (create_device_and_swapchain == NULL)
+		bool success = false;
+		HMODULE d3d12 = ::GetModuleHandleA("d3d12.dll");
+		HMODULE dxgi = ::GetModuleHandleA("dxgi.dll");
+		HMODULE d3d11 = ::GetModuleHandleA("d3d11.dll");
+
+		if (!dxgi)
+			dxgi = ::LoadLibraryA("dxgi.dll");
+
+		// Attempt DX12 dummy swapchain first if d3d12 is active
+		if (d3d12 && dxgi)
 		{
-			::DestroyWindow(this->m_window);
-			::UnregisterClass(windowClass.lpszClassName, windowClass.hInstance);
-			return false;
+			using CreateDXGIFactory1_t = HRESULT(WINAPI*)(const IID&, void**);
+			using D3D12CreateDevice_t = HRESULT(WINAPI*)(IUnknown*, D3D_FEATURE_LEVEL, const IID&, void**);
+
+			auto create_factory = reinterpret_cast<CreateDXGIFactory1_t>(::GetProcAddress(dxgi, "CreateDXGIFactory1"));
+			if (!create_factory)
+				create_factory = reinterpret_cast<CreateDXGIFactory1_t>(::GetProcAddress(dxgi, "CreateDXGIFactory"));
+			auto create_device = reinterpret_cast<D3D12CreateDevice_t>(::GetProcAddress(d3d12, "D3D12CreateDevice"));
+
+			if (create_factory && create_device)
+			{
+				IDXGIFactory4* factory = nullptr;
+				if (SUCCEEDED(create_factory(__uuidof(IDXGIFactory4), reinterpret_cast<void**>(&factory)))
+				    || SUCCEEDED(create_factory(__uuidof(IDXGIFactory), reinterpret_cast<void**>(&factory))))
+				{
+					IDXGIAdapter* adapter = nullptr;
+					if (factory->EnumAdapters(0, &adapter) != DXGI_ERROR_NOT_FOUND)
+					{
+						ID3D12Device* device = nullptr;
+						if (SUCCEEDED(create_device(adapter, D3D_FEATURE_LEVEL_11_0, __uuidof(ID3D12Device), reinterpret_cast<void**>(&device))))
+						{
+							D3D12_COMMAND_QUEUE_DESC queue_desc = {};
+							queue_desc.Type = D3D12_COMMAND_LIST_TYPE_DIRECT;
+							queue_desc.Priority = 0;
+							queue_desc.Flags = D3D12_COMMAND_QUEUE_FLAG_NONE;
+
+							ID3D12CommandQueue* command_queue = nullptr;
+							if (SUCCEEDED(device->CreateCommandQueue(&queue_desc, __uuidof(ID3D12CommandQueue), reinterpret_cast<void**>(&command_queue))))
+							{
+								DXGI_SWAP_CHAIN_DESC swap_chain_desc = {};
+								swap_chain_desc.BufferCount = 2;
+								swap_chain_desc.BufferDesc.Width = 100;
+								swap_chain_desc.BufferDesc.Height = 100;
+								swap_chain_desc.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+								swap_chain_desc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
+								swap_chain_desc.OutputWindow = dummy_window;
+								swap_chain_desc.SampleDesc.Count = 1;
+								swap_chain_desc.Windowed = TRUE;
+								swap_chain_desc.SwapEffect = DXGI_SWAP_EFFECT_FLIP_DISCARD;
+
+								IDXGISwapChain* dummy_swapchain = nullptr;
+								if (SUCCEEDED(factory->CreateSwapChain(command_queue, &swap_chain_desc, &dummy_swapchain)))
+								{
+									::memcpy(this->m_swapchain_methods, *(void***)dummy_swapchain, sizeof(m_swapchain_methods));
+									this->m_command_queue_execute_command_lists = (*(void***)command_queue)[10];
+									this->m_is_dx12 = true;
+									success = true;
+
+									LOG(INFO) << "Created DX12 dummy swapchain successfully.";
+									dummy_swapchain->Release();
+								}
+								command_queue->Release();
+							}
+							device->Release();
+						}
+						adapter->Release();
+					}
+					factory->Release();
+				}
+			}
 		}
 
-		D3D_FEATURE_LEVEL featureLevel;
-		const D3D_FEATURE_LEVEL featureLevels[] = {
-		    D3D_FEATURE_LEVEL_11_0,
-		    D3D_FEATURE_LEVEL_10_1,
-		    D3D_FEATURE_LEVEL_10_0,
-		    D3D_FEATURE_LEVEL_9_3,
-		    D3D_FEATURE_LEVEL_9_2,
-		    D3D_FEATURE_LEVEL_9_1,
-		};
-
-		DXGI_RATIONAL refreshRate;
-		refreshRate.Numerator = 60;
-		refreshRate.Denominator = 1;
-
-		DXGI_MODE_DESC bufferDesc;
-		bufferDesc.Width = 100;
-		bufferDesc.Height = 100;
-		bufferDesc.RefreshRate = refreshRate;
-		bufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
-		bufferDesc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;
-		bufferDesc.Scaling = DXGI_MODE_SCALING_UNSPECIFIED;
-
-		DXGI_SAMPLE_DESC sampleDesc;
-		sampleDesc.Count = 1;
-		sampleDesc.Quality = 0;
-
-		DXGI_SWAP_CHAIN_DESC swapChainDesc;
-		swapChainDesc.BufferDesc = bufferDesc;
-		swapChainDesc.SampleDesc = sampleDesc;
-		swapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
-		swapChainDesc.BufferCount = 1;
-		swapChainDesc.OutputWindow = this->m_window;
-		swapChainDesc.Windowed = 1;
-		swapChainDesc.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
-		swapChainDesc.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
-
-		HRESULT hr = ((functions::create_d3d11_device_and_swapchain_t)(create_device_and_swapchain))(NULL,
-		    D3D_DRIVER_TYPE_HARDWARE,
-		    NULL,
-		    0,
-		    featureLevels,
-		    2,
-		    D3D11_SDK_VERSION,
-		    &swapChainDesc,
-		    &this->m_dummy_swapchain,
-		    &this->m_d3d_device,
-		    &featureLevel,
-		    &this->m_d3d_context);
-
-		if (FAILED(hr))
+		// Fallback to DX11 if DX12 was not present or failed
+		if (!success)
 		{
-			::DestroyWindow(this->m_window);
-			::UnregisterClass(windowClass.lpszClassName, windowClass.hInstance);
-			return false;
+			if (!d3d11)
+				d3d11 = ::GetModuleHandleA("d3d11.dll");
+			if (!d3d11)
+				d3d11 = ::LoadLibraryA("d3d11.dll");
+
+			if (d3d11)
+			{
+				auto create_device_and_swapchain = reinterpret_cast<functions::create_d3d11_device_and_swapchain_t>(
+				    ::GetProcAddress(d3d11, "D3D11CreateDeviceAndSwapChain"));
+
+				if (create_device_and_swapchain)
+				{
+					D3D_FEATURE_LEVEL featureLevel;
+					const D3D_FEATURE_LEVEL featureLevels[] = {
+					    D3D_FEATURE_LEVEL_11_0,
+					    D3D_FEATURE_LEVEL_10_1,
+					};
+
+					DXGI_SWAP_CHAIN_DESC swapChainDesc = {};
+					swapChainDesc.BufferCount = 1;
+					swapChainDesc.BufferDesc.Width = 100;
+					swapChainDesc.BufferDesc.Height = 100;
+					swapChainDesc.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+					swapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
+					swapChainDesc.OutputWindow = dummy_window;
+					swapChainDesc.SampleDesc.Count = 1;
+					swapChainDesc.Windowed = TRUE;
+					swapChainDesc.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
+
+					IDXGISwapChain* dummy_swapchain = nullptr;
+					ID3D11Device* dummy_device = nullptr;
+					ID3D11DeviceContext* dummy_context = nullptr;
+
+					HRESULT hr = create_device_and_swapchain(
+					    NULL,
+					    D3D_DRIVER_TYPE_HARDWARE,
+					    NULL,
+					    0,
+					    featureLevels,
+					    2,
+					    D3D11_SDK_VERSION,
+					    &swapChainDesc,
+					    &dummy_swapchain,
+					    &dummy_device,
+					    &featureLevel,
+					    &dummy_context);
+
+					if (SUCCEEDED(hr) && dummy_swapchain)
+					{
+						::memcpy(this->m_swapchain_methods, *(void***)dummy_swapchain, sizeof(m_swapchain_methods));
+						this->m_is_dx12 = false;
+						success = true;
+
+						LOG(INFO) << "Created DX11 dummy swapchain successfully.";
+
+						dummy_swapchain->Release();
+						if (dummy_device) dummy_device->Release();
+						if (dummy_context) dummy_context->Release();
+					}
+				}
+			}
 		}
 
-		::memcpy(this->m_swapchain_methods, *(void***)this->m_dummy_swapchain, sizeof(m_swapchain_methods));
-
-		this->m_dummy_swapchain->Release();
-		this->m_dummy_swapchain = nullptr;
-
-		this->m_d3d_device->Release();
-		this->m_d3d_device = nullptr;
-
-		this->m_d3d_context->Release();
-		this->m_d3d_context = nullptr;
-
-		::DestroyWindow(this->m_window);
+		::DestroyWindow(dummy_window);
 		::UnregisterClass(windowClass.lpszClassName, windowClass.hInstance);
 
-		return true;
+		return success;
 	}
 	HWND pointers::window_focus()
 	{

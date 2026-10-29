@@ -67,12 +67,12 @@ namespace big
 	{
 		ImDrawList* draw_list = ImGui::GetBackgroundDrawList();
 
-		std::vector<notification> notifications = g_notification_service->get();
+		std::vector<legacy_notification> notifications = g_notification_service->get();
 
 		float prev_pos = 0.f;
 		for (int i = 0; i < notifications.size(); i++)
 		{
-			notification& n = notifications[i];
+			auto& n = notifications[i];
 
 			prev_pos = draw_notification(
 			    prev_pos, draw_list, n.title, n.message, g_notification_service->notification_colors.at(n.type));

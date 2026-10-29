@@ -1,9 +1,16 @@
 #pragma once
 
-#include <D3D11.h>
-#include <Psapi.h>
 #include <SDKDDKVer.h>
+#include <winsock2.h>
+#include <ws2tcpip.h>
 #include <Windows.h>
+#include <d3d11.h>
+#include <d3d12.h>
+#include <dxgi.h>
+#include <dxgi1_4.h>
+#include <xinput.h>
+#pragma comment(lib, "Xinput.lib")
+#include <Psapi.h>
 #include <algorithm>
 #include <any>
 #include <atomic>
@@ -53,9 +60,10 @@
 #define WINDOW_CLASS "MT FRAMEWORK"
 #define WINDOW_NAME "MONSTER HUNTER: WORLD(421810)"
 #define TARGET_PROCESS "MonsterHunterWorld.exe"
+#define GAME_NAME "Monster Hunter World"
 
 #include "logger/logger.hpp"
-#include "settings.hpp"
+#include "menu_settings.hpp"
 #include "utility/fnv1a.hpp"
 
 extern "C" uint64_t g_set_item;

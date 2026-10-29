@@ -2,7 +2,11 @@
 #include "common.hpp"
 #include "detour_hook.hpp"
 #include "mhw/fwddec.hpp"
-#include "vmt_hook.hpp"
+
+namespace ellohim
+{
+	class mid_context;
+}
 
 extern "C" void equipment();
 extern "C" void player_atk_stat();
@@ -22,6 +26,7 @@ namespace big
 		static HRESULT APIENTRY swapchain_present(IDXGISwapChain* this_, UINT sync_interval, UINT flags);
 		static HRESULT APIENTRY swapchain_resizebuffers(IDXGISwapChain* this_, UINT buffer_count, UINT width, UINT height, DXGI_FORMAT new_format, UINT swapchain_flags);
 		static void APIENTRY swapchain_draw_indexed(ID3D11DeviceContext* pContext, UINT IndexCount, UINT StartIndexLocation, INT BaseVertexLocation);
+		static void APIENTRY execute_command_lists(ID3D12CommandQueue* queue, UINT num_command_lists, ID3D12CommandList* const* pp_command_lists);
 
 		static LRESULT wndproc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam);
 		static BOOL set_cursor_pos(int x, int y);
@@ -47,12 +52,46 @@ namespace big
 		static __int64 __fastcall monster_part_breaking(__int64 a1, unsigned int a2);
 		static __int64 __fastcall monster_on_map(__int64 a1, int a2, int a3);
 		static int __fastcall bow_gun_effect(__int64 a1);
-	};
 
-	struct minhook_keepalive
-	{
-		minhook_keepalive();
-		~minhook_keepalive();
+		// Ellohim mid-hook callbacks
+		static void mid_gs_charge(ellohim::mid_context& ctx);
+		static void mid_spirit_gauge(ellohim::mid_context& ctx);
+		static void mid_demon_mode(ellohim::mid_context& ctx);
+		static void mid_switch_axe(ellohim::mid_context& ctx);
+		static void mid_gl_ammo(ellohim::mid_context& ctx);
+		static void mid_gl_cooldown(ellohim::mid_context& ctx);
+		static void mid_cb_phials(ellohim::mid_context& ctx);
+		static void mid_cb_sword(ellohim::mid_context& ctx);
+		static void mid_cb_shield(ellohim::mid_context& ctx);
+		static void mid_ig_extract(ellohim::mid_context& ctx);
+		static void mid_ig_stamina(ellohim::mid_context& ctx);
+		static void mid_ig_jump(ellohim::mid_context& ctx);
+		static void mid_bow_coatings(ellohim::mid_context& ctx);
+		static void mid_bow_charge(ellohim::mid_context& ctx);
+		static void mid_bowgun_no_reload(ellohim::mid_context& ctx);
+		static void mid_wyvernblast(ellohim::mid_context& ctx);
+		static void mid_wyvernheart(ellohim::mid_context& ctx);
+		static void mid_wyvernheart_rapidfire(ellohim::mid_context& ctx);
+		static void mid_bowgun_no_recoil(ellohim::mid_context& ctx);
+
+		static void mid_part_breaker(ellohim::mid_context& ctx);
+		static void mid_mount_reset(ellohim::mid_context& ctx);
+		static void mid_frostcraft_drawn(ellohim::mid_context& ctx);
+		static void mid_frostcraft_heat(ellohim::mid_context& ctx);
+		static void mid_lucky_voucher(ellohim::mid_context& ctx);
+		static void mid_load_cannon(ellohim::mid_context& ctx);
+		static void mid_pet_mgr(ellohim::mid_context& ctx);
+		static void mid_pet_unlocker(ellohim::mid_context& ctx);
+		static void mid_palico_gadget_cd(ellohim::mid_context& ctx);
+		static void mid_slinger_ammo(ellohim::mid_context& ctx);
+		static void mid_maxed_effect_set(ellohim::mid_context& ctx);
+		static void mid_maxed_attribute(ellohim::mid_context& ctx);
+		static void mid_max_sharpness(ellohim::mid_context& ctx);
+		static void mid_max_slot_armor(ellohim::mid_context& ctx);
+		static void mid_max_slot_armor_ranged(ellohim::mid_context& ctx);
+		static void mid_max_slot_armor_melee(ellohim::mid_context& ctx);
+		static void mid_scoutfly_max(ellohim::mid_context& ctx);
+		static void mid_scoutfly_level(ellohim::mid_context& ctx);
 	};
 
 	class hooking
@@ -65,13 +104,12 @@ namespace big
 
 		void enable();
 		void disable();
+		void delete_disabled_hooks();
 
 	private:
 		bool m_enabled{};
-		minhook_keepalive m_minhook_keepalive;
 
 		WNDPROC m_og_wndproc;
-		vmt_hook m_swapchain_hook;
 	};
 
 	inline hooking* g_hooking{};
