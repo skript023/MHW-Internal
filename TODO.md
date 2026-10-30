@@ -125,3 +125,77 @@ Dokumen ini merangkum kumpulan fitur menarik dan populer dari komunitas modding,
   - Mengabaikan syarat material saat melakukan augmentasi senjata dan zirah di Smithy.
 - [ ] **Layered Transmog Unlocker**
   - Membuka seluruh tampilan layered armor dan weapon tanpa harus menyelesaikan quest event atau grinding arena.
+
+---
+
+## 7. Quality of Life & Flow Permainan (Inspirasi Komunitas Nexus Mods)
+
+- [x] **Skippable Cutscenes** *(Inspirasi: Skippable Cutscenes by Moonbunnie / AsteriskAmpersand)*
+  - Melewati cutscene cerita (*story cutscenes*) yang terkunci dan tidak bisa di-skip hanya dengan menekan 1 tombol (Start / Esc), langsung melanjutkan gameplay tanpa menunggu.
+- [x] **Post-Quest Wait Timer Skip** *(Inspirasi: FastResult / Standalone Quest End Timer Skip)*
+  - Menghilangkan hitungan mundur tunggu 60 detik (hunt) atau 20 detik (capture) setelah monster mati, langsung menampilkan layar reward dan kembali ke hub/camp seketika.
+- [x] **Instant Gathering & Zero-Delay Carving** *(Inspirasi: Fast Carve & Fast Gathering)*
+  - Mengeliminasi animasi berlutut berulang kali saat mengukir monster (carving delay 0.1 detik tanpa interupsi monster kecil).
+  - Ekstraksi tambang dan tulang sekali sentuh langsung mengumpulkan seluruh material node secara instan.
+- [x] **Full Hub Sprint Speed** *(Inspirasi: Fast Seliana & Hub Movement)*
+  - Hunter dapat berlari sprint dengan kecepatan maksimal di dalam markas (Astera, Seliana, Gathering Hubs) tanpa terhambat animasi jalan lambat di tangga atau tanjakan.
+- [x] **Remote Tent & Item Box Access Anywhere** *(Inspirasi: Portable Camp Facilities)*
+  - Membuka menu ganti perlengkapan (*Change Equipment*) dan kotak item (*Item Box*) dari mana saja di map/expedition tanpa perlu kembali ke base camp.
+- [x] **Quick Quest Restart & Reset** *(Inspirasi: Quick Quest Restart)*
+  - Opsi tombol 1 klik untuk langsung me-restart quest aktif dari awal (sangat berguna untuk speedrunning dan arena time-attack).
+
+---
+
+## 8. Sieges, End-Game & Grinding Reducers (Inspirasi Nexus Mods & ICE)
+
+- [ ] **Solo Siege Scaling (Safi'jiiva & Kulve Taroth)** *(Inspirasi: Solo Safi / Kulve Scaling)*
+  - Mengubah kalkulasi drain energi lantai dan total HP Safi'jiiva & Kulve Taroth ke skala 1 pemain (*True Solo Scaling*), memungkinkan menyelesaikan siege raid secara mandiri dalam 1 run tanpa grinding berjam-jam di lobby multiplayer.
+- [ ] **Guiding Lands Level Cap Remover** *(Inspirasi: Kat's Guiding Lands Cap Remover)*
+  - Menghapus batas total akumulasi level region Guiding Lands sehingga seluruh 6 region (Forest, Wildspire, Coral, Rotted, Volcanic, Tundra) dapat berada di Level 7 secara bersamaan (*anti de-leveling*).
+- [ ] **Permanent Geologist Exploit (2x/3x Shinies Gather)** *(Inspirasi: Geology QoL)*
+  - Mengunci efek pengumpulan ganda pada drop material monster di tanah (khususnya Guiding Lands) agar dapat dipungut 2–3 kali per drop tanpa syarat memakai skill Geologist level 1.
+- [ ] **Botanical Research & Soft Soil Auto-Maintainer** *(Inspirasi: Fertilizer Counter & Max Farm)*
+  - Mengunci durasi pupuk / *Soft Soil* pada level dan durasi maksimal (99 turn) secara permanen sehingga tanaman kebun selalu panen maksimal tanpa perlu bolak-balik ke NPC Botanical.
+- [ ] **Decoration Drop RNG Overhaul / Smart Feystone Reroll** *(Inspirasi: Decoration Drop Rate Overhaul)*
+  - Menyesuaikan bobot probabilitas *Sealed Feystone* dan *Carved Feystone* agar memprioritaskan dekorasi langka tier-12 (Attack Jewel 4, Expert Jewel 4, Challenger Jewel 4, Agitator 4) daripada dekorasi sampah.
+
+---
+
+## 9. Clutch Claw & Sistem Tempur Lanjutan (Inspirasi Nexus Mods & ICE)
+
+- [ ] **Infinite Clutch Claw Reach** *(Inspirasi: Infinite / Longer Reach Clutch Claw)*
+  - Menambah jangkauan kait Clutch Claw (slider jangkauan 2x hingga tak terbatas), mempermudah menempel ke monster terbang atau monster berukuran raksasa.
+- [ ] **Universal 1-Hit Tenderize & Guaranteed Slinger Ammo** *(Inspirasi: ICE Clutch Claw Rework)*
+  - Serangan cakar senjata ringan (LS, DB, Bow, SnS, IG, LBG) langsung melunakkan (*tenderize*) bagian monster dalam 1 kali serangan DAN tetap menjatuhkan batu/pod slinger ammo.
+- [ ] **Universal Wall-Bang / Unrestricted Flinch Shot** *(Inspirasi: Unrestricted Flinch Shot)*
+  - Menembakkan slinger ammo ke monster saat menempel di kepala akan selalu memicu dorongan ke dinding (*wall-bang*) bahkan saat monster sedang dalam kondisi Enrage (mata kuning/merah) atau dari sudut mana pun.
+- [ ] **Extended Tenderize Duration Slider** *(Inspirasi: Longer Tenderize)*
+  - Mengatur durasi kelembutan daging monster hasil tenderize (dari standar 180 detik menjadi 600 detik atau permanen).
+- [ ] **Universal CC & Roar Immunity (True Rocksteady)** *(Inspirasi: QoL Immunity)*
+  - Kebal alami terhadap Monster Roar (Earplugs 5), Wind Pressure (Windproof 5), Tremor (Tremor Resistance 3), dan Stun tanpa memerlukan mantel Rocksteady aktif atau membuang slot dekorasi.
+
+---
+
+## 10. Visual Hitzone & Analitik Tempur (Inspirasi Nexus Mods & SmartHunter)
+
+- [x] **Monster Elemental & Status Weakness Icon HUD** *(Inspirasi: Monster Weakness Icon Indicator)*
+  - Menampilkan panel ikon kelemahan elemen monster (Fire, Water, Thunder, Ice, Dragon) dan efektivitas status (Poison, Sleep, Paralysis, Blast, Stun) langsung di sebelah nama monster pada overlay.
+- [x] **Hitzone Value (HZV) Vulnerability Indicator** *(Inspirasi: ICE HZV & SmartHunter)*
+  - Menampilkan persentase ketahanan/kerentanan bagian tubuh monster terhadap tipe serangan senjata hunter (Severing / Slash, Blunt, Shot, dan Elemental HZV).
+- [x] **Light Pillars for Dropped Items & Shinies** *(Inspirasi: Souvenir's Light Pillar & Dropped Items EFX)*
+  - Memproyeksikan pilar cahaya vertikal 3D (*light beam*) di atas setiap drop material monster di tanah agar mudah terlihat di rumput tebal atau area gelap.
+- [x] **Tic Rate & High-FPS Damage Calculation Fix** *(Inspirasi: Tic Rate Fix)*
+  - Memperbaiki kalkulasi hit rate game pada framerate monitor tinggi (>60 FPS, 144Hz, 240Hz) agar tick damage serangan bertubi-tubi (seperti Piercing Shots, DB Blade Dance, Dragon Piercer) terhitung akurat sesuai frame asli.
+
+---
+
+## 11. Multiplayer Co-op & Team Utilities (Inspirasi HunterPie & SmartHunter)
+
+- [x] **Co-op Team Player ESP & Health Bars** *(Implemented)*
+  - Menampilkan radar 3D world space, floating nameplate, tipe senjata, sisa HP, dan jarak hunter anggota tim (P1 s/d P4) di layar dalam estetika MHW HUD.
+- [x] **Off-Screen Teammate Compass Indicator** *(Implemented)*
+  - Menampilkan panah kompas / chevron penunjuk arah di pinggiran layar saat rekan setim berada di belakang hunter atau di luar jarak pandang kamera, dilengkapi jarak meter.
+- [x] **Instant Fast Travel / Teleport to Teammate** *(Implemented)*
+  - Tombol 1 klik di menu Teleport serta pintasan cepat (Hotkey `F9` / klik nameplate) untuk langsung berteleportasi seketika ke samping rekan setim saat co-op di map luas (Ancient Forest, Guiding Lands, Coral Highlands).
+
+

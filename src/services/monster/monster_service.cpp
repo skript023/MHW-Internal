@@ -130,6 +130,25 @@ namespace big
 		return std::format("Monster Not Found, ID: {}", index);
 	}
 
+	int32_t monster_service::get_monster_id_impl(int index)
+	{
+		if (index >= 0 && index < static_cast<int>(m_entry.size()) && m_entry[index])
+		{
+			if (auto wt = m_entry[index]->m_monster_world_stats)
+			{
+				return wt->m_monster_id;
+			}
+		}
+
+		return -1;
+	}
+
+	monster_data::monster_combat_profile monster_service::get_combat_profile_impl(int index)
+	{
+		int32_t id = get_monster_id_impl(index);
+		return monster_data::get_combat_profile(id);
+	}
+
 	float monster_service::get_timer_impl(int index)
 	{
 		if (index >= 0 && index < static_cast<int>(m_entry.size()) && m_entry[index])
@@ -262,6 +281,46 @@ namespace big
 						defaults[i].severable,
 						severed
 					});
+				}
+			}
+		}
+
+		auto profile = get_combat_profile_impl(index);
+		for (auto& p : parts)
+		{
+			bool found_hzv = false;
+			for (const auto& h : profile.parts)
+			{
+				if (p.name.find(h.part_name) != std::string::npos || std::string(h.part_name).find(p.name) != std::string::npos)
+				{
+					p.slash_hzv = h.slash;
+					p.blunt_hzv = h.blunt;
+					p.shot_hzv = h.shot;
+					p.elem_hzv = h.elem;
+					p.elem_type = h.best_elem;
+					p.is_weakpoint = h.is_weakpoint;
+					found_hzv = true;
+					break;
+				}
+			}
+
+			if (!found_hzv)
+			{
+				if (p.name.find("Head") != std::string::npos)
+				{
+					p.slash_hzv = 65; p.blunt_hzv = 65; p.shot_hzv = 55; p.elem_hzv = 25; p.elem_type = "Fire"; p.is_weakpoint = true;
+				}
+				else if (p.name.find("Tail") != std::string::npos)
+				{
+					p.slash_hzv = 55; p.blunt_hzv = 45; p.shot_hzv = 40; p.elem_hzv = 20; p.elem_type = "Fire"; p.is_weakpoint = true;
+				}
+				else if (p.name.find("Wing") != std::string::npos || p.name.find("Arm") != std::string::npos || p.name.find("Foreleg") != std::string::npos)
+				{
+					p.slash_hzv = 45; p.blunt_hzv = 40; p.shot_hzv = 45; p.elem_hzv = 15; p.elem_type = "Fire"; p.is_weakpoint = true;
+				}
+				else
+				{
+					p.slash_hzv = 30; p.blunt_hzv = 30; p.shot_hzv = 25; p.elem_hzv = 10; p.elem_type = "Fire"; p.is_weakpoint = false;
 				}
 			}
 		}

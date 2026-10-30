@@ -10,6 +10,7 @@
 #include "services/meal/meal_data.hpp"
 #include "services/equipment/weapon_service.hpp"
 #include "services/equipment/armour_service.hpp"
+#include "services/qol/qol_service.hpp"
 #include <astra/host/notification.hpp>
 #include <vector>
 #include <mutex>
@@ -32,6 +33,7 @@ namespace big
 		weapon_submenu();
 		crafting_submenu();
 		teleport_submenu();
+		qol_submenu();
 		setting_submenu();
 	}
 
@@ -295,6 +297,47 @@ namespace big
 		});
 	}
 
+	void view::qol_submenu()
+	{
+		canvas::add_tab<regular_submenu>("QoL & Flow", SubmenuQoL, [](regular_submenu* sub) {
+			sub->add_option<bool_option<bool>>("Skippable Cutscenes", "Skip story and monster cutscenes with 1 key (Esc / Start).", &g_settings.qol.skippable_cutscenes);
+			sub->add_option<reguler_option>("Skip Current Cutscene", "Force skip active cutscene immediately.", [] {
+				qol_service::skip_cutscene();
+			});
+
+			sub->add_option<bool_option<bool>>("Post-Quest Timer Skip", "Eliminate 60s/20s countdown after hunt/capture.", &g_settings.qol.post_quest_timer_skip);
+			sub->add_option<bool_option<bool>>("Auto-Skip Post-Quest", "Automatically transition to rewards when quest ends.", &g_settings.qol.auto_post_quest_timer_skip);
+			sub->add_option<reguler_option>("Skip Quest Timer Now", "Instantly end post-quest wait timer (Hotkeys: 'Y' or Menu).", [] {
+				qol_service::skip_post_quest_timer();
+			});
+
+			sub->add_option<bool_option<bool>>("Instant Gathering", "Extract all node materials (mining/bonepiles) in a single touch.", &g_settings.qol.instant_gathering);
+			sub->add_option<bool_option<bool>>("Zero-Delay Carving", "Accelerate carve animation 10x-20x without interruptions.", &g_settings.qol.zero_delay_carving);
+			sub->add_option<number_option<float>>("Carve Speed Mult", "Carving animation speed multiplier.", &g_settings.qol.carve_speed_multiplier, 1.f, 25.f, 1.f, 1);
+
+			sub->add_option<bool_option<bool>>("Full Hub Sprint Speed", "Full sprint in Astera, Seliana & Hubs without slowdown.", &g_settings.qol.full_hub_sprint);
+			sub->add_option<number_option<float>>("Hub Speed Mult", "Hub movement speed multiplier.", &g_settings.qol.hub_speed_multiplier, 1.f, 5.f, 0.25f, 2);
+
+			sub->add_option<bool_option<bool>>("Remote Camp Facilities", "Enable Item Box & Equipment Change anywhere (F7 / F8).", &g_settings.qol.remote_camp_facilities);
+			sub->add_option<reguler_option>("Open Remote Item Box", "Open Item Box anywhere in the field (Hotkey: F7).", [] {
+				qol_service::open_remote_item_box();
+			});
+			sub->add_option<reguler_option>("Open Remote Equipment", "Open Change Equipment / Loadouts anywhere (Hotkey: F8).", [] {
+				qol_service::open_remote_equipment();
+			});
+
+			sub->add_option<bool_option<bool>>("Quick Quest Restart", "Enable 1-click quest restart and reset (Ctrl+R / Alt+R).", &g_settings.qol.quick_quest_restart);
+			sub->add_option<reguler_option>("Quick Quest Restart", "Restart active quest from 00:00 (Hotkey: Ctrl+R).", [] {
+				qol_service::quick_restart_quest();
+			});
+			sub->add_option<reguler_option>("Quick Quest Reset", "Cleanly abandon quest back to base camp (Hotkey: Alt+R).", [] {
+				qol_service::quick_reset_quest();
+			});
+
+			sub->add_option<bool_option<bool>>("Tic Rate Fix (High-FPS)", "Fix multi-hit tick damage on >60FPS/144Hz/240Hz monitors.", &g_settings.qol.tic_rate_fix);
+		});
+	}
+
 	void view::setting_submenu()
 	{
 		canvas::add_settings_tab(SubmenuSettings, SubmenuSettingsInput, [](regular_submenu* sub) {
@@ -302,6 +345,15 @@ namespace big
 			sub->add_option<bool_option<bool>>("Monster Health Bar", "Show monster health bar, size, and coordinates.", &g_settings.window.overlay_monster);
 			sub->add_option<bool_option<bool>>("Crown Size Badges", "Show Mini Crown / Giant Gold Crown indicators.", &g_settings.window.overlay_crown);
 			sub->add_option<bool_option<bool>>("Monster Enrage Bar", "Show monster enrage / state timer progress bar.", &g_settings.window.overlay_enrage_bar);
+			sub->add_option<bool_option<bool>>("Monster Weakness HUD", "Show Fire/Water/Thunder/Ice/Dragon and status ratings.", &g_settings.window.overlay_monster_weakness);
+			sub->add_option<bool_option<bool>>("Hitzone Values (HZV)", "Show Slash/Blunt/Shot/Elem HZV & WEX weakpoint tag.", &g_settings.window.overlay_hitzone_values);
+			sub->add_option<bool_option<bool>>("Part Health & Tail Bar", "Display body part HP and severable tail remaining.", &g_settings.window.overlay_monster_parts);
+			sub->add_option<bool_option<bool>>("Status Ailments Buildup", "Display Poison, Para, Sleep, Blast, Stun bars.", &g_settings.window.overlay_monster_ailments);
+			sub->add_option<bool_option<bool>>("Party DPS Meter", "Display hunter team damage contribution table.", &g_settings.window.overlay_party_dps);
+			sub->add_option<bool_option<bool>>("Dropped Materials ESP", "Display active shiny drops and despawn timers.", &g_settings.window.overlay_dropped_materials);
+			sub->add_option<bool_option<bool>>("3D Light Pillars", "Project vertical light beams over dropped shinies.", &g_settings.window.light_pillars_shinies);
+			sub->add_option<bool_option<bool>>("Hunter Buffs & Mantles", "Display active buffs and mantle timers/cooldowns.", &g_settings.window.overlay_hunter_buffs);
+			sub->add_option<bool_option<bool>>("Team Player ESP", "Display 3D world indicators, health, and compass for teammates.", &g_settings.window.overlay_team_esp);
 			sub->add_option<bool_option<bool>>("Hunter Info Panel", "Display hunter name, ranks, zeni, and world weather.", &g_settings.window.overlay_hunter);
 			sub->add_option<reguler_option>("Unload", "Safely unhook and eject the DLL.", [] {
 				g_running = false;

@@ -203,14 +203,31 @@ namespace big
 			NLOHMANN_DEFINE_TYPE_INTRUSIVE(crafting, ignore_material, unlock_equipment);
 		} crafting;
 
+		struct qol
+		{
+			bool skippable_cutscenes = true;
+			bool post_quest_timer_skip = true;
+			bool auto_post_quest_timer_skip = false;
+			bool instant_gathering = true;
+			bool zero_delay_carving = true;
+			bool full_hub_sprint = true;
+			float hub_speed_multiplier = 2.0f;
+			float carve_speed_multiplier = 10.0f;
+			bool remote_camp_facilities = true;
+			bool quick_quest_restart = true;
+			bool tic_rate_fix = true;
+
+			NLOHMANN_DEFINE_TYPE_INTRUSIVE(qol, skippable_cutscenes, post_quest_timer_skip, auto_post_quest_timer_skip, instant_gathering, zero_delay_carving, full_hub_sprint, hub_speed_multiplier, carve_speed_multiplier, remote_camp_facilities, quick_quest_restart, tic_rate_fix);
+		} qol;
+
 		struct window
 		{
 			ImU32 color        = 3357612055;
 			float gui_scale    = 1.f;
 			float transparency = 1.f;
-			Color custom_background{8, 12, 20, 255};
-			Color custom_panel{15, 24, 38, 255};
-			Color custom_text{225, 235, 250, 255};
+			Color custom_background{13, 15, 19, 245};
+			Color custom_panel{20, 22, 27, 245};
+			Color custom_text{242, 234, 222, 255};
 
 			ImFont* font_title     = nullptr;
 			ImFont* font_sub_title = nullptr;
@@ -228,12 +245,16 @@ namespace big
 			bool overlay_monster = true;
 			bool overlay_crown   = true;
 			bool overlay_enrage_bar = true;
+			bool overlay_monster_weakness = true;
+			bool overlay_hitzone_values = true;
 			bool overlay_hunter  = true;
 			bool overlay_monster_parts = true;
 			bool overlay_monster_ailments = true;
 			bool overlay_party_dps = true;
 			bool overlay_dropped_materials = true;
+			bool light_pillars_shinies = true;
 			bool overlay_hunter_buffs = true;
+			bool overlay_team_esp = true;
 			bool js_eval       = false;
 
 			uint32_t open_key{VK_INSERT};
@@ -256,17 +277,17 @@ namespace big
 			Color m_toggle_on_color{0, 255, 0, 255};
 			Color m_toggle_off_color{255, 0, 0, 255};
 
-			Color m_submenu_rect_color{255, 255, 255, 255};
+			Color m_submenu_rect_color{185, 148, 88, 255};
 
 			Color m_option_selected_background_color{255, 255, 255, 255};
 			Color m_option_unselected_background_color{0, 0, 0, 160};
 
-			Color m_option_selected_text_color{0, 0, 0, 255};
+			Color m_option_selected_text_color{255, 215, 95, 255};
 			Color m_option_unselected_text_color{255, 255, 255, 255};
 
 			Color m_footer_background_color{20, 20, 20, 255};
 
-			Color m_tab_selected_color{80, 140, 240, 255};
+			Color m_tab_selected_color{205, 165, 95, 255};
 			Color m_tab_unselected_color{0, 0, 0, 160};
 			Color m_tab_selected_text_color{255, 255, 255, 255};
 			Color m_tab_unselected_text_color{255, 255, 255, 255};
@@ -282,10 +303,10 @@ namespace big
 			int m_tabbar_switch = 150;
 			bool m_sounds = false;
 
-			NLOHMANN_DEFINE_TYPE_INTRUSIVE(window, layout, theme, banner, color, gui_scale, transparency, custom_background, custom_panel, custom_text, mouse_active, censor, overlay, overlay_monster, overlay_crown, overlay_enrage_bar, overlay_hunter, overlay_monster_parts, overlay_monster_ailments, overlay_party_dps, overlay_dropped_materials, overlay_hunter_buffs, open_key, back_key, enter_key, up_key, down_key, left_key, right_key, left_tab_key, right_tab_key, m_pos, m_width, m_option_per_page, m_sounds, m_open_delay, m_enter_delay, m_back_delay, m_horizontal_delay, m_vectical_delay, m_tabbar_switch, m_submenu_bar_background_color, m_submenu_bar_text_color, m_toggle_on_color, m_toggle_off_color, m_submenu_rect_color, m_option_selected_background_color, m_option_unselected_background_color, m_option_selected_text_color, m_option_unselected_text_color, m_footer_background_color, m_tab_selected_color, m_tab_unselected_color, m_tab_selected_text_color, m_tab_unselected_text_color, description_background_color, description_text_color)
+			NLOHMANN_DEFINE_TYPE_INTRUSIVE(window, layout, theme, banner, color, gui_scale, transparency, custom_background, custom_panel, custom_text, mouse_active, censor, overlay, overlay_monster, overlay_crown, overlay_enrage_bar, overlay_hunter, overlay_monster_parts, overlay_monster_ailments, overlay_party_dps, overlay_dropped_materials, overlay_monster_weakness, overlay_hitzone_values, light_pillars_shinies, overlay_hunter_buffs, overlay_team_esp, open_key, back_key, enter_key, up_key, down_key, left_key, right_key, left_tab_key, right_tab_key, m_pos, m_width, m_option_per_page, m_sounds, m_open_delay, m_enter_delay, m_back_delay, m_horizontal_delay, m_vectical_delay, m_tabbar_switch, m_submenu_bar_background_color, m_submenu_bar_text_color, m_toggle_on_color, m_toggle_off_color, m_submenu_rect_color, m_option_selected_background_color, m_option_unselected_background_color, m_option_selected_text_color, m_option_unselected_text_color, m_footer_background_color, m_tab_selected_color, m_tab_unselected_color, m_tab_selected_text_color, m_tab_unselected_text_color, description_background_color, description_text_color)
 		} window;
 
-		NLOHMANN_DEFINE_TYPE_INTRUSIVE(menu_settings, crafting, window, player, weapon);
+		NLOHMANN_DEFINE_TYPE_INTRUSIVE(menu_settings, crafting, window, player, weapon, qol);
 	};
 
 	inline menu_settings g_settings{};

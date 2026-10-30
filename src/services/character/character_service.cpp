@@ -100,6 +100,11 @@ namespace big
 		return m_position == nullptr ? Vector3(0.f, 0.f, 0.f) : m_position->m_position;
 	}
 
+	Vector3 character_service::get_forward_pos_impl() const
+	{
+		return m_forward == nullptr ? Vector3(0.f, 0.f, 0.f) : m_forward->m_forward_pos;
+	}
+
 	Vector3 character_service::get_waypoint_pos_impl() const
 	{
 		return m_waypoint == nullptr ? Vector3(0.f, 0.f, 0.f) : m_waypoint->m_waypoint;

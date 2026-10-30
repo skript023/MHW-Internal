@@ -13,6 +13,7 @@ namespace big
 		static void weapon_submenu();
 		static void crafting_submenu();
 		static void teleport_submenu();
+		static void qol_submenu();
 		static void setting_submenu();
 	};
 }

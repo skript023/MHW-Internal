@@ -52,6 +52,7 @@ namespace big
 		[[nodiscard]] uint32_t get_master_rank_level_impl() const;
 		[[nodiscard]] uint32_t get_master_rank_experience_impl() const;
 		[[nodiscard]] Vector3 get_position_impl() const;
+		[[nodiscard]] Vector3 get_forward_pos_impl() const;
 		[[nodiscard]] Vector3 get_waypoint_pos_impl() const;
 		[[nodiscard]] uintptr_t get_player_entity_impl() const;
 
@@ -130,6 +131,10 @@ namespace big
 		[[nodiscard]] static Vector3 get_position()
 		{
 			return get().get_position_impl();
+		}
+		[[nodiscard]] static Vector3 get_forward_pos()
+		{
+			return get().get_forward_pos_impl();
 		}
 		[[nodiscard]] static Vector3 get_waypoint_pos()
 		{

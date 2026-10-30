@@ -1,6 +1,9 @@
 #include "teleport_menu.h"
 
 #include <character/character_service.hpp>
+#include <services/party/party_service.hpp>
+#include <fonts/icon_list.hpp>
+#include <format>
 
 namespace big
 {
@@ -8,19 +11,52 @@ namespace big
 	{
 		ImGui::BeginGroup();
 
-		if (ImGui::Button("Teleport Waypoint"))
+		if (ImGui::Button(ICON_FA_MAP_MARKER_ALT " Teleport Waypoint"))
 		{
 			character_service::set_player_to_waypoint();
 		}
 
 		ImGui::SameLine();
 
-		if (ImGui::Button("Teleport Forward"))
+		if (ImGui::Button(ICON_FA_LOCATION_ARROW " Teleport Forward"))
 		{
 			character_service::set_player_forward();
 		}
 
 		ImGui::EndGroup();
+
+		ImGui::Spacing();
+		ImGui::Separator();
+		ImGui::Spacing();
+
+		// Co-op Teammate Fast Travel Section
+		ImGui::TextColored(ImVec4(0.95f, 0.82f, 0.44f, 1.0f), ICON_FA_USER_FRIENDS " Co-op Teammate Fast Travel");
+		auto teammates = party_service::get_active_teammates();
+		if (teammates.empty())
+		{
+			ImGui::TextColored(ImVec4(0.60f, 0.60f, 0.60f, 1.0f), "No co-op teammates detected nearby.");
+		}
+		else
+		{
+			for (const auto& t : teammates)
+			{
+				ImGui::PushID(t.player_id);
+				const char* w_icon = party_service::get_weapon_icon(t.weapon_id);
+				std::string btn_label = std::format("{} Teleport to {} [P{}] ({}) - {:.1f}m",
+					w_icon, t.name, t.player_id + 1, t.weapon, t.distance);
+
+				if (ImGui::Button(btn_label.c_str(), ImVec2(-1.0f, 26.0f)))
+				{
+					party_service::teleport_to_teammate(t);
+				}
+				ImGui::PopID();
+			}
+		}
+
+		ImGui::Spacing();
+		ImGui::Separator();
+		ImGui::Spacing();
+
 		auto teleport_locations = location_list();
 
 		static std::string selected_location;

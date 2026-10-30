@@ -22,6 +22,7 @@ namespace big
 		SubmenuWeapon,
 		SubmenuCrafting,
 		SubmenuTeleport,
+		SubmenuQoL,
 		SubmenuSettings,
 		SubmenuSettingsInput,
 	};

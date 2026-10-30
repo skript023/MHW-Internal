@@ -5,11 +5,13 @@
 #include <features/player.hpp>
 #include <features/weapon.hpp>
 #include <server_module.hpp>
+#include <services/qol/qol_service.hpp>
 
 namespace big
 {
 	void backend_events::features()
 	{
+		qol_service::tick();
 	}
 
 	void backend_events::player_event()
