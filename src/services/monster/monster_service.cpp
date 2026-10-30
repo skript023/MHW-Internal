@@ -5,26 +5,6 @@
 #include <format>
 #include <cmath>
 
-namespace
-{
-	template <typename T>
-	static bool safe_read(uintptr_t addr, T* out)
-	{
-		if (addr < 0x10000)
-			return false;
-
-		__try
-		{
-			*out = *reinterpret_cast<const T*>(addr);
-			return true;
-		}
-		__except (EXCEPTION_EXECUTE_HANDLER)
-		{
-			return false;
-		}
-	}
-}
-
 namespace big
 {
 	static const char* s_default_part_names[] = {
@@ -194,7 +174,7 @@ namespace big
 		if (!manager_ptr)
 			return;
 
-		m_parts_manager[0] = manager_ptr;
+		m_parts_manager[0] = reinterpret_cast<MonsterPartsManager*>(manager_ptr);
 	}
 
 	std::vector<monster_part_info> monster_service::get_parts_impl(int index)
@@ -203,47 +183,38 @@ namespace big
 		if (index < 0 || index >= 3)
 			return parts;
 
-		if (m_parts_manager[index] != 0)
+		auto* mgr = m_parts_manager[index];
+		if (mgr && mgr->m_part_entries && mgr->m_part_count > 0 && mgr->m_part_count < 32)
 		{
-			uint32_t count = 0;
-			uintptr_t part_ptrs = 0;
-			if (safe_read(m_parts_manager[index] + 16, &count) &&
-				safe_read(m_parts_manager[index] + 32, &part_ptrs) &&
-				count > 0 && count < 32 && part_ptrs != 0)
+			for (uint32_t i = 0; i < mgr->m_part_count; i++)
 			{
-				for (uint32_t i = 0; i < count; i++)
-				{
-					uintptr_t p = 0;
-					if (safe_read(part_ptrs + i * sizeof(uintptr_t), &p) && p != 0)
-					{
-						float cur_hp = 0.0f;
-						float max_hp = 0.0f;
-						uint32_t breaks = 0;
-						safe_read(p + 16, &cur_hp);
-						safe_read(p + 20, &max_hp);
-						safe_read(p + 24, &breaks);
+				MonsterPartEntry* p = mgr->m_part_entries[i];
+				if (!p)
+					continue;
 
-						if (max_hp <= 0.0f)
-							max_hp = (cur_hp > 0.0f) ? cur_hp : 1000.0f;
+				float cur_hp = p->m_current_hp;
+				float max_hp = p->m_max_hp;
+				uint32_t breaks = p->m_break_count;
 
-						bool severable = (i == 6);
-						bool severed = severable && (breaks > 0 || cur_hp <= 0.0f);
+				if (max_hp <= 0.0f)
+					max_hp = (cur_hp > 0.0f) ? cur_hp : 1000.0f;
 
-						std::string name = (i < sizeof(s_default_part_names) / sizeof(s_default_part_names[0]))
-							? s_default_part_names[i]
-							: std::format("Part {}", i);
+				bool severable = (i == 6);
+				bool severed = severable && (breaks > 0 || cur_hp <= 0.0f);
 
-						parts.push_back({
-							static_cast<int>(i),
-							std::move(name),
-							cur_hp,
-							max_hp,
-							breaks,
-							severable,
-							severed
-						});
-					}
-				}
+				std::string name = (i < sizeof(s_default_part_names) / sizeof(s_default_part_names[0]))
+					? s_default_part_names[i]
+					: std::format("Part {}", i);
+
+				parts.push_back({
+					static_cast<int>(i),
+					std::move(name),
+					cur_hp,
+					max_hp,
+					breaks,
+					severable,
+					severed
+				});
 			}
 		}
 

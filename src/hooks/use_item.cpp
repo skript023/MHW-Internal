@@ -1,12 +1,14 @@
 #include "hooking.hpp"
+#include <mhw/fwddec.hpp>
 
 namespace big
 {
 	void __fastcall hooks::use_item(__int64 rcx, int a2, int8_t a3)
 	{
-		if (g_settings->player.inf_item)
+		if (g_settings->player.inf_item && rcx)
 		{
-			if (*(DWORD*)(rcx + 0x8) > 0xCC)
+			auto* slot = reinterpret_cast<ItemSlot*>(rcx);
+			if (slot->m_item_id > 0xCC)
 			{
 				if (a3 != 0x01)
 				{

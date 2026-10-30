@@ -20,6 +20,14 @@ extern "C"
 
 namespace big
 {
+	class PlayerParams;
+	class World;
+	class Monster;
+	class PlayerStat;
+	class sPlayerData;
+	class sSessionData;
+	class sCamera;
+
 	class pointers
 	{
 	public:
@@ -45,7 +53,7 @@ namespace big
 		void* m_part_breaker{};
 		void* m_easy_breaker{};
 		void* m_reveal_monster{};
-		uintptr_t** m_player_stat{};
+		PlayerStat** m_player_stat{};
 		void* m_player_state{};
 		void* m_player_anim{};
 		void* m_player_health{};
@@ -93,12 +101,12 @@ namespace big
 		void* m_item_params{};
 		void* m_skill_params{};
 		void* m_mantle_params{};
-		void* m_player_data{};
+		sPlayerData** m_player_data{};
 		World** m_world_data{};
-		void* m_session_data{};
+		sSessionData** m_session_data{};
 		void* m_gathering_data{};
 		Monster** m_monster_data{};
-		void** m_camera{};
+		sCamera** m_camera{};
 		void* m_current_player_name{};
 		void* m_monster{};
 		void* m_player_buff{};

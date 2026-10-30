@@ -246,8 +246,9 @@ namespace big
 		if (g_settings.weapon.inst_chrgs_gs)
 		{
 			ctx.rsi = 3;
-			*reinterpret_cast<uint32_t*>(ctx.rbx + 0x2358) = 3;
-			*reinterpret_cast<float*>(ctx.rbx + 0x2350) = 10.0f;
+			auto* gs = reinterpret_cast<GreatswordData*>(ctx.rbx);
+			gs->m_charge_level = 3;
+			gs->m_charge_timer = 10.0f;
 		}
 	}
 
@@ -255,9 +256,10 @@ namespace big
 	{
 		if (g_settings.weapon.inf_spirit_gauge)
 		{
-			*reinterpret_cast<float*>(ctx.rdi + 0x2368) = 1.0f;
-			*reinterpret_cast<uint32_t*>(ctx.rdi + 0x2370) = 3;
-			*reinterpret_cast<float*>(ctx.rdi + 0x2374) = 1.0f;
+			auto* ls = reinterpret_cast<LongswordData*>(ctx.rdi);
+			ls->m_spirit_gauge = 1.0f;
+			ls->m_spirit_level = 3;
+			ls->m_spirit_duration = 1.0f;
 		}
 	}
 
@@ -265,8 +267,9 @@ namespace big
 	{
 		if (g_settings.weapon.inf_demon_mode)
 		{
-			*reinterpret_cast<float*>(ctx.rdi + 0x236C) = 1.0f;
-			*reinterpret_cast<uint8_t*>(ctx.rdi + 0x2369) = 1;
+			auto* db = reinterpret_cast<DualBladesData*>(ctx.rdi);
+			db->m_demon_gauge = 1.0f;
+			db->m_is_demon_mode = 1;
 		}
 	}
 
@@ -274,7 +277,8 @@ namespace big
 	{
 		if (g_settings.weapon.full_charged_switch_axe)
 		{
-			*reinterpret_cast<float*>(ctx.rcx + 0x2350) = 100.0f;
+			auto* sa = reinterpret_cast<SwitchAxeData*>(ctx.rcx);
+			sa->m_sword_gauge = 100.0f;
 			ctx.xmm[6].f32[0] = 100.0f;
 		}
 	}
@@ -283,8 +287,9 @@ namespace big
 	{
 		if (g_settings.weapon.inf_gl_ammo)
 		{
-			*reinterpret_cast<uint32_t*>(ctx.rdx + 0x236C) = *reinterpret_cast<uint32_t*>(ctx.rdx + 0x2368);
-			*reinterpret_cast<uint32_t*>(ctx.rdx + 0x2378) = 1;
+			auto* gl = reinterpret_cast<GunlanceData*>(ctx.rdx);
+			gl->m_ammo = gl->m_max_ammo;
+			gl->m_wyrmstake = 1;
 		}
 	}
 
@@ -298,46 +303,63 @@ namespace big
 	{
 		if (g_settings.weapon.cb_phials)
 		{
-			*reinterpret_cast<uint32_t*>(ctx.rdi + 0x2374) = 6;
-			*reinterpret_cast<uint16_t*>(ctx.rdi + 0x2372) = 0;
+			auto* cb = reinterpret_cast<ChargeBladeData*>(ctx.rdi);
+			cb->m_phials_count = 6;
+			cb->m_phials_charge = 0;
 		}
 	}
 
 	void hooks::mid_cb_sword(ellohim::mid_context& ctx)
 	{
 		if (g_settings.weapon.cb_sword_charge)
-			*reinterpret_cast<float*>(ctx.rbx + 0x237C) = 50.0f;
+		{
+			auto* cb = reinterpret_cast<ChargeBladeData*>(ctx.rbx);
+			cb->m_sword_charge_timer = 50.0f;
+		}
 	}
 
 	void hooks::mid_cb_shield(ellohim::mid_context& ctx)
 	{
 		if (g_settings.weapon.cb_shield_charge)
-			*reinterpret_cast<float*>(ctx.rbx + 0x2378) = 50.0f;
+		{
+			auto* cb = reinterpret_cast<ChargeBladeData*>(ctx.rbx);
+			cb->m_shield_charge_timer = 50.0f;
+		}
 	}
 
 	void hooks::mid_ig_extract(ellohim::mid_context& ctx)
 	{
 		if (g_settings.weapon.ig_extract)
-			*reinterpret_cast<float*>(ctx.rcx + ctx.rax * 4 + 0x2368) = 150.0f;
+		{
+			auto* ig = reinterpret_cast<InsectGlaiveData*>(ctx.rcx);
+			reinterpret_cast<float*>(&ig->m_red_extract_duration)[ctx.rax] = 150.0f;
+		}
 	}
 
 	void hooks::mid_ig_stamina(ellohim::mid_context& ctx)
 	{
 		if (g_settings.weapon.ig_stamina)
-			*reinterpret_cast<float*>(ctx.rdi + 0x0A8C) = 100.0f;
+		{
+			auto* kinsect = reinterpret_cast<KinsectData*>(ctx.rdi);
+			kinsect->m_stamina = 100.0f;
+		}
 	}
 
 	void hooks::mid_ig_jump(ellohim::mid_context& ctx)
 	{
 		if (g_settings.weapon.ig_jump)
-			*reinterpret_cast<uint32_t*>(ctx.rcx + 0x2428) = 0;
+		{
+			auto* air = reinterpret_cast<GlaiveAirActionData*>(ctx.rcx);
+			air->m_air_dash_count = 0;
+		}
 	}
 
 	void hooks::mid_bow_coatings(ellohim::mid_context& ctx)
 	{
 		if (g_settings.weapon.bow_coatings)
 		{
-			*reinterpret_cast<uint8_t*>(ctx.rcx + 0x45) = 12;
+			auto* bow = reinterpret_cast<BowData*>(ctx.rcx);
+			bow->m_coatings = 12;
 			ctx.rdx = 12;
 		}
 	}
@@ -347,7 +369,8 @@ namespace big
 		if (g_settings.weapon.bow_charge)
 		{
 			ctx.rdi = 3;
-			*reinterpret_cast<uint32_t*>(ctx.rbx + 0x23B4) = 3;
+			auto* bow = reinterpret_cast<BowData*>(ctx.rbx);
+			bow->m_charge_level = 3;
 		}
 	}
 
@@ -355,7 +378,8 @@ namespace big
 	{
 		if (g_settings.weapon.bowgun_no_reload)
 		{
-			auto* clip = reinterpret_cast<int32_t*>(ctx.rdi + ctx.rdx * 8 + 0x23A8);
+			auto* bg = reinterpret_cast<BowgunData*>(ctx.rdi);
+			auto* clip = reinterpret_cast<int32_t*>(&bg->m_active_clips[ctx.rdx]);
 			if (*clip <= 1)
 				*clip = 2;
 		}
@@ -365,7 +389,8 @@ namespace big
 	{
 		if (g_settings.weapon.inf_wyvern_blast)
 		{
-			*reinterpret_cast<uint32_t*>(ctx.rdi + 0x2848) = 3;
+			auto* hbg = reinterpret_cast<HeavyBowgunSpecialData*>(ctx.rdi);
+			hbg->m_wyvernblast_ammo = 3;
 			ctx.rcx = 3;
 		}
 	}
@@ -380,7 +405,8 @@ namespace big
 	{
 		if (g_settings.weapon.wyvernheart_rapidfire)
 		{
-			*reinterpret_cast<float*>(ctx.rbx + 0x09C4) = 0.0f;
+			auto* hbg = reinterpret_cast<HeavyBowgunSpecialData*>(ctx.rbx);
+			hbg->m_wyvernheart_timer = 0.0f;
 			ctx.xmm[0].f32[0] = 0.0f;
 		}
 	}
@@ -389,19 +415,20 @@ namespace big
 	{
 		if (g_settings.weapon.bowgun_no_recoil)
 		{
-			*reinterpret_cast<int32_t*>(ctx.rbx + 0x2368 + 0x00) = 4;
-			*reinterpret_cast<int32_t*>(ctx.rbx + 0x2368 + 0x04) = 4;
-			*reinterpret_cast<int32_t*>(ctx.rbx + 0x2368 + 0x08) = 3;
-			*reinterpret_cast<int32_t*>(ctx.rbx + 0x2368 + 0x0C) = 3;
-			*reinterpret_cast<int32_t*>(ctx.rbx + 0x2368 + 0x10) = 3;
-			*reinterpret_cast<int32_t*>(ctx.rbx + 0x2368 + 0x14) = 4;
-			*reinterpret_cast<int32_t*>(ctx.rbx + 0x2368 + 0x18) = 1;
-			*reinterpret_cast<int32_t*>(ctx.rbx + 0x2368 + 0x1C) = 3;
-			*reinterpret_cast<int32_t*>(ctx.rbx + 0x2368 + 0x20) = 1;
-			*reinterpret_cast<int32_t*>(ctx.rbx + 0x2368 + 0x24) = 1;
-			*reinterpret_cast<int32_t*>(ctx.rbx + 0x2368 + 0x28) = 1;
-			*reinterpret_cast<int32_t*>(ctx.rbx + 0x2368 + 0x2C) = 1;
-			*reinterpret_cast<int32_t*>(ctx.rbx + 0x2368 + 0x30) = 1;
+			auto* recoil = reinterpret_cast<BowgunRecoilData*>(ctx.rbx);
+			recoil->m_recoil_levels[0] = 4;
+			recoil->m_recoil_levels[1] = 4;
+			recoil->m_recoil_levels[2] = 3;
+			recoil->m_recoil_levels[3] = 3;
+			recoil->m_recoil_levels[4] = 3;
+			recoil->m_recoil_levels[5] = 4;
+			recoil->m_recoil_levels[6] = 1;
+			recoil->m_recoil_levels[7] = 3;
+			recoil->m_recoil_levels[8] = 1;
+			recoil->m_recoil_levels[9] = 1;
+			recoil->m_recoil_levels[10] = 1;
+			recoil->m_recoil_levels[11] = 1;
+			recoil->m_recoil_levels[12] = 1;
 		}
 	}
 
@@ -415,7 +442,8 @@ namespace big
 	{
 		if (g_settings.player.mount_reset)
 		{
-			*reinterpret_cast<float*>(ctx.rcx + 0x1C170) = 0.0f;
+			auto* mount = reinterpret_cast<MonsterMountData*>(ctx.rcx);
+			mount->m_mount_gauge = 0.0f;
 			ctx.xmm[0].f32[0] = 0.0f;
 		}
 	}
@@ -435,13 +463,19 @@ namespace big
 	void hooks::mid_lucky_voucher(ellohim::mid_context& ctx)
 	{
 		if (g_settings.player.inf_lucky_voucher)
-			*reinterpret_cast<uint32_t*>(ctx.rax + 0x269154) = 5;
+		{
+			auto* voucher = reinterpret_cast<QuestVoucherData*>(ctx.rax);
+			voucher->m_lucky_vouchers = 5;
+		}
 	}
 
 	void hooks::mid_load_cannon(ellohim::mid_context& ctx)
 	{
 		if (g_settings.player.cannon_always_loaded)
-			*reinterpret_cast<uint32_t*>(ctx.rdi + 0x0FB8) = 5;
+		{
+			auto* cannon = reinterpret_cast<SiegeCannonData*>(ctx.rdi);
+			cannon->m_cannon_balls = 5;
+		}
 	}
 
 	void hooks::mid_pet_mgr(ellohim::mid_context& ctx)
@@ -460,7 +494,8 @@ namespace big
 	{
 		if (g_settings.player.palico_gadget_cd)
 		{
-			*reinterpret_cast<float*>(ctx.rcx + 0xA340) = 0.0f;
+			auto* palico = reinterpret_cast<PalicoGadgetData*>(ctx.rcx);
+			palico->m_cooldown = 0.0f;
 			ctx.xmm[0].f32[0] = 0.0f;
 		}
 	}
@@ -468,35 +503,48 @@ namespace big
 	void hooks::mid_slinger_ammo(ellohim::mid_context& ctx)
 	{
 		if (g_settings.weapon.inf_slinger_ammo)
-			*reinterpret_cast<uint32_t*>(ctx.r9 + 0x7E20) = 99;
+		{
+			auto* slinger = reinterpret_cast<SlingerData*>(ctx.r9);
+			slinger->m_ammo = 99;
+		}
 	}
 
 	void hooks::mid_maxed_effect_set(ellohim::mid_context& ctx)
 	{
 		if (g_settings.player.maxed_armor_effect)
-			*reinterpret_cast<uint8_t*>(ctx.rax + 0x31) = 5;
+		{
+			auto* skill = reinterpret_cast<ArmorSkillLevelData*>(ctx.rax);
+			skill->m_skill_level = 5;
+		}
 	}
 
 	void hooks::mid_maxed_attribute(ellohim::mid_context& ctx)
 	{
 		if (g_settings.player.maxed_stat_set)
-			*reinterpret_cast<uint8_t*>(ctx.r12 + ctx.rsi + 0x31) = 7;
+		{
+			auto* skill = reinterpret_cast<ArmorSkillLevelData*>(ctx.r12 + ctx.rsi);
+			skill->m_skill_level = 7;
+		}
 	}
 
 	void hooks::mid_max_sharpness(ellohim::mid_context& ctx)
 	{
 		if (g_settings.player.max_sharpness)
-			*reinterpret_cast<uint32_t*>(ctx.rcx + 0x20F8) = 400;
+		{
+			auto* wpn = reinterpret_cast<WeaponSharpnessData*>(ctx.rcx);
+			wpn->m_sharpness = 400;
+		}
 	}
 
 	void hooks::mid_max_slot_armor(ellohim::mid_context& ctx)
 	{
 		if (g_settings.weapon.max_slot_armor)
 		{
-			*reinterpret_cast<uint8_t*>(ctx.r8 + 0x11) = 3;
-			*reinterpret_cast<uint8_t*>(ctx.r8 + 0x40) = 4;
-			*reinterpret_cast<uint8_t*>(ctx.r8 + 0x41) = 4;
-			*reinterpret_cast<uint8_t*>(ctx.r8 + 0x42) = 4;
+			auto* armor = reinterpret_cast<ArmorSlotData*>(ctx.r8);
+			armor->m_slot_count = 3;
+			armor->m_slot_levels[0] = 4;
+			armor->m_slot_levels[1] = 4;
+			armor->m_slot_levels[2] = 4;
 		}
 	}
 
@@ -504,10 +552,11 @@ namespace big
 	{
 		if (g_settings.weapon.max_slot_armor)
 		{
-			*reinterpret_cast<uint8_t*>(ctx.r14 + 0x33) = 3;
-			*reinterpret_cast<uint8_t*>(ctx.r14 + 0x34) = 4;
-			*reinterpret_cast<uint8_t*>(ctx.r14 + 0x35) = 4;
-			*reinterpret_cast<uint8_t*>(ctx.r14 + 0x36) = 4;
+			auto* armor = reinterpret_cast<ArmorSlotRanged*>(ctx.r14);
+			armor->m_slot_count = 3;
+			armor->m_slot_levels[0] = 4;
+			armor->m_slot_levels[1] = 4;
+			armor->m_slot_levels[2] = 4;
 		}
 	}
 
@@ -515,22 +564,29 @@ namespace big
 	{
 		if (g_settings.weapon.max_slot_armor)
 		{
-			*reinterpret_cast<uint8_t*>(ctx.rsi + 0x2D) = 3;
-			*reinterpret_cast<uint8_t*>(ctx.rsi + 0x2E) = 4;
-			*reinterpret_cast<uint8_t*>(ctx.rsi + 0x2F) = 4;
-			*reinterpret_cast<uint8_t*>(ctx.rsi + 0x30) = 4;
+			auto* armor = reinterpret_cast<ArmorSlotMelee*>(ctx.rsi);
+			armor->m_slot_count = 3;
+			armor->m_slot_levels[0] = 4;
+			armor->m_slot_levels[1] = 4;
+			armor->m_slot_levels[2] = 4;
 		}
 	}
 
 	void hooks::mid_scoutfly_max(ellohim::mid_context& ctx)
 	{
 		if (g_settings.player.scoutfly_max_level)
-			*reinterpret_cast<float*>(ctx.rax + ctx.rbx * 4 + 0x0F62A8) = 100.0f;
+		{
+			auto* sc = reinterpret_cast<ScoutflyData*>(ctx.rax);
+			sc->m_levels[ctx.rbx] = 100.0f;
+		}
 	}
 
 	void hooks::mid_scoutfly_level(ellohim::mid_context& ctx)
 	{
 		if (g_settings.player.scoutfly_max_level)
-			*reinterpret_cast<float*>(ctx.rax + ctx.rdi * 4 + 0x0F62A8) = 100.0f;
+		{
+			auto* sc = reinterpret_cast<ScoutflyData*>(ctx.rax);
+			sc->m_levels[ctx.rdi] = 100.0f;
+		}
 	}
 }

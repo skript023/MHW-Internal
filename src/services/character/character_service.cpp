@@ -3,26 +3,6 @@
 #include <cstring>
 #include <vector>
 
-namespace
-{
-	template <typename T>
-	static bool safe_read(uintptr_t addr, T* out)
-	{
-		if (addr < 0x10000)
-			return false;
-
-		__try
-		{
-			*out = *reinterpret_cast<const T*>(addr);
-			return true;
-		}
-		__except (EXCEPTION_EXECUTE_HANDLER)
-		{
-			return false;
-		}
-	}
-}
-
 namespace big
 {
 	void character_service::init_impl(Character chara)
@@ -116,27 +96,27 @@ namespace big
 		if (m_player_entity == 0)
 			return buffs;
 
-		uintptr_t buffs_addr = 0;
-		if (safe_read(m_player_entity + 0x7D20, &buffs_addr) && buffs_addr != 0)
-		{
-			auto check_buff = [&](uintptr_t offset, const char* name, float max_dur, bool is_buff, bool is_perm, uint32_t color) {
-				float val = 0.0f;
-				if (safe_read(buffs_addr + offset, &val) && val > 0.0f)
-				{
-					buffs.push_back({name, val, max_dur, is_buff, is_perm, color});
-				}
-			};
+		const auto* hunter = reinterpret_cast<const sHunter*>(m_player_entity);
+		const auto* buffs_ptr = hunter->m_buffs_ptr;
+		if (!buffs_ptr)
+			return buffs;
 
-			check_buff(0x6A0, "Might Seed", 180.0f, true, false, 0xFFFF8C00);
-			check_buff(0x6C4, "Demon Powder", 180.0f, true, false, 0xFFFF4500);
-			check_buff(0x6CC, "Demondrug", 1.0f, true, true, 0xFFDC143C);
-			check_buff(0x6B0, "Adamant Seed", 180.0f, true, false, 0xFF1E90FF);
-			check_buff(0x6C8, "Hardshell Powder", 180.0f, true, false, 0xFF4682B4);
-			check_buff(0x6D0, "Armorskin", 1.0f, true, true, 0xFF4169E1);
-			check_buff(0x690, "Dash Juice", 240.0f, true, false, 0xFF32CD32);
-			check_buff(0x6EC, "Cool Drink", 600.0f, true, false, 0xFF00CED1);
-			check_buff(0x6F0, "Hot Drink", 600.0f, true, false, 0xFFFF6347);
-		}
+		auto check_buff = [&](float val, const char* name, float max_dur, bool is_buff, bool is_perm, uint32_t color) {
+			if (val > 0.0f)
+			{
+				buffs.push_back({name, val, max_dur, is_buff, is_perm, color});
+			}
+		};
+
+		check_buff(buffs_ptr->m_might_seed, "Might Seed", 180.0f, true, false, 0xFFFF8C00);
+		check_buff(buffs_ptr->m_demon_powder, "Demon Powder", 180.0f, true, false, 0xFFFF4500);
+		check_buff(buffs_ptr->m_demondrug, "Demondrug", 1.0f, true, true, 0xFFDC143C);
+		check_buff(buffs_ptr->m_adamant_seed, "Adamant Seed", 180.0f, true, false, 0xFF1E90FF);
+		check_buff(buffs_ptr->m_hardshell_powder, "Hardshell Powder", 180.0f, true, false, 0xFF4682B4);
+		check_buff(buffs_ptr->m_armorskin, "Armorskin", 1.0f, true, true, 0xFF4169E1);
+		check_buff(buffs_ptr->m_dash_juice, "Dash Juice", 240.0f, true, false, 0xFF32CD32);
+		check_buff(buffs_ptr->m_cool_drink, "Cool Drink", 600.0f, true, false, 0xFF00CED1);
+		check_buff(buffs_ptr->m_hot_drink, "Hot Drink", 600.0f, true, false, 0xFFFF6347);
 
 		return buffs;
 	}
@@ -147,21 +127,17 @@ namespace big
 		if (m_player_entity == 0)
 			return mantles;
 
+		const auto* hunter = reinterpret_cast<const sHunter*>(m_player_entity);
+
 		// Mantle Slot 1
-		float dur0 = 0.0f;
-		float cd0 = 0.0f;
-		if (safe_read(m_player_entity + 0x0EFC, &dur0) && safe_read(m_player_entity + 0x0E0C, &cd0))
-		{
-			mantles.push_back({0, "Specialized Tool 1", dur0, 120.0f, cd0, 150.0f, dur0 > 0.0f, cd0 > 0.0f});
-		}
+		float dur0 = hunter->m_mantle_duration[0];
+		float cd0 = hunter->m_mantle_cooldown[0];
+		mantles.push_back({0, "Specialized Tool 1", dur0, 120.0f, cd0, 150.0f, dur0 > 0.0f, cd0 > 0.0f});
 
 		// Mantle Slot 2
-		float dur1 = 0.0f;
-		float cd1 = 0.0f;
-		if (safe_read(m_player_entity + 0x0EFC + 4, &dur1) && safe_read(m_player_entity + 0x0E0C + 4, &cd1))
-		{
-			mantles.push_back({1, "Specialized Tool 2", dur1, 120.0f, cd1, 150.0f, dur1 > 0.0f, cd1 > 0.0f});
-		}
+		float dur1 = hunter->m_mantle_duration[1];
+		float cd1 = hunter->m_mantle_cooldown[1];
+		mantles.push_back({1, "Specialized Tool 2", dur1, 120.0f, cd1, 150.0f, dur1 > 0.0f, cd1 > 0.0f});
 
 		return mantles;
 	}

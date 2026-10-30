@@ -7,48 +7,6 @@
 #include <algorithm>
 #include <cmath>
 
-namespace
-{
-	template <typename T>
-	static bool safe_read(uintptr_t addr, T* out)
-	{
-		if (addr < 0x10000 || out == nullptr)
-			return false;
-
-		__try
-		{
-			*out = *reinterpret_cast<const T*>(addr);
-			return true;
-		}
-		__except (EXCEPTION_EXECUTE_HANDLER)
-		{
-			return false;
-		}
-	}
-
-	static bool safe_read_string(uintptr_t addr, char* out, size_t max_len)
-	{
-		if (addr < 0x10000 || out == nullptr || max_len == 0)
-			return false;
-
-		__try
-		{
-			const char* src = reinterpret_cast<const char*>(addr);
-			size_t i = 0;
-			for (; i < max_len - 1 && src[i] != '\0'; ++i)
-			{
-				out[i] = src[i];
-			}
-			out[i] = '\0';
-			return i > 0;
-		}
-		__except (EXCEPTION_EXECUTE_HANDLER)
-		{
-			return false;
-		}
-	}
-}
-
 namespace big
 {
 	const char* party_service::get_weapon_name(int weapon_id)
@@ -109,6 +67,7 @@ namespace big
 		if (entity == local_entity)
 			return;
 
+		const auto* hunter = reinterpret_cast<const sHunter*>(entity);
 		auto now = std::chrono::steady_clock::now();
 
 		// Check if entity is already registered
@@ -120,9 +79,8 @@ namespace big
 				t.last_seen = now;
 				t.is_active = true;
 
-				// Update health if readable
-				float hp = 0.0f;
-				if (safe_read(entity + 0x7630, &hp) && hp >= 0.0f && hp <= 500.0f)
+				float hp = hunter->m_health;
+				if (hp >= 0.0f && hp <= 500.0f)
 				{
 					t.health = hp;
 				}
@@ -141,8 +99,8 @@ namespace big
 			info.is_active = true;
 			info.last_seen = now;
 
-			int w_id = 0;
-			if (safe_read(entity + 0x126E8, &w_id) && w_id >= 0 && w_id <= 13)
+			int w_id = hunter->m_weapon_id;
+			if (w_id >= 0 && w_id <= 13)
 			{
 				info.weapon_id = w_id;
 				info.weapon = get_weapon_name(w_id);
@@ -153,17 +111,16 @@ namespace big
 				info.weapon = get_weapon_name(info.weapon_id);
 			}
 
-			float hp = 150.0f;
-			if (safe_read(entity + 0x7630, &hp) && hp >= 0.0f && hp <= 500.0f)
+			float hp = hunter->m_health;
+			if (hp >= 0.0f && hp <= 500.0f)
 			{
 				info.health = hp;
-				info.max_health = 150.0f;
 			}
 			else
 			{
 				info.health = 150.0f;
-				info.max_health = 150.0f;
 			}
+			info.max_health = 150.0f;
 
 			info.name = "Teammate [P" + std::to_string(info.player_id + 1) + "]";
 			m_real_teammates.push_back(info);
@@ -265,149 +222,111 @@ namespace big
 		std::vector<teammate_info> active_teammates;
 		uintptr_t local_hunter = character_service::get_player_entity();
 
-		if (g_pointers && g_pointers->m_player_data)
+		if (g_pointers && g_pointers->m_player_data && *g_pointers->m_player_data)
 		{
-			uintptr_t p_data = 0;
-			safe_read(reinterpret_cast<uintptr_t>(g_pointers->m_player_data), &p_data);
+			sPlayerData* p_data = *g_pointers->m_player_data;
 
-			if (p_data >= 0x10000)
+			// Cache session hunter names from sSessionData if available
+			std::vector<std::string> session_names;
+			if (g_pointers->m_session_data && *g_pointers->m_session_data)
 			{
-				// Cache session hunter names from sSessionData if available
-				std::vector<std::string> session_names;
-				if (g_pointers->m_session_data)
+				sSessionData* s_session = *g_pointers->m_session_data;
+				if (s_session->m_member_array && s_session->m_member_count > 0)
 				{
-					uintptr_t s_session = 0;
-					safe_read(reinterpret_cast<uintptr_t>(g_pointers->m_session_data), &s_session);
-					if (s_session >= 0x10000)
+					uint32_t limit = std::min(s_session->m_member_count, 16u);
+					for (uint32_t s = 0; s < limit; ++s)
 					{
-						uint32_t s_count = 0;
-						safe_read(s_session + 0x53890, &s_count);
-						uintptr_t array_ptr = 0;
-						safe_read(s_session + 0x538A0, &array_ptr);
-						if (array_ptr >= 0x10000 && s_count > 0)
+						sSessionEntry* entry = s_session->m_member_array[s];
+						if (entry && entry->m_hunter_info)
 						{
-							uint32_t limit = std::min(s_count, 16u);
-							for (uint32_t s = 0; s < limit; ++s)
+							sHunterInfo* p_info = entry->m_hunter_info;
+							if (p_info->m_name[0] != '\0')
 							{
-								uintptr_t entry = 0;
-								safe_read(array_ptr + s * sizeof(uintptr_t), &entry);
-								if (entry >= 0x10000)
-								{
-									uintptr_t p_info = 0;
-									safe_read(entry + 0x28, &p_info);
-									if (p_info >= 0x10000)
-									{
-										char nbuf[32] = {0};
-										if (safe_read_string(p_info + 0x198, nbuf, sizeof(nbuf)) && nbuf[0] != '\0')
-										{
-											session_names.emplace_back(nbuf);
-										}
-										else if (safe_read_string(p_info + 0x50, nbuf, sizeof(nbuf)) && nbuf[0] != '\0')
-										{
-											session_names.emplace_back(nbuf);
-										}
-										else
-										{
-											session_names.emplace_back("");
-										}
-									}
-								}
+								session_names.emplace_back(p_info->m_name);
+							}
+							else if (p_info->m_name_short[0] != '\0')
+							{
+								session_names.emplace_back(p_info->m_name_short);
+							}
+							else
+							{
+								session_names.emplace_back("");
 							}
 						}
 					}
 				}
+			}
 
-				// Check active party slots 0..3 (0xA0 spacing)
-				for (int slot = 0; slot < 4; ++slot)
+			// Check active party slots 0..3
+			for (int slot = 0; slot < 4; ++slot)
+			{
+				sHunter* hunter = p_data->m_slots[slot].m_hunter;
+				if (!hunter || !hunter->m_position_component)
+					continue;
+
+				uintptr_t hunter_addr = reinterpret_cast<uintptr_t>(hunter);
+
+				// Determine if this is local player
+				if (local_hunter != 0)
 				{
-					uintptr_t slot_addr = p_data + 0x80 + slot * 0xA0;
-					uintptr_t hunter_ptr = 0;
-					safe_read(slot_addr, &hunter_ptr);
-
-					if (hunter_ptr < 0x10000)
+					if (hunter_addr == local_hunter)
 						continue;
-
-					// Verify vftable
-					uintptr_t vf = 0;
-					safe_read(hunter_ptr, &vf);
-					if (vf < 0x140000000)
-						continue;
-
-					// Read Position Component
-					uintptr_t pos_comp = 0;
-					safe_read(hunter_ptr + 0xDB0, &pos_comp);
-					if (pos_comp < 0x10000)
-						continue;
-
-					Vector3 pos{0.0f, 0.0f, 0.0f};
-					safe_read(pos_comp + 0x160, &pos);
-
-					if (std::isnan(pos.x) || std::isnan(pos.y) || std::isnan(pos.z))
-						continue;
-
-					// Determine if this is local player
-					if (local_hunter != 0)
-					{
-						if (hunter_ptr == local_hunter)
-							continue;
-					}
-					else
-					{
-						// Detect local player by position proximity if not yet cached
-						float ldx = pos.x - player_pos.x;
-						float ldy = pos.y - player_pos.y;
-						float ldz = pos.z - player_pos.z;
-						if (std::sqrt(ldx * ldx + ldy * ldy + ldz * ldz) < 1.0f)
-						{
-							character_service::set_player_entity(hunter_ptr);
-							local_hunter = hunter_ptr;
-							continue;
-						}
-					}
-
-					// Read Health
-					float hp = 150.0f;
-					safe_read(hunter_ptr + 0x7630, &hp);
-					float max_hp = 150.0f;
-					safe_read(hunter_ptr + 0x7634, &max_hp);
-					if (max_hp <= 1.0f || max_hp > 500.0f) max_hp = 150.0f;
-					if (hp < 0.0f) hp = 0.0f;
-					if (hp > max_hp) hp = max_hp;
-
-					// Read Weapon ID
-					int w_id = 0;
-					safe_read(hunter_ptr + 0x126E8, &w_id);
-					if (w_id < 0 || w_id > 13) w_id = 0;
-
-					teammate_info t;
-					t.player_id = slot;
-					t.entity_ptr = hunter_ptr;
-					t.position = pos;
-					t.health = hp;
-					t.max_health = max_hp;
-					t.weapon_id = w_id;
-					t.weapon = get_weapon_name(w_id);
-					t.is_local = false;
-					t.is_active = true;
-					t.last_seen = now;
-
-					float dx = pos.x - player_pos.x;
-					float dy = pos.y - player_pos.y;
-					float dz = pos.z - player_pos.z;
-					t.distance = std::sqrt(dx * dx + dy * dy + dz * dz) * 0.03048f;
-					if (t.distance < 0.1f) t.distance = 0.1f;
-
-					if (slot < static_cast<int>(session_names.size()) && !session_names[slot].empty())
-					{
-						t.name = session_names[slot];
-					}
-					else
-					{
-						t.name = "Teammate [P" + std::to_string(slot + 1) + "]";
-					}
-
-					active_teammates.push_back(std::move(t));
 				}
+				else
+				{
+					// Detect local player by position proximity if not yet cached
+					float ldx = hunter->m_position_component->m_position.x - player_pos.x;
+					float ldy = hunter->m_position_component->m_position.y - player_pos.y;
+					float ldz = hunter->m_position_component->m_position.z - player_pos.z;
+					if (std::sqrt(ldx * ldx + ldy * ldy + ldz * ldz) < 1.0f)
+					{
+						character_service::set_player_entity(hunter_addr);
+						local_hunter = hunter_addr;
+						continue;
+					}
+				}
+
+				Vector3 pos = hunter->m_position_component->m_position;
+				if (std::isnan(pos.x) || std::isnan(pos.y) || std::isnan(pos.z))
+					continue;
+
+				float hp = hunter->m_health;
+				float max_hp = hunter->m_max_health;
+				if (max_hp <= 1.0f || max_hp > 500.0f) max_hp = 150.0f;
+				if (hp < 0.0f) hp = 0.0f;
+				if (hp > max_hp) hp = max_hp;
+
+				int w_id = hunter->m_weapon_id;
+				if (w_id < 0 || w_id > 13) w_id = 0;
+
+				teammate_info t;
+				t.player_id = slot;
+				t.entity_ptr = hunter_addr;
+				t.position = pos;
+				t.health = hp;
+				t.max_health = max_hp;
+				t.weapon_id = w_id;
+				t.weapon = get_weapon_name(w_id);
+				t.is_local = false;
+				t.is_active = true;
+				t.last_seen = now;
+
+				float dx = pos.x - player_pos.x;
+				float dy = pos.y - player_pos.y;
+				float dz = pos.z - player_pos.z;
+				t.distance = std::sqrt(dx * dx + dy * dy + dz * dz) * 0.03048f;
+				if (t.distance < 0.1f) t.distance = 0.1f;
+
+				if (slot < static_cast<int>(session_names.size()) && !session_names[slot].empty())
+				{
+					t.name = session_names[slot];
+				}
+				else
+				{
+					t.name = "Teammate [P" + std::to_string(slot + 1) + "]";
+				}
+
+				active_teammates.push_back(std::move(t));
 			}
 		}
 

@@ -121,7 +121,7 @@ namespace big
 
 	private:
 		std::vector<MonsterEntry*> m_entry = {nullptr, nullptr, nullptr};
-		uintptr_t m_parts_manager[3] = {0, 0, 0};
+		MonsterPartsManager* m_parts_manager[3] = {nullptr, nullptr, nullptr};
 		float m_ailment_buildup[3][6] = {};
 	};
 }

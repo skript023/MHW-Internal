@@ -272,9 +272,18 @@ namespace big
 		char pad_0374[14];                 //0x374
 		float unk_388;                     //0x388
 		char pad_38C[212];                 //0x38C
-		float m_bow_charge_step;           //0x460
+		float m_bow_charge_step;           //0x460 (actually 0x45C)
+		char pad_0460[0x938 - (0x45C + sizeof(float))]; // 0x460 to 0x938
+		float m_walk_speed;                //0x0938
+		char pad_093C[0x0954 - (0x0938 + sizeof(float))]; // 0x093C to 0x0954
+		float m_room_run_speed;            //0x0954
+		float m_run_speed;                 //0x0958
+		char pad_095C[0x1574 - (0x0958 + sizeof(float))]; // 0x095C to 0x1574
+		float m_carve_speeds[4];           //0x1574
 	};
-	static_assert(sizeof(PlayerParams) == 0x460, "PlayerParams not properly sized.");
+	static_assert(offsetof(PlayerParams, m_walk_speed) == 0x0938);
+	static_assert(offsetof(PlayerParams, m_room_run_speed) == 0x0954);
+	static_assert(offsetof(PlayerParams, m_carve_speeds) == 0x1574);
 
 	class MonsterWorldStatus
 	{
@@ -333,4 +342,524 @@ namespace big
 		uint32_t m_weather;  //0x008C
 	};
 	static_assert(sizeof(World) == 0x90);
-}
+
+	// =========================================================================
+	// In-World Hunter Buffs Container
+	// =========================================================================
+	class HunterBuffContainer
+	{
+	public:
+		char pad_0000[0x690];                 // 0x0000
+		float m_dash_juice;                   // 0x0690
+		char pad_0694[0x6A0 - 0x694];         // 0x0694
+		float m_might_seed;                   // 0x06A0
+		char pad_06A4[0x6B0 - 0x6A4];         // 0x06A4
+		float m_adamant_seed;                 // 0x06B0
+		char pad_06B4[0x6C4 - 0x6B4];         // 0x06B4
+		float m_demon_powder;                 // 0x06C4
+		float m_hardshell_powder;             // 0x06C8
+		float m_demondrug;                    // 0x06CC
+		float m_armorskin;                    // 0x06D0
+		char pad_06D4[0x6EC - 0x6D4];         // 0x06D4
+		float m_cool_drink;                   // 0x06EC
+		float m_hot_drink;                    // 0x06F0
+	};
+	static_assert(offsetof(HunterBuffContainer, m_dash_juice) == 0x0690);
+	static_assert(offsetof(HunterBuffContainer, m_might_seed) == 0x06A0);
+	static_assert(offsetof(HunterBuffContainer, m_adamant_seed) == 0x06B0);
+	static_assert(offsetof(HunterBuffContainer, m_demon_powder) == 0x06C4);
+	static_assert(offsetof(HunterBuffContainer, m_hardshell_powder) == 0x06C8);
+	static_assert(offsetof(HunterBuffContainer, m_demondrug) == 0x06CC);
+	static_assert(offsetof(HunterBuffContainer, m_armorskin) == 0x06D0);
+	static_assert(offsetof(HunterBuffContainer, m_cool_drink) == 0x06EC);
+	static_assert(offsetof(HunterBuffContainer, m_hot_drink) == 0x06F0);
+
+	// =========================================================================
+	// In-World Hunter & Character Entity
+	// =========================================================================
+	class sHunter
+	{
+	public:
+		char pad_0000[3504];                  // 0x0000
+		PlayerPosition* m_position_component; // 0x0DB0
+		char pad_0DB8[84];                    // 0x0DB8
+		float m_mantle_cooldown[2];           // 0x0E0C
+		char pad_0E14[232];                   // 0x0E14
+		float m_mantle_duration[2];           // 0x0EFC
+		char pad_0F04[26412];                 // 0x0F04
+		float m_health;                       // 0x7630
+		float m_max_health;                   // 0x7634
+		char pad_7638[1768];                  // 0x7638
+		HunterBuffContainer* m_buffs_ptr;     // 0x7D20
+		char pad_7D28[43456];                 // 0x7D28
+		int32_t m_weapon_id;                  // 0x126E8
+	};
+	static_assert(offsetof(sHunter, m_position_component) == 0x0DB0);
+	static_assert(offsetof(sHunter, m_mantle_cooldown) == 0x0E0C);
+	static_assert(offsetof(sHunter, m_mantle_duration) == 0x0EFC);
+	static_assert(offsetof(sHunter, m_health) == 0x7630);
+	static_assert(offsetof(sHunter, m_max_health) == 0x7634);
+	static_assert(offsetof(sHunter, m_buffs_ptr) == 0x7D20);
+	static_assert(offsetof(sHunter, m_weapon_id) == 0x126E8);
+
+	// =========================================================================
+	// Player Data Manager (4 map slots)
+	// =========================================================================
+	class sPlayerSlot
+	{
+	public:
+		sHunter* m_hunter;                    // 0x0000
+		char pad_0008[0xA0 - sizeof(sHunter*)]; // 0x0008
+	};
+	static_assert(sizeof(sPlayerSlot) == 0xA0);
+
+	class sPlayerData
+	{
+	public:
+		char pad_0000[0x80];                  // 0x0000
+		sPlayerSlot m_slots[4];               // 0x0080: slots 0..3
+	};
+	static_assert(offsetof(sPlayerData, m_slots) == 0x80);
+
+	// =========================================================================
+	// Multiplayer Network Session
+	// =========================================================================
+	class sHunterInfo
+	{
+	public:
+		char pad_0000[0x14];                  // 0x0000
+		uint32_t m_game_build;                // 0x0014
+		char pad_0018[0x34 - 0x18];           // 0x0018
+		int32_t m_weapon_id;                  // 0x0034
+		char pad_0038[0x50 - 0x38];           // 0x0038
+		char m_name_short[32];                // 0x0050
+		char pad_0070[0x80 - 0x70];           // 0x0070
+		char m_palico_name[32];               // 0x0080
+		char pad_00A0[0x198 - 0xA0];          // 0x00A0
+		char m_name[32];                      // 0x0198
+	};
+	static_assert(offsetof(sHunterInfo, m_weapon_id) == 0x34);
+	static_assert(offsetof(sHunterInfo, m_name_short) == 0x50);
+	static_assert(offsetof(sHunterInfo, m_palico_name) == 0x80);
+	static_assert(offsetof(sHunterInfo, m_name) == 0x198);
+
+	struct sSessionEntry
+	{
+		char pad_0000[0x28];                  // 0x0000
+		sHunterInfo* m_hunter_info;           // 0x0028
+	};
+	static_assert(offsetof(sSessionEntry, m_hunter_info) == 0x28);
+
+	class sSessionData
+	{
+	public:
+		char pad_0000[0x53890];               // 0x00000
+		uint32_t m_member_count;              // 0x53890
+		char pad_53894[0x538A0 - 0x53894];    // 0x53894
+		sSessionEntry** m_member_array;       // 0x538A0
+	};
+	static_assert(offsetof(sSessionData, m_member_count) == 0x53890);
+	static_assert(offsetof(sSessionData, m_member_array) == 0x538A0);
+
+	// =========================================================================
+	// Camera & View Projection
+	// =========================================================================
+	struct Matrix4x4
+	{
+		float m[16];
+	};
+	static_assert(sizeof(Matrix4x4) == 64);
+
+	class sCamera
+	{
+	public:
+		char pad_0000[0xF0];                  // 0x0000
+		Matrix4x4 m_view_matrix;              // 0x00F0
+		Matrix4x4 m_proj_matrix;              // 0x0130
+	};
+	static_assert(offsetof(sCamera, m_view_matrix) == 0xF0);
+	static_assert(offsetof(sCamera, m_proj_matrix) == 0x130);
+
+	// =========================================================================
+	// Weapon Specific Structures
+	// =========================================================================
+	struct BowgunMods
+	{
+		uint32_t m_recoil;                    // 0x00
+		uint32_t m_reload;                    // 0x04
+		uint32_t m_deviation;                 // 0x08
+		uint32_t m_close_range;               // 0x0C
+		uint32_t m_ranged_atk_up;             // 0x10
+		uint32_t m_shield;                    // 0x14
+		uint32_t m_special_scope;             // 0x18
+		uint32_t m_evading_reload;            // 0x1C
+		uint32_t m_wyvernheart_mod;           // 0x20
+		uint32_t m_wyvernsnipe_mod;           // 0x24
+		uint32_t m_wyvernblast_mod;           // 0x28
+		uint32_t m_power_barrel;              // 0x2C
+		uint32_t m_long_barrel;               // 0x30
+	};
+	static_assert(sizeof(BowgunMods) == 0x34);
+
+	class BowgunAmmoParams
+	{
+	public:
+		char pad_0000[0x13874];               // 0x0000
+		int32_t m_ammo_type_1;                // 0x13874
+		int32_t m_ammo_type_2;                // 0x13878
+		int32_t m_ammo_type_3;                // 0x1387C
+	};
+	static_assert(offsetof(BowgunAmmoParams, m_ammo_type_1) == 0x13874);
+	static_assert(offsetof(BowgunAmmoParams, m_ammo_type_2) == 0x13878);
+	static_assert(offsetof(BowgunAmmoParams, m_ammo_type_3) == 0x1387C);
+
+	class BowgunData
+	{
+	public:
+		char pad_0000[2480];                  // 0x0000
+		BowgunAmmoParams* m_param_ptr;        // 0x09B0 (2480)
+		char pad_09B8[0x2348 - 0x09B8];       // 0x09B8
+		BowgunMods m_mods;                    // 0x2348
+		char pad_237C[0x23A8 - (0x2348 + sizeof(BowgunMods))]; // 0x237C
+		int64_t m_active_clips[13];           // 0x23A8
+		char pad_2410[0x2578 - (0x23A8 + sizeof(int64_t) * 13)]; // 0x2410
+		int64_t m_ammo_clip[13];              // 0x2578
+	};
+	static_assert(offsetof(BowgunData, m_mods) == 0x2348);
+	static_assert(offsetof(BowgunData, m_active_clips) == 0x23A8);
+	static_assert(offsetof(BowgunData, m_ammo_clip) == 0x2578);
+
+	class InsectGlaiveData
+	{
+	public:
+		char pad_0000[0x2368];                // 0x0000
+		float m_red_extract_duration;         // 0x2368
+		float m_white_extract_duration;       // 0x236C
+		uint32_t m_triple_buff_level;         // 0x2370
+		float m_orange_extract_duration;      // 0x2374
+	};
+	static_assert(offsetof(InsectGlaiveData, m_red_extract_duration) == 0x2368);
+	static_assert(offsetof(InsectGlaiveData, m_triple_buff_level) == 0x2370);
+
+	// =========================================================================
+	// Inventory Item Slot
+	// =========================================================================
+	class ItemSlot
+	{
+	public:
+		char pad_0000[8];                     // 0x0000
+		uint32_t m_item_id;                   // 0x0008
+	};
+	static_assert(offsetof(ItemSlot, m_item_id) == 0x08);
+
+
+	// =========================================================================
+	// Weapon States & Action Controllers (Mid-Hook Structures)
+	// =========================================================================
+	class GreatswordData
+	{
+	public:
+		char pad_0000[0x2350];
+		float m_charge_timer;          // 0x2350
+		char pad_2354[4];
+		uint32_t m_charge_level;       // 0x2358
+	};
+	static_assert(offsetof(GreatswordData, m_charge_timer) == 0x2350);
+	static_assert(offsetof(GreatswordData, m_charge_level) == 0x2358);
+
+	class LongswordData
+	{
+	public:
+		char pad_0000[0x2368];
+		float m_spirit_gauge;          // 0x2368
+		char pad_236C[4];
+		uint32_t m_spirit_level;       // 0x2370
+		float m_spirit_duration;       // 0x2374
+	};
+	static_assert(offsetof(LongswordData, m_spirit_gauge) == 0x2368);
+	static_assert(offsetof(LongswordData, m_spirit_level) == 0x2370);
+	static_assert(offsetof(LongswordData, m_spirit_duration) == 0x2374);
+
+	class DualBladesData
+	{
+	public:
+		char pad_0000[0x2368];
+		uint8_t pad_2368;
+		uint8_t m_is_demon_mode;       // 0x2369
+		char pad_236A[2];
+		float m_demon_gauge;           // 0x236C
+	};
+	static_assert(offsetof(DualBladesData, m_is_demon_mode) == 0x2369);
+	static_assert(offsetof(DualBladesData, m_demon_gauge) == 0x236C);
+
+	class SwitchAxeData
+	{
+	public:
+		char pad_0000[0x2350];
+		float m_sword_gauge;           // 0x2350
+	};
+	static_assert(offsetof(SwitchAxeData, m_sword_gauge) == 0x2350);
+
+	class GunlanceData
+	{
+	public:
+		char pad_0000[0x2368];
+		uint32_t m_max_ammo;           // 0x2368
+		uint32_t m_ammo;               // 0x236C
+		char pad_2370[8];
+		uint32_t m_wyrmstake;          // 0x2378
+	};
+	static_assert(offsetof(GunlanceData, m_max_ammo) == 0x2368);
+	static_assert(offsetof(GunlanceData, m_ammo) == 0x236C);
+	static_assert(offsetof(GunlanceData, m_wyrmstake) == 0x2378);
+
+	class ChargeBladeData
+	{
+	public:
+		char pad_0000[0x2372];
+		uint16_t m_phials_charge;      // 0x2372
+		uint32_t m_phials_count;       // 0x2374
+		float m_shield_charge_timer;   // 0x2378
+		float m_sword_charge_timer;    // 0x237C
+	};
+	static_assert(offsetof(ChargeBladeData, m_phials_charge) == 0x2372);
+	static_assert(offsetof(ChargeBladeData, m_phials_count) == 0x2374);
+	static_assert(offsetof(ChargeBladeData, m_shield_charge_timer) == 0x2378);
+	static_assert(offsetof(ChargeBladeData, m_sword_charge_timer) == 0x237C);
+
+	class BowData
+	{
+	public:
+		char pad_0000[0x45];
+		uint8_t m_coatings;            // 0x0045
+		char pad_0046[0x23B4 - 0x0046];
+		uint32_t m_charge_level;       // 0x23B4
+	};
+	static_assert(offsetof(BowData, m_coatings) == 0x0045);
+	static_assert(offsetof(BowData, m_charge_level) == 0x23B4);
+
+	class HeavyBowgunSpecialData
+	{
+	public:
+		char pad_0000[0x09C4];
+		float m_wyvernheart_timer;     // 0x09C4
+		char pad_09C8[0x2848 - 0x09C8];
+		uint32_t m_wyvernblast_ammo;   // 0x2848
+	};
+	static_assert(offsetof(HeavyBowgunSpecialData, m_wyvernheart_timer) == 0x09C4);
+	static_assert(offsetof(HeavyBowgunSpecialData, m_wyvernblast_ammo) == 0x2848);
+
+	class PalicoGadgetData
+	{
+	public:
+		char pad_0000[0xA340];
+		float m_cooldown;              // 0xA340
+	};
+	static_assert(offsetof(PalicoGadgetData, m_cooldown) == 0xA340);
+
+	class SlingerData
+	{
+	public:
+		char pad_0000[0x7E20];
+		uint32_t m_ammo;               // 0x7E20
+	};
+	static_assert(offsetof(SlingerData, m_ammo) == 0x7E20);
+
+	class ArmorSlotData
+	{
+	public:
+		char pad_0000[0x11];
+		uint8_t m_slot_count;          // 0x0011
+		char pad_0012[0x40 - 0x0012];
+		uint8_t m_slot_levels[3];      // 0x0040
+	};
+	static_assert(offsetof(ArmorSlotData, m_slot_count) == 0x0011);
+	static_assert(offsetof(ArmorSlotData, m_slot_levels) == 0x0040);
+
+	class ArmorSlotMelee
+	{
+	public:
+		char pad_0000[0x2D];
+		uint8_t m_slot_count;          // 0x002D
+		uint8_t m_slot_levels[3];      // 0x002E
+	};
+	static_assert(offsetof(ArmorSlotMelee, m_slot_count) == 0x002D);
+	static_assert(offsetof(ArmorSlotMelee, m_slot_levels) == 0x002E);
+
+	class ArmorSlotRanged
+	{
+	public:
+		char pad_0000[0x33];
+		uint8_t m_slot_count;          // 0x0033
+		uint8_t m_slot_levels[3];      // 0x0034
+	};
+	static_assert(offsetof(ArmorSlotRanged, m_slot_count) == 0x0033);
+	static_assert(offsetof(ArmorSlotRanged, m_slot_levels) == 0x0034);
+
+
+	class WeaponSharpnessData
+
+	{
+
+	public:
+
+		char pad_0000[0x20F8];
+
+		uint32_t m_sharpness;          // 0x20F8
+
+	};
+
+	static_assert(offsetof(WeaponSharpnessData, m_sharpness) == 0x20F8);
+
+
+
+	class SiegeCannonData
+
+	{
+
+	public:
+
+		char pad_0000[0x0FB8];
+
+		uint32_t m_cannon_balls;       // 0x0FB8
+
+	};
+
+	static_assert(offsetof(SiegeCannonData, m_cannon_balls) == 0x0FB8);
+
+
+
+	class MonsterMountData
+
+	{
+
+	public:
+
+		char pad_0000[0x1C170];
+
+		float m_mount_gauge;           // 0x1C170
+
+	};
+
+	static_assert(offsetof(MonsterMountData, m_mount_gauge) == 0x1C170);
+
+
+
+	class QuestVoucherData
+
+	{
+
+	public:
+
+		char pad_0000[0x269154];
+
+		uint32_t m_lucky_vouchers;     // 0x269154
+
+	};
+
+	static_assert(offsetof(QuestVoucherData, m_lucky_vouchers) == 0x269154);
+
+
+
+	class ArmorSkillLevelData
+
+	{
+
+	public:
+
+		char pad_0000[0x31];
+
+		uint8_t m_skill_level;         // 0x0031
+
+	};
+
+	static_assert(offsetof(ArmorSkillLevelData, m_skill_level) == 0x0031);
+
+
+
+	class ScoutflyData
+
+	{
+
+	public:
+
+		char pad_0000[0x0F62A8];
+
+		float m_levels[6];             // 0x0F62A8
+
+	};
+
+	static_assert(offsetof(ScoutflyData, m_levels) == 0x0F62A8);
+
+
+
+	class KinsectData
+
+	{
+
+	public:
+
+		char pad_0000[0x0A8C];
+
+		float m_stamina;               // 0x0A8C
+
+	};
+
+	static_assert(offsetof(KinsectData, m_stamina) == 0x0A8C);
+
+
+
+	class GlaiveAirActionData
+
+	{
+
+	public:
+
+		char pad_0000[0x2428];
+
+		uint32_t m_air_dash_count;     // 0x2428
+
+	};
+
+	static_assert(offsetof(GlaiveAirActionData, m_air_dash_count) == 0x2428);
+
+
+
+	class BowgunRecoilData
+
+	{
+
+	public:
+
+		char pad_0000[0x2368];
+
+		int32_t m_recoil_levels[13];   // 0x2368
+
+	};
+
+	static_assert(offsetof(BowgunRecoilData, m_recoil_levels) == 0x2368);
+
+
+	class MonsterPartEntry
+	{
+	public:
+		char pad_0000[16];                    // 0x0000
+		float m_current_hp;                   // 0x0010
+		float m_max_hp;                       // 0x0014
+		uint32_t m_break_count;               // 0x0018
+	};
+	static_assert(offsetof(MonsterPartEntry, m_current_hp) == 0x10);
+	static_assert(offsetof(MonsterPartEntry, m_max_hp) == 0x14);
+	static_assert(offsetof(MonsterPartEntry, m_break_count) == 0x18);
+
+	class MonsterPartsManager
+	{
+	public:
+		char pad_0000[16];                    // 0x0000
+		uint32_t m_part_count;                // 0x0010
+		char pad_0014[12];                    // 0x0014
+		MonsterPartEntry** m_part_entries;    // 0x0020
+	};
+	static_assert(offsetof(MonsterPartsManager, m_part_count) == 0x10);
+	static_assert(offsetof(MonsterPartsManager, m_part_entries) == 0x20);
+}

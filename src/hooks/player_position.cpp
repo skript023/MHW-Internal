@@ -2,6 +2,7 @@
 
 #include <services/character/character_service.hpp>
 #include <services/party/party_service.hpp>
+#include <mhw/fwddec.hpp>
 
 namespace big
 {
@@ -9,17 +10,18 @@ namespace big
 	{
 		if (a1)
 		{
-			auto rax = *(PlayerPosition**)(a1 + 0xDB0);
+			auto* hunter = reinterpret_cast<sHunter*>(a1);
+			auto* pos_comp = hunter->m_position_component;
 
 			if (character_service::get_player_entity() == 0 || character_service::get_player_entity() == static_cast<uintptr_t>(a1))
 			{
-				character_service::init(rax);
+				character_service::init(pos_comp);
 				character_service::set_player_entity(static_cast<uintptr_t>(a1));
 			}
 
-			if (rax)
+			if (pos_comp)
 			{
-				party_service::register_player_entity(static_cast<uintptr_t>(a1), rax->m_position);
+				party_service::register_player_entity(static_cast<uintptr_t>(a1), pos_comp->m_position);
 			}
 		}
 

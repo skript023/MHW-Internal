@@ -25,30 +25,23 @@ namespace big
 		if (!g_pointers || !g_pointers->m_player_params || !*g_pointers->m_player_params)
 			return;
 
-		auto pl = reinterpret_cast<uintptr_t>(*g_pointers->m_player_params);
-		if (!pl)
-			return;
-
-		// pl + 0x938 = Walk Speed, pl + 0x954 = Room/Hub Run Speed, pl + 0x958 = Run Speed
-		auto room_run_speed = reinterpret_cast<float*>(pl + 0x954);
-		auto walk_speed = reinterpret_cast<float*>(pl + 0x938);
-
+		PlayerParams* pl = *g_pointers->m_player_params;
 		if (enable)
 		{
 			if (!m_hub_speed_applied)
 			{
-				m_orig_room_run_speed = *room_run_speed > 0.1f ? *room_run_speed : 1.0f;
+				m_orig_room_run_speed = pl->m_room_run_speed > 0.1f ? pl->m_room_run_speed : 1.0f;
 				m_hub_speed_applied = true;
 			}
-			*room_run_speed = mult;
+			pl->m_room_run_speed = mult;
 			// Speed up walk slightly so staircases and steep terrain in Astera/Seliana do not cause sudden stops
-			if (*walk_speed < 1.35f)
-				*walk_speed = 1.35f;
+			if (pl->m_walk_speed < 1.35f)
+				pl->m_walk_speed = 1.35f;
 		}
 		else if (m_hub_speed_applied)
 		{
-			*room_run_speed = m_orig_room_run_speed;
-			*walk_speed = 1.0f;
+			pl->m_room_run_speed = m_orig_room_run_speed;
+			pl->m_walk_speed = 1.0f;
 			m_hub_speed_applied = false;
 		}
 	}
@@ -58,37 +51,28 @@ namespace big
 		if (!g_pointers || !g_pointers->m_player_params || !*g_pointers->m_player_params)
 			return;
 
-		auto pl = reinterpret_cast<uintptr_t>(*g_pointers->m_player_params);
-		if (!pl)
-			return;
-
-		// pl + 0x1574, 0x1578, 0x157C, 0x1580 = Carve phase animation speed multipliers
-		auto carve_1 = reinterpret_cast<float*>(pl + 0x1574);
-		auto carve_2 = reinterpret_cast<float*>(pl + 0x1578);
-		auto carve_3 = reinterpret_cast<float*>(pl + 0x157C);
-		auto carve_4 = reinterpret_cast<float*>(pl + 0x1580);
-
+		PlayerParams* pl = *g_pointers->m_player_params;
 		if (enable)
 		{
 			if (!m_carve_speed_applied)
 			{
-				m_orig_carve_speeds[0] = *carve_1 > 0.05f ? *carve_1 : 1.0f;
-				m_orig_carve_speeds[1] = *carve_2 > 0.05f ? *carve_2 : 1.0f;
-				m_orig_carve_speeds[2] = *carve_3 > 0.05f ? *carve_3 : 1.0f;
-				m_orig_carve_speeds[3] = *carve_4 > 0.05f ? *carve_4 : 1.0f;
+				m_orig_carve_speeds[0] = pl->m_carve_speeds[0] > 0.05f ? pl->m_carve_speeds[0] : 1.0f;
+				m_orig_carve_speeds[1] = pl->m_carve_speeds[1] > 0.05f ? pl->m_carve_speeds[1] : 1.0f;
+				m_orig_carve_speeds[2] = pl->m_carve_speeds[2] > 0.05f ? pl->m_carve_speeds[2] : 1.0f;
+				m_orig_carve_speeds[3] = pl->m_carve_speeds[3] > 0.05f ? pl->m_carve_speeds[3] : 1.0f;
 				m_carve_speed_applied = true;
 			}
-			*carve_1 = mult;
-			*carve_2 = mult;
-			*carve_3 = mult;
-			*carve_4 = mult;
+			pl->m_carve_speeds[0] = mult;
+			pl->m_carve_speeds[1] = mult;
+			pl->m_carve_speeds[2] = mult;
+			pl->m_carve_speeds[3] = mult;
 		}
 		else if (m_carve_speed_applied)
 		{
-			*carve_1 = m_orig_carve_speeds[0];
-			*carve_2 = m_orig_carve_speeds[1];
-			*carve_3 = m_orig_carve_speeds[2];
-			*carve_4 = m_orig_carve_speeds[3];
+			pl->m_carve_speeds[0] = m_orig_carve_speeds[0];
+			pl->m_carve_speeds[1] = m_orig_carve_speeds[1];
+			pl->m_carve_speeds[2] = m_orig_carve_speeds[2];
+			pl->m_carve_speeds[3] = m_orig_carve_speeds[3];
 			m_carve_speed_applied = false;
 		}
 	}

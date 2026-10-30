@@ -1,3 +1,4 @@
+#include <mhw/fwddec.hpp>
 #include "player.hpp"
 
 #include "hook_manager.hpp"
@@ -43,8 +44,7 @@ namespace big
 	{
 		if (g_pointers->m_player_stat && *g_pointers->m_player_stat)
 		{
-			auto addr = (*g_pointers->m_player_stat);
-			*(float*)((uintptr_t)addr + 0x7A8) = g_settings->player.critical_boost;
+			(*g_pointers->m_player_stat)->m_critical_boost = g_settings->player.critical_boost;
 		}
 	}
 

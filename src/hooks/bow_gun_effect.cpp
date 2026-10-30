@@ -1,45 +1,45 @@
 #include "hooking.hpp"
+#include <mhw/fwddec.hpp>
 
 namespace big
 {
 	int __fastcall hooks::bow_gun_effect(__int64 a1)
 	{
-		auto rbx = a1;
-		auto rsi = *(intptr_t*)(rbx + 2480);
-		int64_t eax;
-
-		*(uint32_t*)(rbx + 0x2348 + 0x0) = 4;  // recoil
-		*(uint32_t*)(rbx + 0x2348 + 0x4) = 4;  // reload
-		*(uint32_t*)(rbx + 0x2348 + 0x8) = 3;  // deviation
-		*(uint32_t*)(rbx + 0x2348 + 0xC) = 3;  // close-range
-		*(uint32_t*)(rbx + 0x2348 + 0x10) = 3; // ranged atk up
-		*(uint32_t*)(rbx + 0x2348 + 0x14) = 4; // shield
-		*(uint32_t*)(rbx + 0x2348 + 0x18) = 1; // special scope
-		*(uint32_t*)(rbx + 0x2348 + 0x1C) = 3; // evading reload
-		*(uint32_t*)(rbx + 0x2348 + 0x20) = 1; // wyvernheart mod
-		*(uint32_t*)(rbx + 0x2348 + 0x24) = 1; // wyvernsnipe
-		*(uint32_t*)(rbx + 0x2348 + 0x28) = 1; // wyvernblast
-		*(uint32_t*)(rbx + 0x2348 + 0x2C) = 1; // power
-		*(uint32_t*)(rbx + 0x2348 + 0x30) = 1; // long
-
-		eax = *(int64_t*)(rsi + 0x13874);
-		if (eax <= 12)
+		auto* bowgun = reinterpret_cast<BowgunData*>(a1);
+		if (bowgun)
 		{
-			*(int64_t*)(rbx + eax * 4 + 0x2578) -= 1;
+			bowgun->m_mods.m_recoil = 4;
+			bowgun->m_mods.m_reload = 4;
+			bowgun->m_mods.m_deviation = 3;
+			bowgun->m_mods.m_close_range = 3;
+			bowgun->m_mods.m_ranged_atk_up = 3;
+			bowgun->m_mods.m_shield = 4;
+			bowgun->m_mods.m_special_scope = 1;
+			bowgun->m_mods.m_evading_reload = 3;
+			bowgun->m_mods.m_wyvernheart_mod = 1;
+			bowgun->m_mods.m_wyvernsnipe_mod = 1;
+			bowgun->m_mods.m_wyvernblast_mod = 1;
+			bowgun->m_mods.m_power_barrel = 1;
+			bowgun->m_mods.m_long_barrel = 1;
+
+			auto* ammo_params = bowgun->m_param_ptr;
+			if (ammo_params)
+			{
+				if (ammo_params->m_ammo_type_1 <= 12)
+				{
+					bowgun->m_ammo_clip[ammo_params->m_ammo_type_1] -= 1;
+				}
+				if (ammo_params->m_ammo_type_2 <= 12)
+				{
+					bowgun->m_ammo_clip[ammo_params->m_ammo_type_2] -= 1;
+				}
+				if (ammo_params->m_ammo_type_3 <= 12)
+				{
+					bowgun->m_ammo_clip[ammo_params->m_ammo_type_3] -= 1;
+				}
+			}
 		}
 
-		eax = *(int64_t*)(rsi + 0x13878);
-		if (eax <= 12)
-		{
-			*(int64_t*)(rbx + eax * 4 + 0x2578) -= 1;
-		}
-
-		eax = *(int64_t*)(rsi + 0x1387C);
-		if (eax <= 12)
-		{
-			*(int64_t*)(rbx + eax * 4 + 0x2578) -= 1;
-		}
-
-		return base_hook::get_original<hooks::bow_gun_effect>()(rbx);
+		return base_hook::get_original<hooks::bow_gun_effect>()(a1);
 	}
 }
