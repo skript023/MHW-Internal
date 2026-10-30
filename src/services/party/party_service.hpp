@@ -91,7 +91,7 @@ namespace big
 	private:
 		std::vector<teammate_info> m_real_teammates;
 		std::vector<teammate_info> m_preview_teammates;
-		bool m_preview_mode = true;
+		bool m_preview_mode = false;
 		std::chrono::steady_clock::time_point m_last_update{};
 	};
 }

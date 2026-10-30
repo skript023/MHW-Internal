@@ -265,6 +265,10 @@ namespace big
 			m_monster_data = ptr.add(3).rip().as<decltype(m_monster_data)>();
 		});
 
+		main_batch.add("Camera", "48 89 1D ? ? ? ? 88 4A FF 48 8D 92", [this](memory::handle ptr) {
+			m_camera = ptr.add(3).rip().as<void**>();
+		});
+
 		main_batch.add("Item Caps", "48 8B 0D ? ? ? ? 48 85 C9 74 ? E8 ? ? ? ? 48 85 C0 74 ? 0F BE 40 12", [this](memory::handle ptr) {
 			//m_character_ptr = ptr.add(3).rip().as<void*>();
 		});

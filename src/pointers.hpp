@@ -98,6 +98,7 @@ namespace big
 		void* m_session_data{};
 		void* m_gathering_data{};
 		Monster** m_monster_data{};
+		void** m_camera{};
 		void* m_current_player_name{};
 		void* m_monster{};
 		void* m_player_buff{};

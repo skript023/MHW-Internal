@@ -6,6 +6,7 @@
 #include <services/damage/damage_service.hpp>
 #include <services/drop/drop_service.hpp>
 #include <services/party/party_service.hpp>
+#include <services/camera/camera_service.hpp>
 #include <astra/host/canvas.hpp>
 #include <menu_settings.hpp>
 #include <fonts/icon_list.hpp>
@@ -962,77 +963,84 @@ namespace big
 			{
 				for (const auto& d : drops)
 				{
-					float dx = d.position.x - player_pos.x;
-					float dy = d.position.y - player_pos.y;
-					float dz = d.position.z - player_pos.z;
+					Vector2 screen_bot;
+					if (!camera_service::world_to_screen(d.position, screen_bot))
+						continue;
 
-					float dist = d.distance > 0.01f ? d.distance : (std::sqrt(dx * dx + dy * dy + dz * dz) * 0.03048f);
+					if (screen_bot.x < -100.0f || screen_bot.x > screen_w + 100.0f ||
+					    screen_bot.y < -100.0f || screen_bot.y > screen_h + 100.0f)
+						continue;
 
-					float dot_f = dx * fx + dz * fz;
-					float dot_r = dx * rx + dz * rz;
-
-					if (dot_f > 0.5f)
+					Vector2 screen_top;
+					float beam_h = 240.0f;
+					if (camera_service::world_to_screen(d.position + Vector3(0.0f, 350.0f, 0.0f), screen_top) && screen_top.y < screen_bot.y)
 					{
-						float sx = viewport->WorkPos.x + screen_w * 0.5f + (dot_r / dot_f) * fov_scale;
-						float sy = viewport->WorkPos.y + screen_h * 0.55f - (dy / dot_f) * fov_scale;
-
-						if (sx >= -80.0f && sx <= screen_w + 80.0f && sy >= -50.0f && sy <= screen_h + 100.0f)
-						{
-							float beam_h = std::clamp(320.0f * (18.0f / (dist + 4.0f)), 100.0f, 420.0f);
-							float beam_half_w = std::clamp(14.0f * (15.0f / (dist + 5.0f)), 6.0f, 22.0f);
-
-							ImU32 col_core = 0xFFFFFFFF;
-							ImU32 col_glow;
-							ImU32 col_top;
-
-							if (d.is_guiding_lands)
-							{
-								col_glow = 0xE000D7FF; // Sacred Gold
-								col_top = 0x0000D7FF;
-							}
-							else if (d.name.find("Slinger") != std::string::npos || d.name.find("Ammo") != std::string::npos)
-							{
-								col_glow = 0xE0FFE500; // Scoutfly Turquoise Cyan
-								col_top = 0x00FFE500;
-							}
-							else
-							{
-								col_glow = 0xE0FFB0E0; // Diamond Light Purple
-								col_top = 0x00FFB0E0;
-							}
-
-							float pulse = 6.0f + 3.0f * std::sin(now_time * 5.0f + static_cast<float>(d.id));
-							bg_draw->AddCircle(ImVec2(sx, sy), pulse, col_glow, 24, 2.0f);
-							bg_draw->AddCircle(ImVec2(sx, sy), pulse * 1.5f, (col_glow & 0x00FFFFFF) | 0x50000000, 24, 1.0f);
-							bg_draw->AddCircleFilled(ImVec2(sx, sy), 4.0f, col_core, 16);
-
-							bg_draw->AddRectFilledMultiColor(
-								ImVec2(sx - beam_half_w, sy - beam_h), ImVec2(sx + beam_half_w, sy),
-								col_top, col_top, col_glow, col_glow
-							);
-
-							bg_draw->AddRectFilledMultiColor(
-								ImVec2(sx - 2.5f, sy - beam_h), ImVec2(sx + 2.5f, sy),
-								0x30FFFFFF, 0x30FFFFFF, col_core, col_core
-							);
-
-							std::string drop_tag = std::format(ICON_FA_GEM " {} ({:.1f}m | {:.0f}s)", d.name, dist, d.time_remaining);
-							ImVec2 tag_sz = ImGui::CalcTextSize(drop_tag.c_str());
-							ImVec2 tag_pos(sx - tag_sz.x * 0.5f, sy - beam_h - 22.0f);
-
-							bg_draw->AddRectFilled(
-								ImVec2(tag_pos.x - 6.0f, tag_pos.y - 3.0f),
-								ImVec2(tag_pos.x + tag_sz.x + 6.0f, tag_pos.y + tag_sz.y + 3.0f),
-								mhw_gui::COLOR_BG_DARK, 0.0f
-							);
-							bg_draw->AddRect(
-								ImVec2(tag_pos.x - 6.0f, tag_pos.y - 3.0f),
-								ImVec2(tag_pos.x + tag_sz.x + 6.0f, tag_pos.y + tag_sz.y + 3.0f),
-								mhw_gui::COLOR_BORDER_BRONZE, 0.0f, 0, 1.0f
-							);
-							bg_draw->AddText(tag_pos, col_core, drop_tag.c_str());
-						}
+						beam_h = std::clamp(screen_bot.y - screen_top.y, 40.0f, screen_h * 0.85f);
 					}
+
+					float sx = screen_bot.x;
+					float sy = screen_bot.y;
+					float beam_half_w = std::clamp(beam_h * 0.055f, 4.0f, 22.0f);
+
+					float dist = d.distance;
+					if (dist <= 0.01f)
+					{
+						float dx = d.position.x - player_pos.x;
+						float dy = d.position.y - player_pos.y;
+						float dz = d.position.z - player_pos.z;
+						dist = std::sqrt(dx * dx + dy * dy + dz * dz) * 0.03048f;
+					}
+
+					ImU32 col_core = 0xFFFFFFFF;
+					ImU32 col_glow;
+					ImU32 col_top;
+
+					if (d.is_guiding_lands)
+					{
+						col_glow = 0xE000D7FF; // Sacred Gold
+						col_top = 0x0000D7FF;
+					}
+					else if (d.name.find("Slinger") != std::string::npos || d.name.find("Ammo") != std::string::npos)
+					{
+						col_glow = 0xE0FFE500; // Scoutfly Turquoise Cyan
+						col_top = 0x00FFE500;
+					}
+					else
+					{
+						col_glow = 0xE0FFB0E0; // Diamond Light Purple
+						col_top = 0x00FFB0E0;
+					}
+
+					float pulse = 6.0f + 3.0f * std::sin(now_time * 5.0f + static_cast<float>(d.id));
+					bg_draw->AddCircle(ImVec2(sx, sy), pulse, col_glow, 24, 2.0f);
+					bg_draw->AddCircle(ImVec2(sx, sy), pulse * 1.5f, (col_glow & 0x00FFFFFF) | 0x50000000, 24, 1.0f);
+					bg_draw->AddCircleFilled(ImVec2(sx, sy), 4.0f, col_core, 16);
+
+					bg_draw->AddRectFilledMultiColor(
+						ImVec2(sx - beam_half_w, sy - beam_h), ImVec2(sx + beam_half_w, sy),
+						col_top, col_top, col_glow, col_glow
+					);
+
+					bg_draw->AddRectFilledMultiColor(
+						ImVec2(sx - 2.5f, sy - beam_h), ImVec2(sx + 2.5f, sy),
+						0x30FFFFFF, 0x30FFFFFF, col_core, col_core
+					);
+
+					std::string drop_tag = std::format(ICON_FA_GEM " {} ({:.1f}m | {:.0f}s)", d.name, dist, d.time_remaining);
+					ImVec2 tag_sz = ImGui::CalcTextSize(drop_tag.c_str());
+					ImVec2 tag_pos(sx - tag_sz.x * 0.5f, sy - beam_h - 22.0f);
+
+					bg_draw->AddRectFilled(
+						ImVec2(tag_pos.x - 6.0f, tag_pos.y - 3.0f),
+						ImVec2(tag_pos.x + tag_sz.x + 6.0f, tag_pos.y + tag_sz.y + 3.0f),
+						mhw_gui::COLOR_BG_DARK, 0.0f
+					);
+					bg_draw->AddRect(
+						ImVec2(tag_pos.x - 6.0f, tag_pos.y - 3.0f),
+						ImVec2(tag_pos.x + tag_sz.x + 6.0f, tag_pos.y + tag_sz.y + 3.0f),
+						mhw_gui::COLOR_BORDER_BRONZE, 0.0f, 0, 1.0f
+					);
+					bg_draw->AddText(tag_pos, col_core, drop_tag.c_str());
 				}
 			}
 		}
@@ -1163,47 +1171,35 @@ namespace big
 			if (!teammates.empty())
 			{
 				Vector3 player_pos = character_service::get_position();
-				Vector3 fwd_pos = character_service::get_forward_pos();
+				Vector3 cam_pos = camera_service::get_camera_pos();
+				Vector3 cam_fwd = camera_service::get_camera_forward();
+				Vector3 cam_right = camera_service::get_camera_right();
 
 				float screen_w = viewport->WorkSize.x;
 				float screen_h = viewport->WorkSize.y;
-				float fov_scale = screen_w * 0.95f;
 				auto* bg_draw = ImGui::GetBackgroundDrawList();
 				float now_time = static_cast<float>(ImGui::GetTime());
 
-				float fdx = fwd_pos.x - player_pos.x;
-				float fdz = fwd_pos.z - player_pos.z;
-				float flen = std::sqrt(fdx * fdx + fdz * fdz);
-				if (flen < 0.001f)
-				{
-					fdx = 0.0f;
-					fdz = 1.0f;
-					flen = 1.0f;
-				}
-				float fx = fdx / flen;
-				float fz = fdz / flen;
-				float rx = fz;
-				float rz = -fx;
-
 				for (const auto& t : teammates)
 				{
-					float dx = t.position.x - player_pos.x;
-					float dy = t.position.y - player_pos.y;
-					float dz = t.position.z - player_pos.z;
+					Vector3 ppos = (cam_pos.x != 0.0f || cam_pos.z != 0.0f) ? cam_pos : player_pos;
+					float dx = t.position.x - ppos.x;
+					float dy = t.position.y - ppos.y;
+					float dz = t.position.z - ppos.z;
 					float dist = t.distance > 0.01f ? t.distance : (std::sqrt(dx * dx + dy * dy + dz * dz) * 0.03048f);
 
-					float dot_f = dx * fx + dz * fz;
-					float dot_r = dx * rx + dz * rz;
+					float dot_f = dx * cam_fwd.x + dy * cam_fwd.y + dz * cam_fwd.z;
+					float dot_r = dx * cam_right.x + dy * cam_right.y + dz * cam_right.z;
+
+					Vector2 screen_feet, screen_head;
+					bool in_front = camera_service::world_to_screen(t.position, screen_feet) &&
+					                camera_service::world_to_screen(t.position + Vector3(0.0f, 180.0f, 0.0f), screen_head);
 
 					bool is_on_screen = false;
-					float sx = 0.0f, sy = 0.0f;
-
-					if (dot_f > 0.5f)
+					if (in_front)
 					{
-						sx = viewport->WorkPos.x + screen_w * 0.5f + (dot_r / dot_f) * fov_scale;
-						sy = viewport->WorkPos.y + screen_h * 0.52f - (dy / dot_f) * fov_scale;
-
-						if (sx >= 110.0f && sx <= screen_w - 110.0f && sy >= 90.0f && sy <= screen_h - 70.0f)
+						if (screen_feet.x >= 110.0f && screen_feet.x <= screen_w - 110.0f &&
+						    screen_head.y >= 70.0f && screen_feet.y <= screen_h - 40.0f)
 						{
 							is_on_screen = true;
 						}
@@ -1211,15 +1207,18 @@ namespace big
 
 					if (is_on_screen)
 					{
-						// 1. In-world 3D locator beacon
+						float sx = screen_head.x;
+						float sy = screen_head.y;
+
+						// 1. In-world 3D locator beacon at feet
 						float pulse = 7.0f + 2.5f * std::sin(now_time * 4.0f + static_cast<float>(t.player_id));
-						bg_draw->AddCircle(ImVec2(sx, sy), pulse, 0xE040D0F8, 24, 2.0f);
-						bg_draw->AddCircleFilled(ImVec2(sx, sy), 3.5f, 0xFFFFFFFF, 16);
-						bg_draw->AddLine(ImVec2(sx, sy), ImVec2(sx, sy - 30.0f), 0x809C7A48, 1.0f);
+						bg_draw->AddCircle(ImVec2(screen_feet.x, screen_feet.y), pulse, 0xE040D0F8, 24, 2.0f);
+						bg_draw->AddCircleFilled(ImVec2(screen_feet.x, screen_feet.y), 3.5f, 0xFFFFFFFF, 16);
+						bg_draw->AddLine(ImVec2(screen_feet.x, screen_feet.y), ImVec2(sx, sy), 0x809C7A48, 1.0f);
 
 						// 2. Floating MHW Nameplate box
-						ImVec2 b_min(sx - 105.0f, sy - 84.0f);
-						ImVec2 b_max(sx + 105.0f, sy - 30.0f);
+						ImVec2 b_min(sx - 105.0f, sy - 58.0f);
+						ImVec2 b_max(sx + 105.0f, sy - 4.0f);
 
 						bg_draw->AddRectFilled(b_min, b_max, mhw_gui::COLOR_BG_DARK, 0.0f);
 						bg_draw->AddRect(b_min, b_max, mhw_gui::COLOR_BORDER_BRONZE, 0.0f, 0, 1.2f);
@@ -1270,8 +1269,19 @@ namespace big
 						float cx = viewport->WorkPos.x + screen_w * 0.5f;
 						float cy = viewport->WorkPos.y + screen_h * 0.5f;
 
-						float dir_x = dot_r;
-						float dir_y = -dot_f;
+						float dir_x = 0.0f;
+						float dir_y = 0.0f;
+						if (in_front)
+						{
+							dir_x = screen_head.x - cx;
+							dir_y = screen_head.y - cy;
+						}
+						else
+						{
+							dir_x = dot_r;
+							dir_y = -dot_f;
+						}
+
 						float dlen = std::sqrt(dir_x * dir_x + dir_y * dir_y);
 						if (dlen > 0.001f)
 						{

@@ -12,13 +12,35 @@ namespace
 	template <typename T>
 	static bool safe_read(uintptr_t addr, T* out)
 	{
-		if (addr < 0x10000)
+		if (addr < 0x10000 || out == nullptr)
 			return false;
 
 		__try
 		{
 			*out = *reinterpret_cast<const T*>(addr);
 			return true;
+		}
+		__except (EXCEPTION_EXECUTE_HANDLER)
+		{
+			return false;
+		}
+	}
+
+	static bool safe_read_string(uintptr_t addr, char* out, size_t max_len)
+	{
+		if (addr < 0x10000 || out == nullptr || max_len == 0)
+			return false;
+
+		__try
+		{
+			const char* src = reinterpret_cast<const char*>(addr);
+			size_t i = 0;
+			for (; i < max_len - 1 && src[i] != '\0'; ++i)
+			{
+				out[i] = src[i];
+			}
+			out[i] = '\0';
+			return i > 0;
 		}
 		__except (EXCEPTION_EXECUTE_HANDLER)
 		{
@@ -75,12 +97,12 @@ namespace big
 
 	party_service::party_service()
 	{
-		m_preview_mode = true;
+		m_preview_mode = false;
 	}
 
 	void party_service::register_player_entity_impl(uintptr_t entity, Vector3 pos)
 	{
-		if (entity == 0)
+		if (entity < 0x10000)
 			return;
 
 		uintptr_t local_entity = character_service::get_player_entity();
@@ -100,7 +122,7 @@ namespace big
 
 				// Update health if readable
 				float hp = 0.0f;
-				if (safe_read(entity + 0x7630, &hp) && hp > 0.0f && hp <= 500.0f)
+				if (safe_read(entity + 0x7630, &hp) && hp >= 0.0f && hp <= 500.0f)
 				{
 					t.health = hp;
 				}
@@ -119,7 +141,6 @@ namespace big
 			info.is_active = true;
 			info.last_seen = now;
 
-			// Try to read weapon type
 			int w_id = 0;
 			if (safe_read(entity + 0x126E8, &w_id) && w_id >= 0 && w_id <= 13)
 			{
@@ -132,9 +153,8 @@ namespace big
 				info.weapon = get_weapon_name(info.weapon_id);
 			}
 
-			// Try to read health
 			float hp = 150.0f;
-			if (safe_read(entity + 0x7630, &hp) && hp > 0.0f && hp <= 500.0f)
+			if (safe_read(entity + 0x7630, &hp) && hp >= 0.0f && hp <= 500.0f)
 			{
 				info.health = hp;
 				info.max_health = 150.0f;
@@ -145,9 +165,8 @@ namespace big
 				info.max_health = 150.0f;
 			}
 
-			info.name = "Teammate " + std::to_string(info.player_id + 1);
+			info.name = "Teammate [P" + std::to_string(info.player_id + 1) + "]";
 			m_real_teammates.push_back(info);
-			m_preview_mode = false;
 
 			LOG(INFO) << "[Party Service] Registered co-op teammate [P" << (info.player_id + 1) << "] at ("
 			          << pos.x << ", " << pos.y << ", " << pos.z << ") Weapon: " << info.weapon;
@@ -158,112 +177,241 @@ namespace big
 	{
 		auto now = std::chrono::steady_clock::now();
 		Vector3 player_pos = character_service::get_position();
-		Vector3 player_fwd = character_service::get_forward_pos();
 
-		// Cleanup stale real teammates (> 6 seconds without update)
-		m_real_teammates.erase(
-			std::remove_if(m_real_teammates.begin(), m_real_teammates.end(),
-				[&now](const teammate_info& t) {
-					return std::chrono::duration_cast<std::chrono::seconds>(now - t.last_seen).count() > 6;
-				}),
-			m_real_teammates.end()
-		);
-
-		// Calculate distances for real teammates
-		for (auto& t : m_real_teammates)
+		// If preview mode is explicitly enabled by settings for debugging, maintain simulated co-op squad
+		if (m_preview_mode)
 		{
-			float dx = t.position.x - player_pos.x;
-			float dy = t.position.y - player_pos.y;
-			float dz = t.position.z - player_pos.z;
-			t.distance = std::sqrt(dx * dx + dy * dy + dz * dz) * 0.03048f;
-			if (t.distance < 0.1f)
-				t.distance = 0.1f;
-		}
+			Vector3 player_fwd = character_service::get_forward_pos();
+			float fdx = player_fwd.x - player_pos.x;
+			float fdz = player_fwd.z - player_pos.z;
+			float flen = std::sqrt(fdx * fdx + fdz * fdz);
+			if (flen < 0.001f)
+			{
+				fdx = 0.0f;
+				fdz = 1.0f;
+				flen = 1.0f;
+			}
+			float fx = fdx / flen;
+			float fz = fdz / flen;
+			float rx = fz;
+			float rz = -fx;
 
-		// If real teammates exist, preview mode is not needed
-		if (!m_real_teammates.empty())
-		{
-			m_preview_mode = false;
+			m_preview_teammates.clear();
+
+			// Teammate 1: Front-Right (~35m)
+			{
+				teammate_info t1;
+				t1.player_id = 1;
+				t1.name = "Aiden";
+				t1.weapon_id = 0; // Great Sword
+				t1.weapon = get_weapon_name(0);
+				t1.position = Vector3(
+					player_pos.x + (fx * 34.0f + rx * 16.0f) * 32.8f,
+					player_pos.y + 0.5f,
+					player_pos.z + (fz * 34.0f + rz * 16.0f) * 32.8f
+				);
+				t1.health = 150.0f;
+				t1.max_health = 150.0f;
+				t1.distance = 37.5f;
+				t1.is_local = false;
+				t1.is_active = true;
+				m_preview_teammates.push_back(t1);
+			}
+
+			// Teammate 2: Front-Left (~65m)
+			{
+				teammate_info t2;
+				t2.player_id = 2;
+				t2.name = "Nadia";
+				t2.weapon_id = 11; // Bow
+				t2.weapon = get_weapon_name(11);
+				t2.position = Vector3(
+					player_pos.x + (fx * 62.0f - rx * 26.0f) * 32.8f,
+					player_pos.y + 1.2f,
+					player_pos.z + (fz * 62.0f - rz * 26.0f) * 32.8f
+				);
+				t2.health = 128.0f;
+				t2.max_health = 150.0f;
+				t2.distance = 67.2f;
+				t2.is_local = false;
+				t2.is_active = true;
+				m_preview_teammates.push_back(t2);
+			}
+
+			// Teammate 3: Behind (~90m)
+			{
+				teammate_info t3;
+				t3.player_id = 3;
+				t3.name = "Radek";
+				t3.weapon_id = 10; // Insect Glaive
+				t3.weapon = get_weapon_name(10);
+				t3.position = Vector3(
+					player_pos.x + (-fx * 85.0f + rx * 22.0f) * 32.8f,
+					player_pos.y - 0.8f,
+					player_pos.z + (-fz * 85.0f + rz * 22.0f) * 32.8f
+				);
+				t3.health = 92.0f;
+				t3.max_health = 150.0f;
+				t3.distance = 87.8f;
+				t3.is_local = false;
+				t3.is_active = true;
+				m_preview_teammates.push_back(t3);
+			}
+
 			return;
 		}
 
-		// When no real teammates are in session, maintain realistic simulated co-op squad
-		// Calculate forward and right vectors
-		float fdx = player_fwd.x - player_pos.x;
-		float fdz = player_fwd.z - player_pos.z;
-		float flen = std::sqrt(fdx * fdx + fdz * fdz);
-		if (flen < 0.001f)
-		{
-			fdx = 0.0f;
-			fdz = 1.0f;
-			flen = 1.0f;
-		}
-		float fx = fdx / flen;
-		float fz = fdz / flen;
-		float rx = fz;
-		float rz = -fx;
+		// Real In-World Hunter Scan via sPlayerData
+		std::vector<teammate_info> active_teammates;
+		uintptr_t local_hunter = character_service::get_player_entity();
 
-		m_preview_teammates.clear();
-
-		// Teammate 1: Aiden (Great Sword) - Front-Right (~35m)
+		if (g_pointers && g_pointers->m_player_data)
 		{
-			teammate_info t1;
-			t1.player_id = 1;
-			t1.name = "Aiden";
-			t1.weapon_id = 0; // Great Sword
-			t1.weapon = get_weapon_name(0);
-			t1.position = Vector3(
-				player_pos.x + (fx * 34.0f + rx * 16.0f) * 32.8f,
-				player_pos.y + 0.5f,
-				player_pos.z + (fz * 34.0f + rz * 16.0f) * 32.8f
-			);
-			t1.health = 150.0f;
-			t1.max_health = 150.0f;
-			t1.distance = 37.5f;
-			t1.is_local = false;
-			t1.is_active = true;
-			m_preview_teammates.push_back(t1);
+			uintptr_t p_data = 0;
+			safe_read(reinterpret_cast<uintptr_t>(g_pointers->m_player_data), &p_data);
+
+			if (p_data >= 0x10000)
+			{
+				// Cache session hunter names from sSessionData if available
+				std::vector<std::string> session_names;
+				if (g_pointers->m_session_data)
+				{
+					uintptr_t s_session = 0;
+					safe_read(reinterpret_cast<uintptr_t>(g_pointers->m_session_data), &s_session);
+					if (s_session >= 0x10000)
+					{
+						uint32_t s_count = 0;
+						safe_read(s_session + 0x53890, &s_count);
+						uintptr_t array_ptr = 0;
+						safe_read(s_session + 0x538A0, &array_ptr);
+						if (array_ptr >= 0x10000 && s_count > 0)
+						{
+							uint32_t limit = std::min(s_count, 16u);
+							for (uint32_t s = 0; s < limit; ++s)
+							{
+								uintptr_t entry = 0;
+								safe_read(array_ptr + s * sizeof(uintptr_t), &entry);
+								if (entry >= 0x10000)
+								{
+									uintptr_t p_info = 0;
+									safe_read(entry + 0x28, &p_info);
+									if (p_info >= 0x10000)
+									{
+										char nbuf[32] = {0};
+										if (safe_read_string(p_info + 0x198, nbuf, sizeof(nbuf)) && nbuf[0] != '\0')
+										{
+											session_names.emplace_back(nbuf);
+										}
+										else if (safe_read_string(p_info + 0x50, nbuf, sizeof(nbuf)) && nbuf[0] != '\0')
+										{
+											session_names.emplace_back(nbuf);
+										}
+										else
+										{
+											session_names.emplace_back("");
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+
+				// Check active party slots 0..3 (0xA0 spacing)
+				for (int slot = 0; slot < 4; ++slot)
+				{
+					uintptr_t slot_addr = p_data + 0x80 + slot * 0xA0;
+					uintptr_t hunter_ptr = 0;
+					safe_read(slot_addr, &hunter_ptr);
+
+					if (hunter_ptr < 0x10000)
+						continue;
+
+					// Verify vftable
+					uintptr_t vf = 0;
+					safe_read(hunter_ptr, &vf);
+					if (vf < 0x140000000)
+						continue;
+
+					// Read Position Component
+					uintptr_t pos_comp = 0;
+					safe_read(hunter_ptr + 0xDB0, &pos_comp);
+					if (pos_comp < 0x10000)
+						continue;
+
+					Vector3 pos{0.0f, 0.0f, 0.0f};
+					safe_read(pos_comp + 0x160, &pos);
+
+					if (std::isnan(pos.x) || std::isnan(pos.y) || std::isnan(pos.z))
+						continue;
+
+					// Determine if this is local player
+					if (local_hunter != 0)
+					{
+						if (hunter_ptr == local_hunter)
+							continue;
+					}
+					else
+					{
+						// Detect local player by position proximity if not yet cached
+						float ldx = pos.x - player_pos.x;
+						float ldy = pos.y - player_pos.y;
+						float ldz = pos.z - player_pos.z;
+						if (std::sqrt(ldx * ldx + ldy * ldy + ldz * ldz) < 1.0f)
+						{
+							character_service::set_player_entity(hunter_ptr);
+							local_hunter = hunter_ptr;
+							continue;
+						}
+					}
+
+					// Read Health
+					float hp = 150.0f;
+					safe_read(hunter_ptr + 0x7630, &hp);
+					float max_hp = 150.0f;
+					safe_read(hunter_ptr + 0x7634, &max_hp);
+					if (max_hp <= 1.0f || max_hp > 500.0f) max_hp = 150.0f;
+					if (hp < 0.0f) hp = 0.0f;
+					if (hp > max_hp) hp = max_hp;
+
+					// Read Weapon ID
+					int w_id = 0;
+					safe_read(hunter_ptr + 0x126E8, &w_id);
+					if (w_id < 0 || w_id > 13) w_id = 0;
+
+					teammate_info t;
+					t.player_id = slot;
+					t.entity_ptr = hunter_ptr;
+					t.position = pos;
+					t.health = hp;
+					t.max_health = max_hp;
+					t.weapon_id = w_id;
+					t.weapon = get_weapon_name(w_id);
+					t.is_local = false;
+					t.is_active = true;
+					t.last_seen = now;
+
+					float dx = pos.x - player_pos.x;
+					float dy = pos.y - player_pos.y;
+					float dz = pos.z - player_pos.z;
+					t.distance = std::sqrt(dx * dx + dy * dy + dz * dz) * 0.03048f;
+					if (t.distance < 0.1f) t.distance = 0.1f;
+
+					if (slot < static_cast<int>(session_names.size()) && !session_names[slot].empty())
+					{
+						t.name = session_names[slot];
+					}
+					else
+					{
+						t.name = "Teammate [P" + std::to_string(slot + 1) + "]";
+					}
+
+					active_teammates.push_back(std::move(t));
+				}
+			}
 		}
 
-		// Teammate 2: Nadia (Bow) - Front-Left (~65m)
-		{
-			teammate_info t2;
-			t2.player_id = 2;
-			t2.name = "Nadia";
-			t2.weapon_id = 11; // Bow
-			t2.weapon = get_weapon_name(11);
-			t2.position = Vector3(
-				player_pos.x + (fx * 62.0f - rx * 26.0f) * 32.8f,
-				player_pos.y + 1.2f,
-				player_pos.z + (fz * 62.0f - rz * 26.0f) * 32.8f
-			);
-			t2.health = 128.0f;
-			t2.max_health = 150.0f;
-			t2.distance = 67.2f;
-			t2.is_local = false;
-			t2.is_active = true;
-			m_preview_teammates.push_back(t2);
-		}
-
-		// Teammate 3: Radek (Insect Glaive) - Behind (~90m, triggers off-screen compass indicator)
-		{
-			teammate_info t3;
-			t3.player_id = 3;
-			t3.name = "Radek";
-			t3.weapon_id = 10; // Insect Glaive
-			t3.weapon = get_weapon_name(10);
-			t3.position = Vector3(
-				player_pos.x + (-fx * 85.0f + rx * 22.0f) * 32.8f,
-				player_pos.y - 0.8f,
-				player_pos.z + (-fz * 85.0f + rz * 22.0f) * 32.8f
-			);
-			t3.health = 92.0f;
-			t3.max_health = 150.0f;
-			t3.distance = 87.8f;
-			t3.is_local = false;
-			t3.is_active = true;
-			m_preview_teammates.push_back(t3);
-		}
+		m_real_teammates = std::move(active_teammates);
 	}
 
 	std::vector<teammate_info> party_service::get_teammates_impl()
@@ -299,7 +447,7 @@ namespace big
 	bool party_service::teleport_to_teammate_impl(const teammate_info& teammate)
 	{
 		Vector3 target = teammate.position;
-		// Safe lateral and vertical offset to avoid collision overlapping
+		// Safe lateral offset to avoid character overlapping
 		target.x += 1.5f;
 		target.z += 1.5f;
 		target.y += 0.5f;
