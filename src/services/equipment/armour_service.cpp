@@ -2,15 +2,12 @@
 
 namespace big
 {
-	armour_service::armour_service()
-	{ g_armour_service = this; }
+	void armour_service::init_impl(Equipment* eq)
+	{
+		m_equipment = eq;
+	}
 
-	armour_service::~armour_service() noexcept
-	{ g_armour_service = nullptr; }
-
-	void armour_service::init(Equipment* eq)
-	{ m_equipment = eq; }
-	Equipment* armour_service::get()
+	Equipment* armour_service::get_impl()
 	{
 		if (!m_equipment)
 			return nullptr;

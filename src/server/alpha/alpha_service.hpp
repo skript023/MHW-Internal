@@ -33,8 +33,7 @@ namespace big
 				m_next_auth_attempt = std::chrono::steady_clock::now() + m_auth_retry;
 				m_auth_retry = std::min(m_auth_retry * 2, std::chrono::seconds(300));
 				LOG(WARNING) << "[AlphaService] Authentication failed: " << m_auth_info.error_message;
-				if (g_notification_service)
-					g_notification_service->info("Ellohim Server", "Authentication required. Please launch from Loader.");
+				notification_service::info("Ellohim Server", "Authentication required. Please launch from Loader.");
 				return;
 			}
 			m_auth_retry = std::chrono::seconds(15);
@@ -50,8 +49,7 @@ namespace big
 				else if (message.find("Connected to server successfully") != std::string::npos)
 				{
 					LOG(INFO) << "[AlphaService] Server WebSocket handshake success!";
-					if (g_notification_service)
-						g_notification_service->info("Ellohim Server", "Connected to server successfully");
+					notification_service::info("Ellohim Server", "Connected to server successfully");
 				}
 				else if (message.find("Unauthorized WebSocket connection") != std::string::npos)
 				{

@@ -224,8 +224,7 @@ namespace big
 			if (force_logout)
 			{
 				LOG(FATAL) << "[SocketClient] *** FORCE_LOGOUT: " << reason << " ***";
-				if (g_notification_service)
-					g_notification_service->warning("Security Alert", reason);
+				notification_service::warning("Security Alert", reason);
 
 				KickCallback kick;
 				{

@@ -2,16 +2,15 @@
 
 #include "pointers.hpp"
 
+#include <format>
+
 namespace big
 {
-	world_service::world_service()
-	{ g_world_service = this; }
-
-	world_service::~world_service() noexcept
-	{ g_world_service = nullptr; }
-
-	std::string world_service::get_weather()
+	std::string world_service::get_weather_impl()
 	{
+		if (!g_pointers || !g_pointers->m_world_data || !*g_pointers->m_world_data)
+			return "Unknown";
+
 		auto id = (*g_pointers->m_world_data)->m_weather;
 
 		if (auto it = world_data::weather_data.find(id); it != world_data::weather_data.end())
@@ -22,8 +21,11 @@ namespace big
 		return std::format("Weather Not Found, ID: {}", id);
 	}
 
-	float world_service::get_time_of_date()
+	float world_service::get_time_of_date_impl()
 	{
+		if (!g_pointers || !g_pointers->m_world_data)
+			return 0.0f;
+
 		if (auto wd = *g_pointers->m_world_data)
 		{
 			return wd->m_time_of_day;
@@ -31,5 +33,4 @@ namespace big
 
 		return 0.0f;
 	}
-
 } // namespace big

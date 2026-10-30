@@ -10,7 +10,8 @@ namespace big
 		{
 			auto rax = *(PlayerPosition**)(a1 + 0xDB0);
 
-			g_character_service->init(rax);
+			character_service::init(rax);
+			character_service::set_player_entity(static_cast<uintptr_t>(a1));
 		}
 
 		return base_hook::get_original<hooks::player_position>()(a1);

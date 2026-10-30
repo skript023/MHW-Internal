@@ -8,7 +8,7 @@ namespace big
 	{
 		if (a1)
 		{
-			g_character_service->init(a1);
+			character_service::init(a1);
 		}
 
 		return base_hook::get_original<hooks::player_forward>()(a1, a2);

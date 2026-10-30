@@ -6,70 +6,66 @@
 
 namespace big
 {
-	notification_service::notification_service()
-	{ g_notification_service = this; }
+	void notification_service::push_impl(legacy_notification n)
+	{
+		this->notifications.emplace(std::hash<std::string>{}(n.message + n.title), n);
+	}
 
-	notification_service::~notification_service()
-	{ g_notification_service = nullptr; }
-
-	void notification_service::push(legacy_notification n)
-	{ this->notifications.emplace(std::hash<std::string>{}(n.message + n.title), n); }
-
-	void notification_service::push(std::string title, std::string message)
+	void notification_service::push_impl(std::string title, std::string message)
 	{
 		big::notification::info(title, message);
-		this->push({NotificationType::INFO, ICON_FA_INFO_CIRCLE " " + title, message, std::chrono::system_clock::now(), 3000.f, 1.f});
+		this->push_impl({NotificationType::INFO, ICON_FA_INFO_CIRCLE " " + title, message, std::chrono::system_clock::now(), 3000.f, 1.f});
 	}
 
-	void notification_service::push_warning(std::string title, std::string message)
+	void notification_service::push_warning_impl(std::string title, std::string message)
 	{
 		big::notification::warning(title, message);
-		this->push({NotificationType::WARNING, ICON_FA_EXCLAMATION_TRIANGLE " " + title, message, std::chrono::system_clock::now(), 3000.f, 1.f});
+		this->push_impl({NotificationType::WARNING, ICON_FA_EXCLAMATION_TRIANGLE " " + title, message, std::chrono::system_clock::now(), 3000.f, 1.f});
 	}
 
-	void notification_service::push_error(std::string title, std::string message)
+	void notification_service::push_error_impl(std::string title, std::string message)
 	{
 		big::notification::error(title, message);
-		this->push({NotificationType::DANGER, ICON_FA_TIMES_CIRCLE " " + title, message, std::chrono::system_clock::now(), 3000.f, 1.f});
+		this->push_impl({NotificationType::DANGER, ICON_FA_TIMES_CIRCLE " " + title, message, std::chrono::system_clock::now(), 3000.f, 1.f});
 	}
 
-	void notification_service::success(std::string title, std::string message)
+	void notification_service::success_impl(std::string title, std::string message)
 	{
 		big::notification::success(title, message);
-		this->push({NotificationType::SUCCESS, ICON_FA_CHECK_CIRCLE " " + title, message, std::chrono::system_clock::now(), 3000.f, 1.f});
+		this->push_impl({NotificationType::SUCCESS, ICON_FA_CHECK_CIRCLE " " + title, message, std::chrono::system_clock::now(), 3000.f, 1.f});
 	}
 
-	void notification_service::info(std::string title, std::string message)
+	void notification_service::info_impl(std::string title, std::string message)
 	{
 		big::notification::info(title, message);
-		this->push({NotificationType::INFO, ICON_FA_INFO_CIRCLE " " + title, message, std::chrono::system_clock::now(), 3000.f, 1.f});
+		this->push_impl({NotificationType::INFO, ICON_FA_INFO_CIRCLE " " + title, message, std::chrono::system_clock::now(), 3000.f, 1.f});
 	}
 
-	void notification_service::warning(std::string title, std::string message)
+	void notification_service::warning_impl(std::string title, std::string message)
 	{
 		big::notification::warning(title, message);
-		this->push({NotificationType::WARNING, ICON_FA_EXCLAMATION_TRIANGLE " " + title, message, std::chrono::system_clock::now(), 3000.f, 1.f});
+		this->push_impl({NotificationType::WARNING, ICON_FA_EXCLAMATION_TRIANGLE " " + title, message, std::chrono::system_clock::now(), 3000.f, 1.f});
 	}
 
-	void notification_service::error(std::string title, std::string message)
+	void notification_service::error_impl(std::string title, std::string message)
 	{
 		big::notification::error(title, message);
-		this->push({NotificationType::DANGER, ICON_FA_TIMES_CIRCLE " " + title, message, std::chrono::system_clock::now(), 3000.f, 1.f});
+		this->push_impl({NotificationType::DANGER, ICON_FA_TIMES_CIRCLE " " + title, message, std::chrono::system_clock::now(), 3000.f, 1.f});
 	}
 
-	void notification_service::protection(std::string message)
+	void notification_service::protection_impl(std::string message)
 	{
 		big::notification::protection(message);
-		this->push({NotificationType::PROTECTED, ICON_FA_SHIELD_ALT " Illegal Event Protection", message, std::chrono::system_clock::now(), 3000.f, 1.f});
+		this->push_impl({NotificationType::PROTECTED, ICON_FA_SHIELD_ALT " Illegal Event Protection", message, std::chrono::system_clock::now(), 3000.f, 1.f});
 	}
 
-	void notification_service::report(std::string message)
+	void notification_service::report_impl(std::string message)
 	{
 		big::notification::report(message);
-		this->push({NotificationType::PROTECTED, ICON_FA_USER_SHIELD " Report Protection", message, std::chrono::system_clock::now(), 3000.f, 1.f});
+		this->push_impl({NotificationType::PROTECTED, ICON_FA_USER_SHIELD " Report Protection", message, std::chrono::system_clock::now(), 3000.f, 1.f});
 	}
 
-	std::vector<legacy_notification> notification_service::get()
+	std::vector<legacy_notification> notification_service::get_impl()
 	{
 		std::vector<legacy_notification> notifications_to_sent;
 		std::vector<std::size_t> to_remove;

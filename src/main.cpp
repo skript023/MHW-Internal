@@ -68,12 +68,6 @@ DWORD APIENTRY main_thread(LPVOID)
 		auto hooking_instance = std::make_unique<hooking>();
 		LOG(INFO) << "Hooking initialized.";
 
-		auto character_service_instance = std::make_unique<character_service>();
-		auto armour_service_instance    = std::make_unique<armour_service>();
-		auto weapon_service_instance    = std::make_unique<weapon_service>();
-		auto monster_service_instance   = std::make_unique<monster_service>();
-		auto world_service_instance     = std::make_unique<world_service>();
-		auto notification_instance      = std::make_unique<notification_service>();
 		LOG(INFO) << "Services initialized.";
 
 		auto midfunc_hook_mgr_instance = std::make_unique<hook_manager>();
@@ -129,12 +123,6 @@ DWORD APIENTRY main_thread(LPVOID)
 		g_script_mgr.remove_all_scripts();
 		LOG(INFO) << "Scripts unregistered.";
 
-		notification_instance.reset();
-		character_service_instance.reset();
-		armour_service_instance.reset();
-		weapon_service_instance.reset();
-		monster_service_instance.reset();
-		world_service_instance.reset();
 		LOG(INFO) << "Service unregistered.";
 
 #ifdef PRODUCTION

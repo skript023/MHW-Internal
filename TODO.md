@@ -16,16 +16,16 @@ Dokumen ini merangkum kumpulan fitur menarik dan populer dari komunitas modding,
   - Posisi koordinat hunter 3D, jarak ke Waypoint, cuaca dunia, dan siklus waktu (Day/Dusk/Night).
 - [x] **Modular Overlay Settings** *(Implemented)*
   - Toggle individual di menu Settings Astra untuk mengaktifkan/menonaktifkan Monster Health Bar, Crown Badges, Enrage Bar, dan Hunter Info secara terpisah.
-- [ ] **Monster Part Health & Severable Tail Bar**
+- [x] **Monster Part Health & Severable Tail Bar** *(Implemented)*
   - Menampilkan HP per bagian tubuh monster (Head, Wings, Legs, Body, Tail).
   - Indikator sisa HP ekor yang bisa dipotong (*severable tail cut remaining*).
-- [ ] **Monster Status Buildup (Ailments Tracking)**
+- [x] **Monster Status Buildup (Ailments Tracking)** *(Implemented)*
   - Bar akumulasi status: Poison, Paralysis, Sleep, Blast, Stun/KO, Exhaust.
-- [ ] **Party DPS / Damage Meter**
+- [x] **Party DPS / Damage Meter** *(Implemented)*
   - Tabel kontribusi damage tiap anggota tim (total damage, DPS, persentase damage hunt, cart count).
-- [ ] **Dropped Materials & Shiny ESP**
+- [x] **Dropped Materials & Shiny ESP** *(Implemented)*
   - Penanda visual 3D (*bounding box* / icon) untuk drop material monster di tanah (sangat berguna di Guiding Lands).
-- [ ] **Hunter Buff & Mantle Durations**
+- [x] **Hunter Buff & Mantle Durations** *(Implemented)*
   - Timer bar untuk Demondrug, Might Seed, Demon Powder, Dash Juice, dan sisa durasi/cooldown Mantle yang sedang dipakai.
 
 ---

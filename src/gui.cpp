@@ -115,7 +115,7 @@ namespace big
 	void gui::script_init()
 	{
 		g_gui.m_opened = true;
-		g_notification_service->success("Welcome", "Monster Hunter World Trainer Successfully Injected. Press insert to open");
+		notification_service::success("Welcome", "Monster Hunter World Trainer Successfully Injected. Press insert to open");
 	}
 
 	void gui::script_on_tick()

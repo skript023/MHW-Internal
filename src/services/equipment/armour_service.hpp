@@ -5,16 +5,30 @@ namespace big
 {
 	class armour_service
 	{
-	public:
-		explicit armour_service();
-		~armour_service() noexcept;
+		static armour_service& get_service()
+		{
+			static armour_service instance;
+			return instance;
+		}
 
-		void init(Equipment* eq);
-		Equipment* get();
+		void init_impl(Equipment* eq);
+		Equipment* get_impl();
+
+	public:
+		explicit armour_service() = default;
+		~armour_service() noexcept = default;
+
+		static void init(Equipment* eq)
+		{
+			get_service().init_impl(eq);
+		}
+
+		static Equipment* get()
+		{
+			return get_service().get_impl();
+		}
 
 	private:
 		Equipment* m_equipment = nullptr;
 	};
-
-	inline armour_service* g_armour_service{};
 }

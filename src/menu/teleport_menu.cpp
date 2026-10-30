@@ -10,14 +10,14 @@ namespace big
 
 		if (ImGui::Button("Teleport Waypoint"))
 		{
-			g_character_service->set_player_to_waypoint();
+			character_service::set_player_to_waypoint();
 		}
 
 		ImGui::SameLine();
 
 		if (ImGui::Button("Teleport Forward"))
 		{
-			g_character_service->set_player_forward();
+			character_service::set_player_forward();
 		}
 
 		ImGui::EndGroup();
@@ -35,7 +35,7 @@ namespace big
 
 		if (ImGui::Button("Save Location"))
 		{
-			save(g_character_service->get_position(), teleport_name);
+			save(character_service::get_position(), teleport_name);
 			ZeroMemory(teleport_name, sizeof(teleport_name));
 		}
 
@@ -141,7 +141,7 @@ namespace big
 
 		auto target_position = locations[name].get<Vector3>();
 
-		g_character_service->set_player_coords(target_position);
+		character_service::set_player_coords(target_position);
 	}
 	void teleport_menu::delete_location(std::string const& name)
 	{

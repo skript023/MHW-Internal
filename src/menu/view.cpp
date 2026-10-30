@@ -69,17 +69,17 @@ namespace big
 			sub->add_option<number_option<int>>("Palico EXP Mult", "Palico experience multiplier.", &g_settings.player.palico_exp_mult, 1, 100, 1);
 
 			sub->add_option<reguler_option>("Add 1,000,000 Zeni", "Add 1,000,000 Zeni to hunter balance.", [] {
-				if (g_character_service)
+				if (true)
 				{
-					g_character_service->set_zeni(g_character_service->get_zeni() + 1000000);
+					character_service::set_zeni(character_service::get_zeni() + 1000000);
 					notification::success("Economy", "Added 1,000,000 Zeni!");
 				}
 			});
 
 			sub->add_option<reguler_option>("Add 100,000 Research Pts", "Add 100,000 Research Points to hunter balance.", [] {
-				if (g_character_service)
+				if (true)
 				{
-					g_character_service->set_research_points(g_character_service->get_research_points() + 100000);
+					character_service::set_research_points(character_service::get_research_points() + 100000);
 					notification::success("Economy", "Added 100,000 Research Points!");
 				}
 			});
@@ -178,7 +178,7 @@ namespace big
 		});
 
 		canvas::add_submenu<regular_submenu>("Weapon Editor", "SubmenuWeaponEditor"_hash, [](regular_submenu* sub) {
-			auto melee = g_weapon_service ? g_weapon_service->get_melee() : nullptr;
+			auto melee = weapon_service::get_melee();
 			if (!melee)
 			{
 				sub->add_option<reguler_option>("No Weapon Selected", "Hover over a melee weapon in Change Equipment box.", [] {});
@@ -196,7 +196,7 @@ namespace big
 		});
 
 		canvas::add_submenu<regular_submenu>("Armour Editor", "SubmenuArmourEditor"_hash, [](regular_submenu* sub) {
-			auto armor = g_armour_service ? g_armour_service->get() : nullptr;
+			auto armor = armour_service::get();
 			if (!armor)
 			{
 				sub->add_option<reguler_option>("No Armour Selected", "Hover over an armour piece in Change Equipment box.", [] {});
@@ -240,24 +240,24 @@ namespace big
 	{
 		canvas::add_tab<regular_submenu>("Teleport", SubmenuTeleport, [](regular_submenu* sub) {
 			sub->add_option<reguler_option>("Teleport to Waypoint", "Instantly teleport hunter to map waypoint pin.", [] {
-				if (g_character_service)
+				if (true)
 				{
-					g_character_service->set_player_to_waypoint();
+					character_service::set_player_to_waypoint();
 					notification::info("Teleport", "Teleported to waypoint.");
 				}
 			});
 
 			sub->add_option<reguler_option>("Teleport Forward", "Teleport in the direction the hunter is facing.", [] {
-				if (g_character_service)
+				if (true)
 				{
-					g_character_service->set_player_forward();
+					character_service::set_player_forward();
 				}
 			});
 
 			sub->add_option<reguler_option>("Save Current Location", "Save current hunter position to config file.", [] {
-				if (g_character_service)
+				if (true)
 				{
-					auto pos = g_character_service->get_position();
+					auto pos = character_service::get_position();
 					auto list = teleport_menu::location_list();
 					std::string name = "Location " + std::to_string(list.size() + 1);
 					teleport_menu::save(pos, name);

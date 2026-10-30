@@ -14,12 +14,12 @@ namespace big
 		if (v3 == 1)
 		{
 			auto v8 = g_pointers->m_select_waapon(v7, v6);
-			g_weapon_service->init_melee(reinterpret_cast<MeleeWeapon*>(v8));
+			weapon_service::init_melee(reinterpret_cast<MeleeWeapon*>(v8));
 		}
 		else
 		{
 			auto v9 = g_pointers->m_select_waapon(v7, v6);
-			g_weapon_service->init_ranged(reinterpret_cast<RangedWeapon*>(v9));
+			weapon_service::init_ranged(reinterpret_cast<RangedWeapon*>(v9));
 		}
 
 		return base_hook::get_original<hooks::highlighted_weapon>()(a1);

@@ -7,9 +7,9 @@ namespace big
 {
 	void equipment_menu::render_menu()
 	{
-		auto ranged = g_weapon_service->get_ranged();
+		auto ranged = weapon_service::get_ranged();
 
-		if (auto melee = g_weapon_service->get_melee())
+		if (auto melee = weapon_service::get_melee())
 		{
 			if (ImGui::TreeNode("Melee Weapon"))
 			{
@@ -23,9 +23,9 @@ namespace big
 				ImGui::InputScalar("Sharpness Amount", ImGuiDataType_U8, &melee->m_sharpness_amount);
 
 				ImGui::Text("Skill");
-				if (ImGui::BeginCombo("##skill", g_weapon_service->get_melee_skill().c_str()))
+				if (ImGui::BeginCombo("##skill", weapon_service::get_melee_skill().c_str()))
 				{
-					for (auto& skill : g_weapon_service->get_skill_data())
+					for (auto& skill : weapon_service::get_skill_data())
 					{
 						if (ImGui::Selectable(skill.second.c_str(), melee->m_element_type == skill.first))
 						{
@@ -41,9 +41,9 @@ namespace big
 				if (ImGui::TreeNode("Elemental Effect"))
 				{
 					ImGui::Text("Elemental Type");
-					if (ImGui::BeginCombo("##elementaltype", g_weapon_service->get_melee_elemental().c_str()))
+					if (ImGui::BeginCombo("##elementaltype", weapon_service::get_melee_elemental().c_str()))
 					{
-						for (auto& element : g_weapon_service->get_element_data())
+						for (auto& element : weapon_service::get_element_data())
 						{
 							if (ImGui::Selectable(element.second.c_str(), melee->m_element_type == element.first))
 							{
@@ -58,9 +58,9 @@ namespace big
 					ImGui::InputScalar("Elemental Attack", ImGuiDataType_U16, &melee->m_elemental_atk);
 
 					ImGui::Text("Hidden Elemental Type");
-					if (ImGui::BeginCombo("##hiddenelementaltype", g_weapon_service->get_melee_hidden_elemental().c_str()))
+					if (ImGui::BeginCombo("##hiddenelementaltype", weapon_service::get_melee_hidden_elemental().c_str()))
 					{
-						for (auto& element : g_weapon_service->get_element_data())
+						for (auto& element : weapon_service::get_element_data())
 						{
 							if (ImGui::Selectable(element.second.c_str(), melee->m_hidden_element_type == element.first))
 							{
@@ -81,7 +81,7 @@ namespace big
 			}
 		}
 
-		if (auto equipment = g_armour_service->get())
+		if (auto equipment = armour_service::get())
 		{
 			if (ImGui::TreeNode("Armour"))
 			{
