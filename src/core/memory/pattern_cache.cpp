@@ -1,25 +1,20 @@
-#include "pattern_cache.hpp"
-
+#include "core/memory/pattern_cache.hpp"
 #include "core/config/file_manager.hpp"
 
-namespace memory
+namespace big::memory
 {
-	pattern_cache::pattern_cache(std::string const& name) :
+	pattern_cache::pattern_cache(const std::string_view name) :
 	    m_initialized(false),
 	    m_name(name)
 	{
-		auto file = big::g_file_manager.get_project_file(std::format("./{}.bin", m_name));
+		auto file = big::file_manager::get_project_file(std::format("./{}.bin", m_name));
 		if (file.exists())
 		{
 			std::ifstream stream(file.get_path(), std::ios_base::binary);
-			while (!stream.eof())
+			std::uint64_t hash;
+			int offset;
+			while (stream.read(reinterpret_cast<char*>(&hash), sizeof(hash)) && stream.read(reinterpret_cast<char*>(&offset), sizeof(offset)))
 			{
-				std::uint64_t hash;
-				int offset;
-
-				stream.read(reinterpret_cast<char*>(&hash), sizeof(hash));
-				stream.read(reinterpret_cast<char*>(&offset), sizeof(offset));
-
 				m_data.emplace(hash, offset);
 			}
 		}
@@ -28,7 +23,7 @@ namespace memory
 	}
 	void pattern_cache::update()
 	{
-		auto file = big::g_file_manager.get_project_file(std::format("./{}.bin", m_name));
+		auto file = big::file_manager::get_project_file(std::format("./{}.bin", m_name));
 		std::ofstream stream(file.get_path(), std::ios_base::binary);
 
 		for (auto& [h, offset] : m_data)
@@ -46,5 +41,7 @@ namespace memory
 		return std::nullopt;
 	}
 	void pattern_cache::update_cached_offset(pattern_hash hash, int offset)
-	{ m_data[hash.get_hash()] = offset; }
+	{
+		m_data[hash.get_hash()] = offset;
+	}
 }

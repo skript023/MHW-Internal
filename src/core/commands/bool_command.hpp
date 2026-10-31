@@ -1,5 +1,5 @@
 #pragma once
-#include "command.hpp"
+#include "core/commands/command.hpp"
 
 namespace big
 {

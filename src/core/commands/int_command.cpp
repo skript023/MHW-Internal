@@ -1,4 +1,4 @@
-#include "int_command.hpp"
+#include "core/commands/int_command.hpp"
 #include "core/threading/task_mgr.hpp"
 
 namespace big

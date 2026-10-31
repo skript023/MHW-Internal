@@ -1,5 +1,5 @@
 #pragma once
-#include "bool_command.hpp"
+#include "core/commands/bool_command.hpp"
 
 namespace big
 {

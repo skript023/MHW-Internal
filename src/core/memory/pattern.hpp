@@ -1,14 +1,13 @@
 #pragma once
-#include "fwddec.hpp"
-#include "handle.hpp"
-#include "pattern_hash.hpp"
-
 #include <cstdint>
 #include <optional>
 #include <string_view>
 #include <vector>
+#include "core/memory/fwddec.hpp"
+#include "core/memory/handle.hpp"
+#include "core/memory/pattern_hash.hpp"
 
-namespace memory
+namespace big::memory
 {
 	class pattern
 	{
@@ -23,9 +22,9 @@ namespace memory
 		    pattern(std::string_view(ida_sig))
 		{
 		}
+		std::vector<std::optional<std::uint8_t>> m_bytes;
 
 	private:
-		std::vector<std::optional<std::uint8_t>> m_bytes;
 		pattern_hash m_hash;
 	};
 }

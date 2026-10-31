@@ -1,6 +1,4 @@
-#include "folder.hpp"
-
-#include "file.hpp"
+#include "core/config/file_manager/folder.hpp"
 
 namespace big
 {
@@ -29,5 +27,7 @@ namespace big
 	}
 
 	const std::filesystem::path folder::get_path() const
-	{ return m_folder_path; }
+	{
+		return m_folder_path;
+	}
 }

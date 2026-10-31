@@ -1,5 +1,5 @@
-#include "looped_command.hpp"
-#include "commands.hpp"
+#include "core/commands/looped_command.hpp"
+#include "core/commands/commands.hpp"
 
 namespace big
 {

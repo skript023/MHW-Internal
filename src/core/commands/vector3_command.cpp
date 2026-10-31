@@ -1,4 +1,4 @@
-#include "vector3_command.hpp"
+#include "core/commands/vector3_command.hpp"
 #include "core/threading/task_mgr.hpp"
 
 namespace big

@@ -1,7 +1,7 @@
-#include "commands.hpp"
-#include "command.hpp"
-#include "bool_command.hpp"
-#include "looped_command.hpp"
+#include "core/commands/commands.hpp"
+#include "core/commands/command.hpp"
+#include "core/commands/looped_command.hpp"
+//#include "process_event/process_event.hpp"
 
 namespace big
 {
@@ -24,6 +24,11 @@ namespace big
 	{
 		m_looped_commands.push_back(command);
 	}
+
+	/*void commands::add_process_event_command_impl(process_event* command)
+	{
+		m_process_event_commands.insert({ command->get_hash(), command });
+	}*/
 
 	void commands::enable_bool_commands_impl()
 	{
@@ -88,6 +93,7 @@ namespace big
 			const auto hash = joaat(name);
 			if (auto toggle = get_bool_command_impl(hash))
 			{
+				// set_state, not load_state, so the feature switches on or off exactly like a menu click.
 				if (value.is_boolean() && toggle->get_state() != value.get<bool>())
 					toggle->set_state(value.get<bool>());
 			}
@@ -104,9 +110,5 @@ namespace big
 		for (auto& command : m_looped_commands)
 			if (command->get_state())
 				command->shutdown();
-
-		for (auto& command : m_bool_commands)
-			if (command->get_state())
-				command->set_state(false);
 	}
 }

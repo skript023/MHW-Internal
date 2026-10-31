@@ -1,6 +1,6 @@
 #pragma once
 
-namespace memory
+namespace big::memory
 {
 	class pattern_hash
 	{
@@ -28,7 +28,9 @@ namespace memory
 		}
 
 		constexpr void operator=(const pattern_hash& other)
-		{ m_hash = other.m_hash; }
+		{
+			m_hash = other.m_hash;
+		}
 
 		constexpr pattern_hash update(char data) const
 		{
@@ -58,6 +60,8 @@ namespace memory
 		}
 
 		constexpr std::uint64_t get_hash() const
-		{ return m_hash; }
+		{
+			return m_hash;
+		}
 	};
 }

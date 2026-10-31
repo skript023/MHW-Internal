@@ -1,6 +1,6 @@
 #pragma once
 
-namespace memory
+namespace big::memory
 {
 	class handle;
 	class range;

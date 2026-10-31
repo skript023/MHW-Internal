@@ -1,4 +1,4 @@
-#include "color_command.hpp"
+#include "core/commands/color_command.hpp"
 #include "core/threading/task_mgr.hpp"
 
 namespace big

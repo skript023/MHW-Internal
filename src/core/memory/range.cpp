@@ -1,9 +1,8 @@
-#include "range.hpp"
-
 #include "core/common.hpp"
-#include "pattern.hpp"
+#include "core/memory/range.hpp"
+#include "core/memory/pattern.hpp"
 
-namespace memory
+namespace big::memory
 {
 	range::range(handle base, std::size_t size) :
 	    m_base(base),
@@ -12,13 +11,19 @@ namespace memory
 	}
 
 	handle range::begin()
-	{ return m_base; }
+	{
+		return m_base;
+	}
 
 	handle range::end()
-	{ return m_base.add(m_size); }
+	{
+		return m_base.add(m_size);
+	}
 
 	std::size_t range::size()
-	{ return m_size; }
+	{
+		return m_size;
+	}
 
 	bool range::contains(handle h)
 	{
@@ -114,5 +119,68 @@ namespace memory
 		}
 
 		return std::move(result);
+	}
+
+	struct memory_region
+	{
+		handle base;
+		size_t size;
+		DWORD protect;
+		DWORD type;
+	};
+
+	static std::vector<memory_region> enum_process_memory()
+	{
+		std::vector<memory_region> regions;
+		regions.reserve(1024); // FIX: avoid realloc (speed)
+
+		MEMORY_BASIC_INFORMATION mbi{};
+		uintptr_t addr = 0;
+
+		while (VirtualQuery(reinterpret_cast<void*>(addr), &mbi, sizeof(mbi)))
+		{
+			// FIX: ONLY SCAN WHAT CE SCANS
+			if (mbi.State == MEM_COMMIT && !(mbi.Protect & PAGE_GUARD) && !(mbi.Protect & PAGE_NOACCESS))
+			{
+				regions.push_back({handle(mbi.BaseAddress),
+				    mbi.RegionSize,
+				    mbi.Protect,
+				    mbi.Type});
+			}
+
+			addr += mbi.RegionSize;
+		}
+
+		return regions;
+	}
+
+	static bool is_scannable(DWORD protect)
+	{
+		return protect & (PAGE_READONLY | PAGE_READWRITE | PAGE_EXECUTE_READ | PAGE_EXECUTE_READWRITE | PAGE_EXECUTE);
+	}
+
+	handle range::fullscan(pattern const& sig)
+	{
+		auto regions = enum_process_memory();
+
+		for (const auto& r : regions)
+		{
+			// FIX: skip unreadable
+			if (!is_scannable(r.protect))
+				continue;
+
+			// FIX: skip too small
+			if (r.size < sig.m_bytes.size())
+				continue;
+
+			range mem(r.base, r.size);
+
+			LOG(VERBOSE) << "Base: " << mem.begin().as<void*>() << " Size: " << std::hex << mem.end().as<void*>();
+
+			if (auto h = mem.scan(sig))
+				return h;
+		}
+
+		return nullptr;
 	}
 }

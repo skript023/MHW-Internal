@@ -1,5 +1,9 @@
 #pragma once
 #include "core/utility/joaat.hpp"
+#include "core/threading/task_mgr.hpp"
+#include <future>
+#include <memory>
+#include <chrono>
 #include <astra/host/state_serializer.hpp>
 
 namespace big
@@ -82,9 +86,18 @@ namespace big
 			get_instance().mark_state_dirty();
 		}
 
-		static void shutdown()
+		// Runs shutdown_impl() on the game thread and waits up to `timeout`.
+		// Returns false when the game thread did not run it in time.
+		// Do not call this from the game thread itself: it blocks.
+		static bool shutdown(std::chrono::milliseconds timeout = std::chrono::seconds(2))
 		{
-			get_instance().shutdown_impl();
+			auto done     = std::make_shared<std::promise<void>>();
+			auto finished = done->get_future();
+			async_run([done] {
+				get_instance().shutdown_impl();
+				done->set_value();
+			});
+			return finished.wait_for(timeout) == std::future_status::ready;
 		}
 
 	private:

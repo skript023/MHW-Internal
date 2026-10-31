@@ -1,5 +1,5 @@
-#include "bool_command.hpp"
-#include "commands.hpp"
+#include "core/commands/bool_command.hpp"
+#include "core/commands/commands.hpp"
 #include "core/threading/task_mgr.hpp"
 
 namespace big

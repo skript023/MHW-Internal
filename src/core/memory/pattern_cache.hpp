@@ -1,16 +1,16 @@
 #pragma once
-#include "pattern_hash.hpp"
+#include "core/memory/pattern_hash.hpp"
 
-namespace memory
+namespace big::memory
 {
 	class pattern_cache
 	{
 		bool m_initialized;
-		std::string m_name;
+		const std::string_view m_name;
 		std::unordered_map<std::uint64_t, int> m_data;
 
 	public:
-		pattern_cache(std::string const& name);
+		pattern_cache(const std::string_view name);
 
 		void update();
 
@@ -19,6 +19,8 @@ namespace memory
 		void update_cached_offset(pattern_hash hash, int offset);
 
 		bool is_initialized() const
-		{ return m_initialized; }
+		{
+			return m_initialized;
+		}
 	};
 }

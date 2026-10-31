@@ -14,9 +14,7 @@ namespace big
 {
 	pointers::pointers() :
 	    m_resolution(new iVector2(1920, 1080)),
-	    m_base_address(memory::module(nullptr).begin().as<uint64_t>()),
-	    main_batch(std::make_shared<memory::pattern_cache>("pattern_cache")),
-	    steam_batch(std::make_shared<memory::pattern_cache>("steam_overlay"))
+	    m_base_address(memory::module(nullptr).begin().as<uint64_t>())
 	{
 		if (!this->get_swapchain())
 			LOG(WARNING) << "Failed get swapchain";

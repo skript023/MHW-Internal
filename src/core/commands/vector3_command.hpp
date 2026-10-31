@@ -1,6 +1,6 @@
 #pragma once
-#include "command.hpp"
-#include "core/utility/vector.hpp"
+#include "core/commands/command.hpp"
+#include <core/utility/vector.hpp>
 
 namespace big
 {

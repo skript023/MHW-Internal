@@ -6,6 +6,7 @@
 #include "core/net/server_module.hpp"
 #include "core/threading/fiber_pool.hpp"
 #include "core/threading/script_mgr.hpp"
+#include "core/threading/task_mgr.hpp"
 #include "core/threading/thread_pool.hpp"
 #include "core/ui/renderer.hpp"
 #include "core/utility/benchmark.hpp"
@@ -50,9 +51,9 @@ DWORD APIENTRY main_thread(LPVOID)
 	std::filesystem::path base_dir = std::getenv("appdata");
 	base_dir /= config::data_folder;
 
-	g_file_manager.init(base_dir);
+	file_manager::init(base_dir);
 
-	logger::initialize(config::log_file, g_file_manager.get_project_file(std::format("./{}.log", config::log_file)), true);
+	logger::initialize(config::log_file, file_manager::get_project_file(std::format("./{}.log", config::log_file)), true);
 	try
 	{
 		LOG(INFO) << R"kek(
@@ -63,7 +64,7 @@ DWORD APIENTRY main_thread(LPVOID)
 | |  | | (_) | | | \__ \ ||  __/ |    | |  | | |_| | | | | ||  __/ |   _     \  /\  / (_) | |  | | (_| |
 |_|  |_|\___/|_| |_|___/\__\___|_|    |_|  |_|\__,_|_| |_|\__\___|_|  (_)     \/  \/ \___/|_|  |_|\__,_|
 )kek";
-		g_settings.set_file(g_file_manager.get_project_file("./settings.json"));
+		g_settings.set_file(file_manager::get_project_file("./settings.json"));
 		g_settings.load();
 		LOG(INFO) << "Settings initialized.";
 
@@ -108,6 +109,7 @@ DWORD APIENTRY main_thread(LPVOID)
 			}
 #endif
 			commands::run_looped_command();
+			task_mgr::tick();
 			g_script_mgr.tick();
 			g_settings->attempt_save();
 

@@ -1,6 +1,6 @@
 #include "core/utility/joaat.hpp"
-#include "command.hpp"
-#include "commands.hpp"
+#include "core/commands/command.hpp"
+#include "core/commands/commands.hpp"
 
 namespace big
 {

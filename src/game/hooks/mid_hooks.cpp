@@ -3,11 +3,11 @@
 #include "game/classes/fwddec.hpp"
 #include "game/settings.hpp"
 
-#include <ellohim/hooking/mid_hook.hpp>
+#include "core/hooking/mid_hook.hpp"
 
 namespace big
 {
-	void game_hooks::mid_gs_charge(ellohim::mid_context& ctx)
+	void game_hooks::mid_gs_charge(mid_context& ctx)
 	{
 		if (g_settings.weapon.inst_chrgs_gs)
 		{
@@ -18,7 +18,7 @@ namespace big
 		}
 	}
 
-	void game_hooks::mid_spirit_gauge(ellohim::mid_context& ctx)
+	void game_hooks::mid_spirit_gauge(mid_context& ctx)
 	{
 		if (g_settings.weapon.inf_spirit_gauge)
 		{
@@ -29,7 +29,7 @@ namespace big
 		}
 	}
 
-	void game_hooks::mid_demon_mode(ellohim::mid_context& ctx)
+	void game_hooks::mid_demon_mode(mid_context& ctx)
 	{
 		if (g_settings.weapon.inf_demon_mode)
 		{
@@ -39,7 +39,7 @@ namespace big
 		}
 	}
 
-	void game_hooks::mid_switch_axe(ellohim::mid_context& ctx)
+	void game_hooks::mid_switch_axe(mid_context& ctx)
 	{
 		if (g_settings.weapon.full_charged_switch_axe)
 		{
@@ -49,7 +49,7 @@ namespace big
 		}
 	}
 
-	void game_hooks::mid_gl_ammo(ellohim::mid_context& ctx)
+	void game_hooks::mid_gl_ammo(mid_context& ctx)
 	{
 		if (g_settings.weapon.inf_gl_ammo)
 		{
@@ -59,13 +59,13 @@ namespace big
 		}
 	}
 
-	void game_hooks::mid_gl_cooldown(ellohim::mid_context& ctx)
+	void game_hooks::mid_gl_cooldown(mid_context& ctx)
 	{
 		if (g_settings.weapon.no_gl_cooldown)
 			ctx.xmm[1].f32[0] = 0.0f;
 	}
 
-	void game_hooks::mid_cb_phials(ellohim::mid_context& ctx)
+	void game_hooks::mid_cb_phials(mid_context& ctx)
 	{
 		if (g_settings.weapon.cb_phials)
 		{
@@ -75,7 +75,7 @@ namespace big
 		}
 	}
 
-	void game_hooks::mid_cb_sword(ellohim::mid_context& ctx)
+	void game_hooks::mid_cb_sword(mid_context& ctx)
 	{
 		if (g_settings.weapon.cb_sword_charge)
 		{
@@ -84,7 +84,7 @@ namespace big
 		}
 	}
 
-	void game_hooks::mid_cb_shield(ellohim::mid_context& ctx)
+	void game_hooks::mid_cb_shield(mid_context& ctx)
 	{
 		if (g_settings.weapon.cb_shield_charge)
 		{
@@ -93,7 +93,7 @@ namespace big
 		}
 	}
 
-	void game_hooks::mid_ig_extract(ellohim::mid_context& ctx)
+	void game_hooks::mid_ig_extract(mid_context& ctx)
 	{
 		if (g_settings.weapon.ig_extract)
 		{
@@ -102,7 +102,7 @@ namespace big
 		}
 	}
 
-	void game_hooks::mid_ig_stamina(ellohim::mid_context& ctx)
+	void game_hooks::mid_ig_stamina(mid_context& ctx)
 	{
 		if (g_settings.weapon.ig_stamina)
 		{
@@ -111,7 +111,7 @@ namespace big
 		}
 	}
 
-	void game_hooks::mid_ig_jump(ellohim::mid_context& ctx)
+	void game_hooks::mid_ig_jump(mid_context& ctx)
 	{
 		if (g_settings.weapon.ig_jump)
 		{
@@ -120,7 +120,7 @@ namespace big
 		}
 	}
 
-	void game_hooks::mid_bow_coatings(ellohim::mid_context& ctx)
+	void game_hooks::mid_bow_coatings(mid_context& ctx)
 	{
 		if (g_settings.weapon.bow_coatings)
 		{
@@ -130,7 +130,7 @@ namespace big
 		}
 	}
 
-	void game_hooks::mid_bow_charge(ellohim::mid_context& ctx)
+	void game_hooks::mid_bow_charge(mid_context& ctx)
 	{
 		if (g_settings.weapon.bow_charge)
 		{
@@ -140,7 +140,7 @@ namespace big
 		}
 	}
 
-	void game_hooks::mid_bowgun_no_reload(ellohim::mid_context& ctx)
+	void game_hooks::mid_bowgun_no_reload(mid_context& ctx)
 	{
 		if (g_settings.weapon.bowgun_no_reload)
 		{
@@ -151,7 +151,7 @@ namespace big
 		}
 	}
 
-	void game_hooks::mid_wyvernblast(ellohim::mid_context& ctx)
+	void game_hooks::mid_wyvernblast(mid_context& ctx)
 	{
 		if (g_settings.weapon.inf_wyvern_blast)
 		{
@@ -161,13 +161,13 @@ namespace big
 		}
 	}
 
-	void game_hooks::mid_wyvernheart(ellohim::mid_context& ctx)
+	void game_hooks::mid_wyvernheart(mid_context& ctx)
 	{
 		if (g_settings.weapon.inf_wyvernheart)
 			ctx.xmm[2].f32[0] = 100.0f;
 	}
 
-	void game_hooks::mid_wyvernheart_rapidfire(ellohim::mid_context& ctx)
+	void game_hooks::mid_wyvernheart_rapidfire(mid_context& ctx)
 	{
 		if (g_settings.weapon.wyvernheart_rapidfire)
 		{
@@ -177,7 +177,7 @@ namespace big
 		}
 	}
 
-	void game_hooks::mid_bowgun_no_recoil(ellohim::mid_context& ctx)
+	void game_hooks::mid_bowgun_no_recoil(mid_context& ctx)
 	{
 		if (g_settings.weapon.bowgun_no_recoil)
 		{
@@ -198,13 +198,13 @@ namespace big
 		}
 	}
 
-	void game_hooks::mid_part_breaker(ellohim::mid_context& ctx)
+	void game_hooks::mid_part_breaker(mid_context& ctx)
 	{
 		if (g_settings.player.part_breaker)
 			*reinterpret_cast<float*>(ctx.rsp + 0x1A8) = 990.0f;
 	}
 
-	void game_hooks::mid_mount_reset(ellohim::mid_context& ctx)
+	void game_hooks::mid_mount_reset(mid_context& ctx)
 	{
 		if (g_settings.player.mount_reset)
 		{
@@ -214,19 +214,19 @@ namespace big
 		}
 	}
 
-	void game_hooks::mid_frostcraft_drawn(ellohim::mid_context& ctx)
+	void game_hooks::mid_frostcraft_drawn(mid_context& ctx)
 	{
 		if (g_settings.weapon.frostcraft_recharge)
 			ctx.xmm[0].f32[0] *= g_settings.weapon.frostcraft_drawn;
 	}
 
-	void game_hooks::mid_frostcraft_heat(ellohim::mid_context& ctx)
+	void game_hooks::mid_frostcraft_heat(mid_context& ctx)
 	{
 		if (g_settings.weapon.frostcraft_recharge)
 			ctx.xmm[0].f32[0] *= g_settings.weapon.frostcraft_heat;
 	}
 
-	void game_hooks::mid_lucky_voucher(ellohim::mid_context& ctx)
+	void game_hooks::mid_lucky_voucher(mid_context& ctx)
 	{
 		if (g_settings.player.inf_lucky_voucher)
 		{
@@ -235,7 +235,7 @@ namespace big
 		}
 	}
 
-	void game_hooks::mid_load_cannon(ellohim::mid_context& ctx)
+	void game_hooks::mid_load_cannon(mid_context& ctx)
 	{
 		if (g_settings.player.cannon_always_loaded)
 		{
@@ -244,19 +244,19 @@ namespace big
 		}
 	}
 
-	void game_hooks::mid_pet_mgr(ellohim::mid_context& ctx)
+	void game_hooks::mid_pet_mgr(mid_context& ctx)
 	{
 		if (g_settings.player.unlock_all_pet)
 			ctx.rax = 99;
 	}
 
-	void game_hooks::mid_pet_unlocker(ellohim::mid_context& ctx)
+	void game_hooks::mid_pet_unlocker(mid_context& ctx)
 	{
 		if (g_settings.player.unlock_all_pet)
 			ctx.rax = 99;
 	}
 
-	void game_hooks::mid_palico_gadget_cd(ellohim::mid_context& ctx)
+	void game_hooks::mid_palico_gadget_cd(mid_context& ctx)
 	{
 		if (g_settings.player.palico_gadget_cd)
 		{
@@ -266,7 +266,7 @@ namespace big
 		}
 	}
 
-	void game_hooks::mid_slinger_ammo(ellohim::mid_context& ctx)
+	void game_hooks::mid_slinger_ammo(mid_context& ctx)
 	{
 		if (g_settings.weapon.inf_slinger_ammo)
 		{
@@ -275,7 +275,7 @@ namespace big
 		}
 	}
 
-	void game_hooks::mid_maxed_effect_set(ellohim::mid_context& ctx)
+	void game_hooks::mid_maxed_effect_set(mid_context& ctx)
 	{
 		if (g_settings.player.maxed_armor_effect)
 		{
@@ -284,7 +284,7 @@ namespace big
 		}
 	}
 
-	void game_hooks::mid_maxed_attribute(ellohim::mid_context& ctx)
+	void game_hooks::mid_maxed_attribute(mid_context& ctx)
 	{
 		if (g_settings.player.maxed_stat_set)
 		{
@@ -293,7 +293,7 @@ namespace big
 		}
 	}
 
-	void game_hooks::mid_max_sharpness(ellohim::mid_context& ctx)
+	void game_hooks::mid_max_sharpness(mid_context& ctx)
 	{
 		if (g_settings.player.max_sharpness)
 		{
@@ -302,7 +302,7 @@ namespace big
 		}
 	}
 
-	void game_hooks::mid_max_slot_armor(ellohim::mid_context& ctx)
+	void game_hooks::mid_max_slot_armor(mid_context& ctx)
 	{
 		if (g_settings.weapon.max_slot_armor)
 		{
@@ -314,7 +314,7 @@ namespace big
 		}
 	}
 
-	void game_hooks::mid_max_slot_armor_ranged(ellohim::mid_context& ctx)
+	void game_hooks::mid_max_slot_armor_ranged(mid_context& ctx)
 	{
 		if (g_settings.weapon.max_slot_armor)
 		{
@@ -326,7 +326,7 @@ namespace big
 		}
 	}
 
-	void game_hooks::mid_max_slot_armor_melee(ellohim::mid_context& ctx)
+	void game_hooks::mid_max_slot_armor_melee(mid_context& ctx)
 	{
 		if (g_settings.weapon.max_slot_armor)
 		{
@@ -338,7 +338,7 @@ namespace big
 		}
 	}
 
-	void game_hooks::mid_scoutfly_max(ellohim::mid_context& ctx)
+	void game_hooks::mid_scoutfly_max(mid_context& ctx)
 	{
 		if (g_settings.player.scoutfly_max_level)
 		{
@@ -347,7 +347,7 @@ namespace big
 		}
 	}
 
-	void game_hooks::mid_scoutfly_level(ellohim::mid_context& ctx)
+	void game_hooks::mid_scoutfly_level(mid_context& ctx)
 	{
 		if (g_settings.player.scoutfly_max_level)
 		{

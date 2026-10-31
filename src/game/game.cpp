@@ -15,7 +15,7 @@
 #include "game/pointers.hpp"
 #include "game/settings.hpp"
 
-#include <ellohim/hooking/mid_hook.hpp>
+#include "core/hooking/mid_hook.hpp"
 
 namespace game
 {
@@ -72,18 +72,18 @@ namespace game
 
 	void enable()
 	{
-		ellohim::mid_hook::enable_all();
+		big::mid_hook::enable_all();
 	}
 
 	void disable()
 	{
-		ellohim::mid_hook::disable_all();
+		big::mid_hook::disable_all();
 	}
 
 	void shutdown()
 	{
 		big::g_script_mgr.remove_all_scripts();
-		ellohim::mid_hook::destroy_owned();
+		big::mid_hook::destroy_owned();
 
 		g_patch_table.reset();
 		g_pointer_table.reset();

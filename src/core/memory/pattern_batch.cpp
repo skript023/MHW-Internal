@@ -1,33 +1,48 @@
-#include "pattern_batch.hpp"
-
 #include "core/common.hpp"
-#include "range.hpp"
+#include "core/memory/pattern_batch.hpp"
+#include "core/memory/range.hpp"
 
-namespace memory
+namespace big::memory
 {
-	pattern_batch::pattern_batch(std::shared_ptr<pattern_cache> pattern_cache) :
-	    m_pattern_cache(pattern_cache)
+	static bool cached_pattern_matches(range& region, int offset, const pattern& sig)
+	{
+		if (offset < 0 || static_cast<std::size_t>(offset) + sig.m_bytes.size() > region.size())
+		{
+			return false;
+		}
+		auto address = region.begin().add(offset);
+		for (std::size_t i = 0; i < sig.m_bytes.size(); ++i)
+		{
+			if (sig.m_bytes[i] && *address.add(i).as<std::uint8_t*>() != *sig.m_bytes[i])
+			{
+				return false;
+			}
+		}
+		return true;
+	}
+
+	pattern_batch::pattern_batch(const std::string_view name) :
+	    m_pattern_cache(name)
 	{
 	}
-	pattern_batch::~pattern_batch() noexcept
-	{ m_pattern_cache.reset(); }
 	void pattern_batch::add(std::string name, pattern pattern, std::function<void(handle)> callback)
-	{ m_entries.emplace_back(std::move(name), std::move(pattern), std::move(callback)); }
+	{
+		m_entries.emplace_back(std::move(name), std::move(pattern), std::move(callback));
+	}
 
 	void pattern_batch::run(range region)
 	{
 		bool all_found = true;
 		for (auto& entry : m_entries)
 		{
-			if (m_pattern_cache->is_initialized())
+			if (m_pattern_cache.is_initialized())
 			{
-				auto offset = m_pattern_cache->get_cached_offset(entry.m_hash.update(region.size()));
+				auto offset = m_pattern_cache.get_cached_offset(entry.m_hash.update(region.size()));
 
-				if (offset.has_value())
+				if (offset.has_value() && cached_pattern_matches(region, offset.value(), entry.m_pattern))
 				{
-					LOG(VERBOSE) << "Using cached pattern [" << entry.m_name << "] : ["
-					             << HEX_TO_UPPER(region.begin().as<DWORD64>() + offset.value()) << "]";
 					std::invoke(entry.m_callback, handle(region.begin().as<DWORD64>() + offset.value()));
+					LOG(INFO) << "Using cached pattern [" << entry.m_name << "] : [" << HEX_TO_UPPER(region.begin().as<DWORD64>() + offset.value()) << "]";
 
 					continue;
 				}
@@ -38,26 +53,23 @@ namespace memory
 				if (entry.m_callback)
 				{
 					std::invoke(std::move(entry.m_callback), result);
-					LOG(VERBOSE) << "Found '" << entry.m_name << std::format("' {}+", TARGET_PROCESS)
-					             << HEX_TO_UPPER(result.as<DWORD64>() - region.begin().as<DWORD64>());
+					LOG(INFO) << "Found '" << entry.m_name << std::format("' {}+", big::config::game_name) << HEX_TO_UPPER(result.as<DWORD64>() - region.begin().as<DWORD64>());
 
-					if (m_pattern_cache->is_initialized())
+					if (m_pattern_cache.is_initialized())
 					{
-						LOG(VERBOSE) << "Save " << entry.m_name << " to cache";
-						m_pattern_cache->update_cached_offset(
-						    entry.m_hash.update(region.size()), result.as<DWORD64>() - region.begin().as<DWORD64>());
+						m_pattern_cache.update_cached_offset(entry.m_hash.update(region.size()), result.as<DWORD64>() - region.begin().as<DWORD64>());
 					}
 				}
 				else
 				{
 					all_found = false;
-					LOG(WARNING) << "Failed to find '" << entry.m_name << "'.";
+					LOG(FATAL) << "Failed to find '" << entry.m_name << "'.";
 				}
 			}
 			else
 			{
 				all_found = false;
-				LOG(WARNING) << "Failed to find '" << entry.m_name << "'.";
+				LOG(FATAL) << "Failed to find '" << entry.m_name << "'.";
 			}
 		}
 
@@ -66,5 +78,29 @@ namespace memory
 		{
 			throw std::runtime_error("Failed to find some patterns.");
 		}
+	}
+	void pattern_batch::run_fullscan()
+	{
+		bool all_found = true;
+
+		for (auto& entry : m_entries)
+		{
+			auto result = range::fullscan(entry.m_pattern);
+
+			if (result)
+			{
+				std::invoke(entry.m_callback, result);
+			}
+			else
+			{
+				LOG(FATAL) << "Pattern not found: " << entry.m_name;
+				all_found = false;
+			}
+		}
+
+		m_entries.clear();
+
+		if (!all_found)
+			throw std::runtime_error("Some patterns not found");
 	}
 }

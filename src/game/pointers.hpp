@@ -140,8 +140,8 @@ namespace big
 		functions::bow_gun_effect_apply_t m_bow_gun_effect_apply{};
 
 	private:
-		memory::pattern_batch main_batch;
-		memory::pattern_batch steam_batch;
+		memory::pattern_batch main_batch{"pattern_cache"};
+		memory::pattern_batch steam_batch{"steam_overlay"};
 		functions::create_d3d11_device_and_swapchain_t create_device_and_swapchain{};
 		bool get_swapchain();
 		HWND window_focus();
