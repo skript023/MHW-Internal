@@ -1,5 +1,5 @@
+#include "game/features/features.hpp"
 #include "game/hooks/hooks.hpp"
-#include "game/settings.hpp"
 #include "core/hooking/hook_manager.hpp"
 
 #include "game/pointers.hpp"
@@ -8,7 +8,7 @@ namespace big
 {
 	void __fastcall game_hooks::consumable(__int64 a1, int a2, DWORD* a3)
 	{
-		if (g_settings->player.inf_item)
+		if (features::_inf_item.get_state())
 		{
 			const auto rax = std::make_unique<Consumeable>();
 

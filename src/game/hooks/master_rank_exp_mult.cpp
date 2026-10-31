@@ -1,5 +1,5 @@
+#include "game/features/features.hpp"
 #include "game/hooks/hooks.hpp"
-#include "game/settings.hpp"
 #include "core/hooking/hook_manager.hpp"
 
 namespace big
@@ -15,7 +15,7 @@ namespace big
 		v4 = a3;
 		v5 = a2;
 
-		auto exp = g_settings->player.mr_ex_mult * *(DWORD*)(v3 + 216);
+		auto exp = features::_mr_ex_mult.get_state() * *(DWORD*)(v3 + 216);
 		v7 = v5 + exp; // EXP HR ADD
 		if ((unsigned int)v7 > 0x5F5E0FF)
 			v7 = 99999999;

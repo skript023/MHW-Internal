@@ -1,6 +1,6 @@
+#include "game/features/features.hpp"
 #include "game/hooks/hooks.hpp"
 #include "core/hooking/hook_manager.hpp"
-#include "game/settings.hpp"
 #include "game/mhw/qol/qol_service.hpp"
 
 namespace big
@@ -9,7 +9,7 @@ namespace big
 	{
 		if (monster)
 		{
-			if (g_settings.qol.instant_gathering)
+			if (features::_instant_gathering.get_state())
 			{
 				qol_service::on_gather_node();
 				if (monster->m_material_count < monster->m_body_count)
@@ -18,7 +18,7 @@ namespace big
 				}
 			}
 
-			if (g_settings.player.inf_gathering)
+			if (features::_inf_gathering.get_state())
 			{
 				if (monster->m_body_count != 0)
 				{

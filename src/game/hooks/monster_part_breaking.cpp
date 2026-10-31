@@ -1,5 +1,5 @@
+#include "game/features/features.hpp"
 #include "game/hooks/hooks.hpp"
-#include "game/settings.hpp"
 #include "core/hooking/hook_manager.hpp"
 
 #include "game/mhw/monster/monster_service.hpp"
@@ -13,7 +13,7 @@ namespace big
 			monster_service::register_parts_manager(static_cast<uintptr_t>(a1), a2);
 		}
 
-		if (g_settings->player.easy_part_breaker)
+		if (features::_easy_part_breaker.get_state())
 		{
 			__int64 result = a1;
 

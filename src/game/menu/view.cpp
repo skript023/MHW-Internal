@@ -1,7 +1,5 @@
+#include "game/features/features.hpp"
 #include "view.hpp"
-#include "game/settings.hpp"
-#include "game/features/player.hpp"
-#include "game/features/weapon.hpp"
 #include "core/utility/fnv1a.hpp"
 #include "player_menu.h"
 #include "teleport_menu.h"
@@ -40,35 +38,36 @@ namespace big
 	void view::player_submenu()
 	{
 		canvas::add_tab<regular_submenu>("Player", SubmenuPlayer, [](regular_submenu* sub) {
-			sub->add_option<bool_option<bool>>("Invulnerable", "Immune to all monster attacks and damage.", &g_settings.player.invulnerable);
-			sub->add_option<bool_option<bool>>("Infinite Stamina", "Stamina never depletes.", &g_settings.player.inf_stamina);
-			sub->add_option<bool_option<bool>>("Part Breaker", "Break monster parts quickly.", &g_settings.player.part_breaker);
-			sub->add_option<bool_option<bool>>("Easy Part Breaker", "Monster parts break in one or few hits.", &g_settings.player.easy_part_breaker);
-			sub->add_option<bool_option<bool>>("Infinite Mounting", "Never get thrown off while mounting monsters.", &g_settings.player.inf_mount);
-			sub->add_option<bool_option<bool>>("Reset Mounting", "Instantly reset monster mount resistance.", &g_settings.player.mount_reset);
-			sub->add_option<bool_option<bool>>("Infinite Item Use", "Consumables and items are not depleted when used.", &g_settings.player.inf_item);
-			sub->add_option<bool_option<bool>>("Reveal Monsters", "Show all monsters on the mini-map without tracking.", &g_settings.player.reveal_monster);
-			sub->add_option<bool_option<bool>>("Infinite Gathering", "Gather unlimited times from mining outcrops, plants and bones.", &g_settings.player.inf_gathering);
-			sub->add_option<bool_option<bool>>("No Palico Gadget CD", "Palico gadgets can be used with zero cooldown.", &g_settings.player.palico_gadget_cd);
-			sub->add_option<bool_option<bool>>("Infinite Lucky Voucher", "Always have lucky vouchers available.", &g_settings.player.inf_lucky_voucher);
-			sub->add_option<bool_option<bool>>("Cannon Always Loaded", "Cannons and ballistas are permanently loaded.", &g_settings.player.cannon_always_loaded);
-			sub->add_option<bool_option<bool>>("Infinite Cannon Fire", "Cannons fire without needing reload.", &g_settings.player.inf_cannon_fire);
-			sub->add_option<bool_option<bool>>("Unlock All Pets", "Unlock all endemic life pets.", &g_settings.player.unlock_all_pet);
-			sub->add_option<bool_option<bool>>("Max Scoutfly Level", "Max out scoutfly tracking level immediately.", &g_settings.player.scoutfly_max_level);
+			sub->add_option<bool_option<>>("invulnerable"_hash);
+			sub->add_option<bool_option<>>("inf_stamina"_hash);
+			sub->add_option<bool_option<>>("part_breaker"_hash);
+			sub->add_option<bool_option<>>("easy_part_breaker"_hash);
+			sub->add_option<bool_option<>>("inf_mount"_hash);
+			sub->add_option<bool_option<>>("mount_reset"_hash);
+			sub->add_option<bool_option<>>("inf_item"_hash);
+			sub->add_option<bool_option<>>("reveal_monster"_hash);
+			sub->add_option<bool_option<>>("inf_gathering"_hash);
+			sub->add_option<bool_option<>>("palico_gadget_cd"_hash);
+			sub->add_option<bool_option<>>("inf_lucky_voucher"_hash);
+			sub->add_option<bool_option<>>("cannon_always_loaded"_hash);
+			sub->add_option<bool_option<>>("inf_cannon_fire"_hash);
+			sub->add_option<bool_option<>>("unlock_all_pet"_hash);
+			sub->add_option<bool_option<>>("scoutfly_max_level"_hash);
 			sub->add_option<sub_option>("Player Stats & EXP", "Multipliers for rank experience and combat stats.", "SubmenuStats"_hash);
 			sub->add_option<sub_option>("Meal Editor", "Customize Canteen food skills and stat buffs.", "SubmenuMeal"_hash);
 		});
 
 		canvas::add_submenu<regular_submenu>("Player Stats & EXP", "SubmenuStats"_hash, [](regular_submenu* sub) {
-			sub->add_option<number_option<float>>("Critical Boost", "Critical damage multiplier.", &g_settings.player.critical_boost, 1.f, 100.f, 0.25f, 2);
+			sub->add_option<number_option<float>>("Critical Boost", "Critical damage multiplier.", &features::_critical_boost.get_state(), 1.f, 100.f, 0.25f, 2);
 			sub->add_option<number_option<float>>("Attack Bonus", "Raw attack bonus added by hook.", &g_atk_addr, 0.f, 10000.f, 10.f, 1);
 			sub->add_option<number_option<int>>("Defense Bonus", "Defense bonus added by hook.", &g_def_addr, 0, 100000, 100);
 			sub->add_option<number_option<float>>("Damage Received %", "Damage received multiplier applied by defense hook.", &g_def_rate_addr, 0.f, 10.f, 0.05f, 2);
 			sub->add_option<number_option<float>>("Affinity Bonus %", "Affinity percentage added by hook.", &g_affinity_addr, -100.f, 500.f, 10.f, 1);
-			sub->add_option<number_option<float>>("Research EXP Mult", "Multiplier for monster research points.", &g_settings.player.research_exp, 1.f, 50.f, 1.f, 1);
-			sub->add_option<number_option<int>>("MR EXP Mult", "Master Rank experience multiplier.", &g_settings.player.mr_ex_mult, 1, 100, 1);
-			sub->add_option<number_option<int>>("HR EXP Mult", "High Rank experience multiplier.", &g_settings.player.hr_ex_mult, 1, 100, 1);
-			sub->add_option<number_option<int>>("Palico EXP Mult", "Palico experience multiplier.", &g_settings.player.palico_exp_mult, 1, 100, 1);
+			sub->add_option<number_option<float>>("Research EXP Mult", "Multiplier for monster research points.", &features::_research_exp.get_state(), 1.f, 50.f, 1.f, 1);
+			sub->add_option<bool_option<>>("research_exp_mult"_hash);
+			sub->add_option<number_option<int>>("mr_ex_mult"_hash, 1);
+			sub->add_option<number_option<int>>("hr_ex_mult"_hash, 1);
+			sub->add_option<number_option<int>>("palico_exp_mult"_hash, 1);
 
 			sub->add_option<reguler_option>("Add 1,000,000 Zeni", "Add 1,000,000 Zeni to hunter balance.", [] {
 				if (true)
@@ -139,11 +138,11 @@ namespace big
 	void view::weapon_submenu()
 	{
 		canvas::add_tab<regular_submenu>("Weapon", SubmenuWeapon, [](regular_submenu* sub) {
-			sub->add_option<bool_option<bool>>("Max Sharpness", "Melee weapon sharpness never degrades.", &g_settings.player.max_sharpness);
-			sub->add_option<bool_option<bool>>("Maxed Stat Set", "Max out equipment stats on hover or inspect.", &g_settings.player.maxed_stat_set);
-			sub->add_option<bool_option<bool>>("Maxed Armor Effect", "Activate max level skills on equipped armor.", &g_settings.player.maxed_armor_effect);
-			sub->add_option<bool_option<bool>>("Max Slot Armor", "Maximum decoration slots on all armor pieces.", &g_settings.weapon.max_slot_armor);
-			sub->add_option<bool_option<bool>>("Infinite Slinger Ammo", "Slinger ammo is not consumed.", &g_settings.weapon.inf_slinger_ammo);
+			sub->add_option<bool_option<>>("max_sharpness"_hash);
+			sub->add_option<bool_option<>>("maxed_stat_set"_hash);
+			sub->add_option<bool_option<>>("maxed_armor_effect"_hash);
+			sub->add_option<bool_option<>>("max_slot_armor"_hash);
+			sub->add_option<bool_option<>>("inf_slinger_ammo"_hash);
 			sub->add_option<sub_option>("Frostcraft", "Frostcraft gauge settings and multipliers.", "SubmenuFrostcraft"_hash);
 			sub->add_option<sub_option>("Weapon Buffs", "Specific weapon mechanics and instant charge buffs.", "SubmenuWeaponBuffs"_hash);
 			sub->add_option<sub_option>("Weapon Editor", "Inspect or edit currently hovered melee weapon stats.", "SubmenuWeaponEditor"_hash);
@@ -151,32 +150,32 @@ namespace big
 		});
 
 		canvas::add_submenu<regular_submenu>("Frostcraft", "SubmenuFrostcraft"_hash, [](regular_submenu* sub) {
-			sub->add_option<bool_option<bool>>("Infinite Frostcraft", "Frostcraft gauge stays permanently full.", &g_settings.weapon.inf_frostcraft);
-			sub->add_option<bool_option<bool>>("Frostcraft Recharge", "Accelerate Frostcraft gauge replenishment.", &g_settings.weapon.frostcraft_recharge);
-			sub->add_option<number_option<float>>("Frostcraft Drawn Mult", "Damage boost when weapon is drawn.", &g_settings.weapon.frostcraft_drawn, 1.f, 20.f, 0.5f, 1);
-			sub->add_option<number_option<float>>("Frostcraft Heat", "Frostcraft heat rate parameter.", &g_settings.weapon.frostcraft_heat, 1.f, 100.f, 5.f, 1);
+			sub->add_option<bool_option<>>("inf_frostcraft"_hash);
+			sub->add_option<bool_option<>>("frostcraft_recharge"_hash);
+			sub->add_option<number_option<float>>("Frostcraft Drawn Mult", "Damage boost when weapon is drawn.", &features::_frostcraft_drawn.get_state(), 1.f, 20.f, 0.5f, 1);
+			sub->add_option<number_option<float>>("Frostcraft Heat", "Frostcraft heat rate parameter.", &features::_frostcraft_heat.get_state(), 1.f, 100.f, 5.f, 1);
 		});
 
 		canvas::add_submenu<regular_submenu>("Weapon Buffs", "SubmenuWeaponBuffs"_hash, [](regular_submenu* sub) {
-			sub->add_option<bool_option<bool>>("Instant GS Charges", "Great Sword charges to max level immediately.", &g_settings.weapon.inst_chrgs_gs);
-			sub->add_option<bool_option<bool>>("Infinite Spirit Gauge", "Long Sword spirit gauge remains full.", &g_settings.weapon.inf_spirit_gauge);
-			sub->add_option<bool_option<bool>>("Infinite Demon Mode", "Dual Blades demon mode stamina never depletes.", &g_settings.weapon.inf_demon_mode);
-			sub->add_option<bool_option<bool>>("Fully Charged Switch Axe", "Switch Axe sword mode always amped.", &g_settings.weapon.full_charged_switch_axe);
-			sub->add_option<bool_option<bool>>("Infinite GL Ammo / Stake", "Gunlance shells and wyrmstake never run out.", &g_settings.weapon.inf_gl_ammo);
-			sub->add_option<bool_option<bool>>("No Gunlance Cooldown", "Zero cooldown on wyvern's fire.", &g_settings.weapon.no_gl_cooldown);
-			sub->add_option<bool_option<bool>>("Infinite CB Phials", "Phials always maxed at 6 and shield charged white.", &g_settings.weapon.cb_phials);
-			sub->add_option<bool_option<bool>>("Infinite CB Sword Charge", "Sword buff duration never expires.", &g_settings.weapon.cb_sword_charge);
-			sub->add_option<bool_option<bool>>("Infinite CB Shield Charge", "Shield charge duration never expires.", &g_settings.weapon.cb_shield_charge);
-			sub->add_option<bool_option<bool>>("Infinite IG Extract Duration", "Triple buff extract duration permanently active.", &g_settings.weapon.ig_extract);
-			sub->add_option<bool_option<bool>>("Infinite Kinsect Stamina", "Kinsect stamina never depletes.", &g_settings.weapon.ig_stamina);
-			sub->add_option<bool_option<bool>>("Infinite IG Vaulting", "Air vault and dash attacks indefinitely.", &g_settings.weapon.ig_jump);
-			sub->add_option<bool_option<bool>>("Bows Support All Coatings", "All bows can use every coating type.", &g_settings.weapon.bow_coatings);
-			sub->add_option<bool_option<bool>>("Max Bow Charge", "Bow attacks immediately release at max charge.", &g_settings.weapon.bow_charge);
-			sub->add_option<bool_option<bool>>("Bowgun No Reload", "Bowguns fire continuously without reloading.", &g_settings.weapon.bowgun_no_reload);
-			sub->add_option<bool_option<bool>>("Infinite Wyvernblast", "Light Bowgun wyvernblast mines recharge instantly.", &g_settings.weapon.inf_wyvern_blast);
-			sub->add_option<bool_option<bool>>("Infinite Wyvernheart", "HBG wyvernheart special ammo never drains.", &g_settings.weapon.inf_wyvernheart);
-			sub->add_option<bool_option<bool>>("Wyvernheart Rapidfire", "Fire wyvernheart at extreme rapidfire rate.", &g_settings.weapon.wyvernheart_rapidfire);
-			sub->add_option<bool_option<bool>>("Bowgun No Recoil & Mods", "Eliminate recoil and automatically apply full bowgun mods.", &g_settings.weapon.bowgun_no_recoil);
+			sub->add_option<bool_option<>>("inst_chrgs_gs"_hash);
+			sub->add_option<bool_option<>>("inf_spirit_gauge"_hash);
+			sub->add_option<bool_option<>>("inf_demon_mode"_hash);
+			sub->add_option<bool_option<>>("full_charged_switch_axe"_hash);
+			sub->add_option<bool_option<>>("inf_gl_ammo"_hash);
+			sub->add_option<bool_option<>>("no_gl_cooldown"_hash);
+			sub->add_option<bool_option<>>("cb_phials"_hash);
+			sub->add_option<bool_option<>>("cb_sword_charge"_hash);
+			sub->add_option<bool_option<>>("cb_shield_charge"_hash);
+			sub->add_option<bool_option<>>("ig_extract"_hash);
+			sub->add_option<bool_option<>>("ig_stamina"_hash);
+			sub->add_option<bool_option<>>("ig_jump"_hash);
+			sub->add_option<bool_option<>>("bow_coatings"_hash);
+			sub->add_option<bool_option<>>("bow_charge"_hash);
+			sub->add_option<bool_option<>>("bowgun_no_reload"_hash);
+			sub->add_option<bool_option<>>("inf_wyvern_blast"_hash);
+			sub->add_option<bool_option<>>("inf_wyvernheart"_hash);
+			sub->add_option<bool_option<>>("wyvernheart_rapidfire"_hash);
+			sub->add_option<bool_option<>>("bowgun_no_recoil"_hash);
 		});
 
 		canvas::add_submenu<regular_submenu>("Weapon Editor", "SubmenuWeaponEditor"_hash, [](regular_submenu* sub) {
@@ -233,8 +232,8 @@ namespace big
 	void view::crafting_submenu()
 	{
 		canvas::add_tab<regular_submenu>("Crafting", SubmenuCrafting, [](regular_submenu* sub) {
-			sub->add_option<bool_option<bool>>("Ignore Material", "Forge and upgrade equipment without consuming materials or zenny.", &g_settings.crafting.ignore_material);
-			sub->add_option<bool_option<bool>>("Unlock Equipment", "Display and forge all weapons and armor regardless of hunt progression.", &g_settings.crafting.unlock_equipment);
+			sub->add_option<bool_option<>>("ignore_material"_hash);
+			sub->add_option<bool_option<>>("unlock_equipment"_hash);
 		});
 	}
 
@@ -300,25 +299,25 @@ namespace big
 	void view::qol_submenu()
 	{
 		canvas::add_tab<regular_submenu>("QoL & Flow", SubmenuQoL, [](regular_submenu* sub) {
-			sub->add_option<bool_option<bool>>("Skippable Cutscenes", "Skip story and monster cutscenes with 1 key (Esc / Start).", &g_settings.qol.skippable_cutscenes);
+			sub->add_option<bool_option<>>("skippable_cutscenes"_hash);
 			sub->add_option<reguler_option>("Skip Current Cutscene", "Force skip active cutscene immediately.", [] {
 				qol_service::skip_cutscene();
 			});
 
-			sub->add_option<bool_option<bool>>("Post-Quest Timer Skip", "Eliminate 60s/20s countdown after hunt/capture.", &g_settings.qol.post_quest_timer_skip);
-			sub->add_option<bool_option<bool>>("Auto-Skip Post-Quest", "Automatically transition to rewards when quest ends.", &g_settings.qol.auto_post_quest_timer_skip);
+			sub->add_option<bool_option<>>("post_quest_timer_skip"_hash);
+			sub->add_option<bool_option<>>("auto_post_quest_timer_skip"_hash);
 			sub->add_option<reguler_option>("Skip Quest Timer Now", "Instantly end post-quest wait timer (Hotkeys: 'Y' or Menu).", [] {
 				qol_service::skip_post_quest_timer();
 			});
 
-			sub->add_option<bool_option<bool>>("Instant Gathering", "Extract all node materials (mining/bonepiles) in a single touch.", &g_settings.qol.instant_gathering);
-			sub->add_option<bool_option<bool>>("Zero-Delay Carving", "Accelerate carve animation 10x-20x without interruptions.", &g_settings.qol.zero_delay_carving);
-			sub->add_option<number_option<float>>("Carve Speed Mult", "Carving animation speed multiplier.", &g_settings.qol.carve_speed_multiplier, 1.f, 25.f, 1.f, 1);
+			sub->add_option<bool_option<>>("instant_gathering"_hash);
+			sub->add_option<bool_option<>>("zero_delay_carving"_hash);
+			sub->add_option<number_option<float>>("Carve Speed Mult", "Carving animation speed multiplier.", &features::_carve_speed_multiplier.get_state(), 1.f, 25.f, 1.f, 1);
 
-			sub->add_option<bool_option<bool>>("Full Hub Sprint Speed", "Full sprint in Astera, Seliana & Hubs without slowdown.", &g_settings.qol.full_hub_sprint);
-			sub->add_option<number_option<float>>("Hub Speed Mult", "Hub movement speed multiplier.", &g_settings.qol.hub_speed_multiplier, 1.f, 5.f, 0.25f, 2);
+			sub->add_option<bool_option<>>("full_hub_sprint"_hash);
+			sub->add_option<number_option<float>>("Hub Speed Mult", "Hub movement speed multiplier.", &features::_hub_speed_multiplier.get_state(), 1.f, 5.f, 0.25f, 2);
 
-			sub->add_option<bool_option<bool>>("Remote Camp Facilities", "Enable Item Box & Equipment Change anywhere (F7 / F8).", &g_settings.qol.remote_camp_facilities);
+			sub->add_option<bool_option<>>("remote_camp_facilities"_hash);
 			sub->add_option<reguler_option>("Open Remote Item Box", "Open Item Box anywhere in the field (Hotkey: F7).", [] {
 				qol_service::open_remote_item_box();
 			});
@@ -326,7 +325,7 @@ namespace big
 				qol_service::open_remote_equipment();
 			});
 
-			sub->add_option<bool_option<bool>>("Quick Quest Restart", "Enable 1-click quest restart and reset (Ctrl+R / Alt+R).", &g_settings.qol.quick_quest_restart);
+			sub->add_option<bool_option<>>("quick_quest_restart"_hash);
 			sub->add_option<reguler_option>("Quick Quest Restart", "Restart active quest from 00:00 (Hotkey: Ctrl+R).", [] {
 				qol_service::quick_restart_quest();
 			});
@@ -334,27 +333,27 @@ namespace big
 				qol_service::quick_reset_quest();
 			});
 
-			sub->add_option<bool_option<bool>>("Tic Rate Fix (High-FPS)", "Fix multi-hit tick damage on >60FPS/144Hz/240Hz monitors.", &g_settings.qol.tic_rate_fix);
+			sub->add_option<bool_option<>>("tic_rate_fix"_hash);
 		});
 	}
 
 	void view::setting_submenu()
 	{
 		canvas::add_settings_tab(SubmenuSettings, SubmenuSettingsInput, [](regular_submenu* sub) {
-			sub->add_option<bool_option<bool>>("Show Overlay", "Display hunter, world, and monster info overlay on screen.", &g_settings.window.overlay);
-			sub->add_option<bool_option<bool>>("Monster Health Bar", "Show monster health bar, size, and coordinates.", &g_settings.window.overlay_monster);
-			sub->add_option<bool_option<bool>>("Crown Size Badges", "Show Mini Crown / Giant Gold Crown indicators.", &g_settings.window.overlay_crown);
-			sub->add_option<bool_option<bool>>("Monster Enrage Bar", "Show monster enrage / state timer progress bar.", &g_settings.window.overlay_enrage_bar);
-			sub->add_option<bool_option<bool>>("Monster Weakness HUD", "Show Fire/Water/Thunder/Ice/Dragon and status ratings.", &g_settings.window.overlay_monster_weakness);
-			sub->add_option<bool_option<bool>>("Hitzone Values (HZV)", "Show Slash/Blunt/Shot/Elem HZV & WEX weakpoint tag.", &g_settings.window.overlay_hitzone_values);
-			sub->add_option<bool_option<bool>>("Part Health & Tail Bar", "Display body part HP and severable tail remaining.", &g_settings.window.overlay_monster_parts);
-			sub->add_option<bool_option<bool>>("Status Ailments Buildup", "Display Poison, Para, Sleep, Blast, Stun bars.", &g_settings.window.overlay_monster_ailments);
-			sub->add_option<bool_option<bool>>("Party DPS Meter", "Display hunter team damage contribution table.", &g_settings.window.overlay_party_dps);
-			sub->add_option<bool_option<bool>>("Dropped Materials ESP", "Display active shiny drops and despawn timers.", &g_settings.window.overlay_dropped_materials);
-			sub->add_option<bool_option<bool>>("3D Light Pillars", "Project vertical light beams over dropped shinies.", &g_settings.window.light_pillars_shinies);
-			sub->add_option<bool_option<bool>>("Hunter Buffs & Mantles", "Display active buffs and mantle timers/cooldowns.", &g_settings.window.overlay_hunter_buffs);
-			sub->add_option<bool_option<bool>>("Team Player ESP", "Display 3D world indicators, health, and compass for teammates.", &g_settings.window.overlay_team_esp);
-			sub->add_option<bool_option<bool>>("Hunter Info Panel", "Display hunter name, ranks, zeni, and world weather.", &g_settings.window.overlay_hunter);
+			sub->add_option<bool_option<>>("overlay"_hash);
+			sub->add_option<bool_option<>>("overlay_monster"_hash);
+			sub->add_option<bool_option<>>("overlay_crown"_hash);
+			sub->add_option<bool_option<>>("overlay_enrage_bar"_hash);
+			sub->add_option<bool_option<>>("overlay_monster_weakness"_hash);
+			sub->add_option<bool_option<>>("overlay_hitzone_values"_hash);
+			sub->add_option<bool_option<>>("overlay_monster_parts"_hash);
+			sub->add_option<bool_option<>>("overlay_monster_ailments"_hash);
+			sub->add_option<bool_option<>>("overlay_party_dps"_hash);
+			sub->add_option<bool_option<>>("overlay_dropped_materials"_hash);
+			sub->add_option<bool_option<>>("light_pillars_shinies"_hash);
+			sub->add_option<bool_option<>>("overlay_hunter_buffs"_hash);
+			sub->add_option<bool_option<>>("overlay_team_esp"_hash);
+			sub->add_option<bool_option<>>("overlay_hunter"_hash);
 			sub->add_option<reguler_option>("Unload", "Safely unhook and eject the DLL.", [] {
 				g_running = false;
 			});

@@ -1,3 +1,4 @@
+#include "game/features/features.hpp"
 #include "game/game.hpp"
 
 #include "core/common.hpp"
@@ -13,7 +14,6 @@
 #include "game/mhw/notification/notification_service.hpp"
 #include "game/patches.hpp"
 #include "game/pointers.hpp"
-#include "game/settings.hpp"
 
 #include "core/hooking/mid_hook.hpp"
 
@@ -54,7 +54,7 @@ namespace game
 		LOG(INFO) << "Astra submenus registered.";
 
 		g_gui.add_tick_callback([] {
-			if (g_settings.window.overlay)
+			if (features::_overlay.get_state())
 				overlay::render_menu();
 		});
 
@@ -66,7 +66,6 @@ namespace game
 		g_script_mgr.add_script(std::make_unique<script>(&gui::script_func));
 		g_script_mgr.add_script(std::make_unique<script>(&backend_events::script_func));
 		g_script_mgr.add_script(std::make_unique<script>(&backend_events::player_event));
-		g_script_mgr.add_script(std::make_unique<script>(&backend_events::weapon_event));
 		LOG(INFO) << "Scripts registered.";
 	}
 

@@ -1,12 +1,12 @@
+#include "game/features/features.hpp"
 #include "game/hooks/hooks.hpp"
-#include "game/settings.hpp"
 #include "core/hooking/hook_manager.hpp"
 
 namespace big
 {
 	__int64 game_hooks::monster_on_map(__int64 a1, int a2, int a3)
 	{
-		if (g_settings->player.reveal_monster)
+		if (features::_reveal_monster.get_state())
 		{
 			auto v3 = *(DWORD*)(a1 + 264);
 			auto v4 = v3 ? *(uintptr_t*)(a1 + 280) : 0ui64;

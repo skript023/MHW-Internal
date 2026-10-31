@@ -1,3 +1,4 @@
+#include "game/features/features.hpp"
 #include "overlay.h"
 
 #include "game/mhw/character/character_service.hpp"
@@ -8,7 +9,6 @@
 #include "game/mhw/party/party_service.hpp"
 #include "game/mhw/camera/camera_service.hpp"
 #include <astra/host/canvas.hpp>
-#include "game/settings.hpp"
 #include "core/ui/fonts/icon_list.hpp"
 #include <imgui.h>
 #include <vector>
@@ -191,7 +191,7 @@ namespace big
 
 	void overlay::render_menu()
 	{
-		if (!g_settings.window.overlay)
+		if (!features::_overlay.get_state())
 			return;
 
 		bool is_menu_open = canvas::is_opened();
@@ -214,7 +214,7 @@ namespace big
 		// ==========================================
 		// 1. HUNTER INFO OVERLAY (MHW GUILD CARD)
 		// ==========================================
-		if (g_settings.window.overlay_hunter)
+		if (features::_overlay_hunter.get_state())
 		{
 			ImGui::SetNextWindowPos(ImVec2(viewport->WorkPos.x + 20.0f, viewport->WorkPos.y + 24.0f), ImGuiCond_FirstUseEver, ImVec2(0.0f, 0.0f));
 			ImGui::SetNextWindowSizeConstraints(ImVec2(280.0f, 0.0f), ImVec2(380.0f, FLT_MAX));
@@ -258,7 +258,7 @@ namespace big
 		// ==========================================
 		// 2. MONSTER HEALTH, PARTS & AILMENTS OVERLAY
 		// ==========================================
-		if (g_settings.window.overlay_monster)
+		if (features::_overlay_monster.get_state())
 		{
 			struct monster_display_info
 			{
@@ -317,7 +317,7 @@ namespace big
 					{
 						// Preview Card in Full MHW Styling
 						ImGui::TextColored(ImVec4(0.95f, 0.82f, 0.44f, 1.0f), ICON_FA_DIAMOND " RATHALOS " ICON_FA_DIAMOND);
-						if (g_settings.window.overlay_crown)
+						if (features::_overlay_crown.get_state())
 						{
 							ImGui::SameLine();
 							ImGui::TextColored(ImVec4(1.0f, 0.84f, 0.0f, 1.0f), "[" ICON_FA_CROWN " Giant Gold] (124.5%)");
@@ -331,7 +331,7 @@ namespace big
 						mhw_gui::draw_ornate_divider();
 
 						// Weakness HUD
-						if (g_settings.window.overlay_monster_weakness)
+						if (features::_overlay_monster_weakness.get_state())
 						{
 							ImGui::TextColored(ImVec4(0.84f, 0.75f, 0.58f, 1.0f), "Weakness:");
 							ImGui::SameLine();
@@ -363,44 +363,44 @@ namespace big
 						mhw_gui::draw_gauge_bar(0.85f, -1.0f, 18.0f, mhw_gui::HP_GREEN_TOP, mhw_gui::HP_GREEN_BOT, "12,750 / 15,000 (85.0%)");
 
 						// Enrage Gauge
-						if (g_settings.window.overlay_enrage_bar)
+						if (features::_overlay_enrage_bar.get_state())
 						{
 							ImGui::Spacing();
 							mhw_gui::draw_gauge_bar(0.72f, -1.0f, 12.0f, mhw_gui::ENRAGE_TOP, mhw_gui::ENRAGE_BOT, ICON_FA_FIRE " Enrage / Agitator: 65.0s / 90.0s (72%)");
 						}
 
 						// Severable Tail & Body Parts Preview
-						if (g_settings.window.overlay_monster_parts)
+						if (features::_overlay_monster_parts.get_state())
 						{
 							ImGui::Spacing();
 							ImGui::TextColored(ImVec4(0.84f, 0.75f, 0.58f, 1.0f), "Body Parts & Severable Tail:");
 
 							// Tail Gauge
 							mhw_gui::draw_gauge_bar(0.62f, -1.0f, 13.0f, mhw_gui::TAIL_TOP, mhw_gui::TAIL_BOT, ICON_FA_CUT " Tail [Severable Cut]: 930 / 1,500 HP (62.0%)");
-							if (g_settings.window.overlay_hitzone_values)
+							if (features::_overlay_hitzone_values.get_state())
 								ImGui::TextColored(ImVec4(1.0f, 0.85f, 0.25f, 1.0f), ICON_FA_SWORD " 60 " ICON_FA_HAMMER " 50 " ICON_FA_BOW_ARROW " 45 " ICON_FA_DRAGON " 25 [" ICON_FA_CROSSHAIRS " WEX]");
 
 							// Sample Sub-Parts
 							ImGui::Columns(2, "PreviewPartsColumns", false);
 							mhw_gui::draw_gauge_bar(0.90f, -1.0f, 10.0f, mhw_gui::PART_TOP, mhw_gui::PART_BOT, "Head: 1,080 / 1,200");
-							if (g_settings.window.overlay_hitzone_values)
+							if (features::_overlay_hitzone_values.get_state())
 								ImGui::TextColored(ImVec4(1.0f, 0.85f, 0.25f, 1.0f), ICON_FA_SWORD " 65 " ICON_FA_HAMMER " 65 " ICON_FA_BOW_ARROW " 55 " ICON_FA_DRAGON " 30 [" ICON_FA_CROSSHAIRS " WEX]");
 							mhw_gui::draw_gauge_bar(0.75f, -1.0f, 10.0f, mhw_gui::PART_TOP, mhw_gui::PART_BOT, "Left Wing: 675 / 900");
-							if (g_settings.window.overlay_hitzone_values)
+							if (features::_overlay_hitzone_values.get_state())
 								ImGui::TextColored(ImVec4(1.0f, 0.85f, 0.25f, 1.0f), ICON_FA_SWORD " 45 " ICON_FA_HAMMER " 40 " ICON_FA_BOW_ARROW " 45 " ICON_FA_DRAGON " 20 [" ICON_FA_CROSSHAIRS " WEX]");
 
 							ImGui::NextColumn();
 							mhw_gui::draw_gauge_bar(0.85f, -1.0f, 10.0f, mhw_gui::PART_TOP, mhw_gui::PART_BOT, "Body: 2,550 / 3,000");
-							if (g_settings.window.overlay_hitzone_values)
+							if (features::_overlay_hitzone_values.get_state())
 								ImGui::TextColored(ImVec4(0.65f, 0.70f, 0.78f, 1.0f), ICON_FA_SWORD " 25 " ICON_FA_HAMMER " 25 " ICON_FA_BOW_ARROW " 20 " ICON_FA_DRAGON " 15");
 							mhw_gui::draw_gauge_bar(0.80f, -1.0f, 10.0f, mhw_gui::PART_TOP, mhw_gui::PART_BOT, "Right Wing: 720 / 900");
-							if (g_settings.window.overlay_hitzone_values)
+							if (features::_overlay_hitzone_values.get_state())
 								ImGui::TextColored(ImVec4(1.0f, 0.85f, 0.25f, 1.0f), ICON_FA_SWORD " 45 " ICON_FA_HAMMER " 40 " ICON_FA_BOW_ARROW " 45 " ICON_FA_DRAGON " 20 [" ICON_FA_CROSSHAIRS " WEX]");
 							ImGui::Columns(1);
 						}
 
 						// Status Buildup Preview
-						if (g_settings.window.overlay_monster_ailments)
+						if (features::_overlay_monster_ailments.get_state())
 						{
 							ImGui::Spacing();
 							ImGui::TextColored(ImVec4(0.84f, 0.75f, 0.58f, 1.0f), "Status Ailments Buildup:");
@@ -434,7 +434,7 @@ namespace big
 							// Header: Monster Name + Crown Badge
 							ImGui::TextColored(ImVec4(0.95f, 0.82f, 0.44f, 1.0f), ICON_FA_DIAMOND " %s " ICON_FA_DIAMOND, m.name.c_str());
 
-							if (g_settings.window.overlay_crown && m.size > 0.01f)
+							if (features::_overlay_crown.get_state() && m.size > 0.01f)
 							{
 								ImGui::SameLine();
 								if (m.size <= 0.90f)
@@ -481,7 +481,7 @@ namespace big
 							mhw_gui::draw_ornate_divider();
 
 							// Weakness HUD
-							if (g_settings.window.overlay_monster_weakness)
+							if (features::_overlay_monster_weakness.get_state())
 							{
 								auto profile = monster_service::get_combat_profile(m.index);
 								auto format_stars = [](uint8_t count) -> const char* {
@@ -548,7 +548,7 @@ namespace big
 							mhw_gui::draw_gauge_bar(fraction, -1.0f, 18.0f, hp_top, hp_bot, hp_text.c_str());
 
 							// Enrage Gauge
-							if (g_settings.window.overlay_enrage_bar && m.timer > 0.0f)
+							if (features::_overlay_enrage_bar.get_state() && m.timer > 0.0f)
 							{
 								ImGui::Spacing();
 								float timer_frac = (m.max_timer > 0.0f) ? std::clamp(m.timer / m.max_timer, 0.0f, 1.0f) : 1.0f;
@@ -560,7 +560,7 @@ namespace big
 							}
 
 							// Sub-fitur 1: Monster Part Health & Severable Tail Bar
-							if (g_settings.window.overlay_monster_parts && !m.parts.empty())
+							if (features::_overlay_monster_parts.get_state() && !m.parts.empty())
 							{
 								ImGui::Spacing();
 								ImGui::TextColored(ImVec4(0.84f, 0.75f, 0.58f, 1.0f), "Body Parts & Severable Tail:");
@@ -589,7 +589,7 @@ namespace big
 
 										mhw_gui::draw_gauge_bar(tail_frac, -1.0f, 13.0f, mhw_gui::TAIL_TOP, mhw_gui::TAIL_BOT, tail_str.c_str());
 
-										if (g_settings.window.overlay_hitzone_values && tail_part->slash_hzv > 0)
+										if (features::_overlay_hitzone_values.get_state() && tail_part->slash_hzv > 0)
 										{
 											std::string hzv_str = std::format(ICON_FA_SWORD " {} " ICON_FA_HAMMER " {} " ICON_FA_BOW_ARROW " {} {}{}", tail_part->slash_hzv, tail_part->blunt_hzv, tail_part->shot_hzv, tail_part->elem_type.substr(0, 2), tail_part->elem_hzv);
 											if (tail_part->is_weakpoint)
@@ -613,7 +613,7 @@ namespace big
 
 									mhw_gui::draw_gauge_bar(p_frac, -1.0f, 10.0f, mhw_gui::PART_TOP, mhw_gui::PART_BOT, p_str.c_str());
 
-									if (g_settings.window.overlay_hitzone_values && p.slash_hzv > 0)
+									if (features::_overlay_hitzone_values.get_state() && p.slash_hzv > 0)
 									{
 										std::string hzv_str = std::format(ICON_FA_SWORD " {} " ICON_FA_HAMMER " {} " ICON_FA_BOW_ARROW " {} {}{}", p.slash_hzv, p.blunt_hzv, p.shot_hzv, p.elem_type.substr(0, 2), p.elem_hzv);
 										if (p.is_weakpoint)
@@ -629,7 +629,7 @@ namespace big
 							}
 
 							// Sub-fitur 2: Monster Status Buildup (Ailments Tracking)
-							if (g_settings.window.overlay_monster_ailments && !m.ailments.empty())
+							if (features::_overlay_monster_ailments.get_state() && !m.ailments.empty())
 							{
 								ImGui::Spacing();
 								ImGui::TextColored(ImVec4(0.84f, 0.75f, 0.58f, 1.0f), "Status Ailments Buildup:");
@@ -667,12 +667,12 @@ namespace big
 							std::string meta_line = std::format("Pos: [{:.1f}, {:.1f}, {:.1f}]", m.position.x, m.position.y, m.position.z);
 							ImGui::TextColored(ImVec4(0.60f, 0.62f, 0.66f, 1.0f), "%s", meta_line.c_str());
 
-							if (g_settings.player.easy_part_breaker)
+							if (features::_easy_part_breaker.get_state())
 							{
 								ImGui::SameLine();
 								ImGui::TextColored(ImVec4(0.30f, 1.00f, 0.40f, 1.0f), "[1-Hit Part Breaker]");
 							}
-							else if (g_settings.player.part_breaker)
+							else if (features::_part_breaker.get_state())
 							{
 								ImGui::SameLine();
 								ImGui::TextColored(ImVec4(0.30f, 0.80f, 1.00f, 1.0f), "[Part Breaker]");
@@ -687,7 +687,7 @@ namespace big
 		// ==========================================
 		// 3. PARTY DPS / DAMAGE METER OVERLAY
 		// ==========================================
-		if (g_settings.window.overlay_party_dps)
+		if (features::_overlay_party_dps.get_state())
 		{
 			auto party = damage_service::get_party_damage();
 			uint32_t total_team_dmg = damage_service::get_total_party_damage();
@@ -798,7 +798,7 @@ namespace big
 		// ==========================================
 		// 4. DROPPED MATERIALS & SHINY ESP
 		// ==========================================
-		if (g_settings.window.overlay_dropped_materials)
+		if (features::_overlay_dropped_materials.get_state())
 		{
 			auto drops = drop_service::get_active_drops();
 
@@ -896,7 +896,7 @@ namespace big
 		// ==========================================
 		// 5. 3D LIGHT PILLARS FOR DROPPED ITEMS
 		// ==========================================
-		if (g_settings.window.light_pillars_shinies)
+		if (features::_light_pillars_shinies.get_state())
 		{
 			auto* bg_draw = ImGui::GetBackgroundDrawList();
 			auto drops = drop_service::get_active_drops();
@@ -1048,7 +1048,7 @@ namespace big
 		// ==========================================
 		// 6. HUNTER BUFF & MANTLE TIMERS OVERLAY
 		// ==========================================
-		if (g_settings.window.overlay_hunter_buffs)
+		if (features::_overlay_hunter_buffs.get_state())
 		{
 			auto buffs = character_service::get_active_buffs();
 			auto mantles = character_service::get_mantles();
@@ -1165,7 +1165,7 @@ namespace big
 		// ==========================================
 		// 7. TEAM PLAYER ESP & OFF-SCREEN COMPASS
 		// ==========================================
-		if (g_settings.window.overlay_team_esp)
+		if (features::_overlay_team_esp.get_state())
 		{
 			auto teammates = party_service::get_active_teammates();
 			if (!teammates.empty())

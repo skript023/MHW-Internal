@@ -1,4 +1,4 @@
-#include "game/settings.hpp"
+#include "game/features/features.hpp"
 #include "qol_service.hpp"
 #include "game/pointers.hpp"
 #include "core/logging/logger.hpp"
@@ -185,9 +185,9 @@ namespace big
 			init_impl();
 
 		// Apply continuous movement parameters
-		apply_hub_speed_impl(g_settings.qol.full_hub_sprint, g_settings.qol.hub_speed_multiplier);
-		apply_fast_carve_impl(g_settings.qol.zero_delay_carving, g_settings.qol.carve_speed_multiplier);
-		apply_tic_rate_fix_impl(g_settings.qol.tic_rate_fix);
+		apply_hub_speed_impl(features::_full_hub_sprint.get_state(), features::_hub_speed_multiplier.get_state());
+		apply_fast_carve_impl(features::_zero_delay_carving.get_state(), features::_carve_speed_multiplier.get_state());
+		apply_tic_rate_fix_impl(features::_tic_rate_fix.get_state());
 
 		// Handle hotkeys with debounce
 		static auto last_hotkey_time = std::chrono::steady_clock::now();
@@ -196,7 +196,7 @@ namespace big
 			return;
 
 		// Ctrl + R: Quick Quest Restart
-		if (g_settings.qol.quick_quest_restart && (GetAsyncKeyState(VK_CONTROL) & 0x8000) && (GetAsyncKeyState('R') & 0x8000))
+		if (features::_quick_quest_restart.get_state() && (GetAsyncKeyState(VK_CONTROL) & 0x8000) && (GetAsyncKeyState('R') & 0x8000))
 		{
 			quick_restart_quest_impl();
 			last_hotkey_time = now;
@@ -204,7 +204,7 @@ namespace big
 		}
 
 		// Alt + R: Quick Quest Reset
-		if (g_settings.qol.quick_quest_restart && (GetAsyncKeyState(VK_MENU) & 0x8000) && (GetAsyncKeyState('R') & 0x8000))
+		if (features::_quick_quest_restart.get_state() && (GetAsyncKeyState(VK_MENU) & 0x8000) && (GetAsyncKeyState('R') & 0x8000))
 		{
 			quick_reset_quest_impl();
 			last_hotkey_time = now;
@@ -212,7 +212,7 @@ namespace big
 		}
 
 		// F7: Remote Item Box
-		if (g_settings.qol.remote_camp_facilities && (GetAsyncKeyState(VK_F7) & 0x8000))
+		if (features::_remote_camp_facilities.get_state() && (GetAsyncKeyState(VK_F7) & 0x8000))
 		{
 			open_remote_item_box_impl();
 			last_hotkey_time = now;
@@ -220,7 +220,7 @@ namespace big
 		}
 
 		// F8: Remote Equipment Change
-		if (g_settings.qol.remote_camp_facilities && (GetAsyncKeyState(VK_F8) & 0x8000))
+		if (features::_remote_camp_facilities.get_state() && (GetAsyncKeyState(VK_F8) & 0x8000))
 		{
 			open_remote_equipment_impl();
 			last_hotkey_time = now;
@@ -244,7 +244,7 @@ namespace big
 		}
 
 		// 'Y': FastResult Skip Post-Quest Timer
-		if (g_settings.qol.post_quest_timer_skip && (GetAsyncKeyState('Y') & 0x8000))
+		if (features::_post_quest_timer_skip.get_state() && (GetAsyncKeyState('Y') & 0x8000))
 		{
 			skip_post_quest_timer_impl();
 			last_hotkey_time = now;

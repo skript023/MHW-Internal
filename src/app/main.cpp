@@ -11,8 +11,9 @@
 #include "core/ui/renderer.hpp"
 #include "core/utility/benchmark.hpp"
 
+#include <astra/host/settings.hpp>
+
 #include "game/game.hpp"
-#include "game/settings.hpp"
 
 #include <openssl/crypto.h>
 
@@ -64,8 +65,7 @@ DWORD APIENTRY main_thread(LPVOID)
 | |  | | (_) | | | \__ \ ||  __/ |    | |  | | |_| | | | | ||  __/ |   _     \  /\  / (_) | |  | | (_| |
 |_|  |_|\___/|_| |_|___/\__\___|_|    |_|  |_|\__,_|_| |_|\__\___|_|  (_)     \/  \/ \___/|_|  |_|\__,_|
 )kek";
-		g_settings.set_file(file_manager::get_project_file("./settings.json"));
-		g_settings.load();
+		settings::initialize(file_manager::get_project_file("./settings.json"));
 		LOG(INFO) << "Settings initialized.";
 
 		auto renderer_instance = std::make_unique<renderer>();
@@ -111,7 +111,8 @@ DWORD APIENTRY main_thread(LPVOID)
 			commands::run_looped_command();
 			task_mgr::tick();
 			g_script_mgr.tick();
-			g_settings->attempt_save();
+			settings::apply_external();
+			settings::tick();
 
 			std::this_thread::sleep_for(10ms);
 		}
@@ -150,7 +151,7 @@ DWORD APIENTRY main_thread(LPVOID)
 		renderer_instance.reset();
 		LOG(INFO) << "Renderer uninitialized.";
 
-		g_settings.attempt_save();
+		settings::tick();
 		LOG(INFO) << "Settings saved and uninitialized.";
 	}
 	catch (std::exception const& ex)

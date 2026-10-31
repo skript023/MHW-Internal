@@ -1,5 +1,5 @@
+#include "game/features/features.hpp"
 #include "game/hooks/hooks.hpp"
-#include "game/settings.hpp"
 #include "core/hooking/hook_manager.hpp"
 
 namespace big
@@ -23,7 +23,7 @@ namespace big
 		if (v9 < v6)
 		{
 			v10
-				= (v7 * g_settings->player.palico_exp_mult) + v9;
+				= (v7 * features::_palico_exp_mult.get_state()) + v9;
 				if (v10 > (unsigned int)v6)
 					v10
 						= v6;

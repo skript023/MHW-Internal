@@ -1,8 +1,9 @@
+#include "game/features/ui.hpp"
+#include "game/features/features.hpp"
 #include "player_menu.h"
 
 #include "imgui.h"
 #include "core/threading/script.hpp"
-#include "game/settings.hpp"
 #include "game/mhw/mhw.hpp"
 
 float g_atk_addr = 30.f;
@@ -16,15 +17,15 @@ namespace big
 	{
 		ImGui::BeginGroup();
 
-		ImGui::Checkbox("Invulnerable", &g_settings->player.invulnerable);
+		features::checkbox("Invulnerable", features::_invulnerable);
 
-		ImGui::Checkbox("Inf Stamina", &g_settings->player.inf_stamina);
+		features::checkbox("Inf Stamina", features::_inf_stamina);
 
-		ImGui::Checkbox("Inf Mounting", &g_settings->player.inf_mount);
+		features::checkbox("Inf Mounting", features::_inf_mount);
 
-		ImGui::Checkbox("Inf Gathering", &g_settings->player.inf_gathering);
+		features::checkbox("Inf Gathering", features::_inf_gathering);
 
-		ImGui::Checkbox("No Palico Gadget CD", &g_settings->player.palico_gadget_cd);
+		features::checkbox("No Palico Gadget CD", features::_palico_gadget_cd);
 
 		ImGui::EndGroup();
 
@@ -32,15 +33,15 @@ namespace big
 
 		ImGui::BeginGroup();
 
-		ImGui::Checkbox("Part Breaker", &g_settings->player.part_breaker);
+		features::checkbox("Part Breaker", features::_part_breaker);
 
-		ImGui::Checkbox("Easy Part Breaker", &g_settings->player.easy_part_breaker);
+		features::checkbox("Easy Part Breaker", features::_easy_part_breaker);
 
-		ImGui::Checkbox("Reset Mounting", &g_settings->player.mount_reset);
+		features::checkbox("Reset Mounting", features::_mount_reset);
 
-		ImGui::Checkbox("Inf Item Use", &g_settings->player.inf_item);
+		features::checkbox("Inf Item Use", features::_inf_item);
 
-		ImGui::Checkbox("Reveal Monster", &g_settings->player.reveal_monster);
+		features::checkbox("Reveal Monster", features::_reveal_monster);
 
 		ImGui::EndGroup();
 
@@ -48,13 +49,13 @@ namespace big
 
 		ImGui::BeginGroup();
 
-		ImGui::Checkbox("Inf Lucky Voucher", &g_settings->player.inf_lucky_voucher);
+		features::checkbox("Inf Lucky Voucher", features::_inf_lucky_voucher);
 
-		ImGui::Checkbox("Cannon Always Loaded", &g_settings->player.cannon_always_loaded);
+		features::checkbox("Cannon Always Loaded", features::_cannon_always_loaded);
 
-		ImGui::Checkbox("Inf Cannon Fire", &g_settings->player.inf_cannon_fire);
+		features::checkbox("Inf Cannon Fire", features::_inf_cannon_fire);
 
-		ImGui::Checkbox("Have All Pets", &g_settings->player.unlock_all_pet);
+		features::checkbox("Have All Pets", features::_unlock_all_pet);
 
 		ImGui::EndGroup();
 
@@ -62,7 +63,7 @@ namespace big
 
 		if (ImGui::CollapsingHeader("Stats"))
 		{
-			ImGui::InputFloat("Critical Boost", &g_settings->player.critical_boost, 1.f, 1000.f);
+			features::input_float("Critical Boost", features::_critical_boost, 1.f, 1000.f);
 			ImGui::InputFloat("Atk +", &g_atk_addr, 1.f, 1000.f);
 			ImGui::InputFloat("dmg receive percent", &g_def_rate_addr, 1.f, 1000.f);
 			ImGui::InputInt("Def +", &g_def_addr, 1, 1000);
@@ -71,10 +72,10 @@ namespace big
 
 		if (ImGui::CollapsingHeader("Player EXP"))
 		{
-			ImGui::InputFloat("EXP Multiplier", &g_settings->player.research_exp, 1.f, 10.f);
-			ImGui::InputInt("MR EXP Mult", &g_settings->player.mr_ex_mult, 1, 1000);
-			ImGui::InputInt("HR EXP Mult", &g_settings->player.hr_ex_mult, 1, 1000);
-			ImGui::InputInt("Palico EXP Multiplier", &g_settings->player.palico_exp_mult, 1, 1000);
+			features::input_float("EXP Multiplier", features::_research_exp, 1.f, 10.f);
+			features::input_int("MR EXP Mult", features::_mr_ex_mult, 1, 1000);
+			features::input_int("HR EXP Mult", features::_hr_ex_mult, 1, 1000);
+			features::input_int("Palico EXP Multiplier", features::_palico_exp_mult, 1, 1000);
 		}
 	}
 

@@ -1,8 +1,9 @@
+#include "game/features/ui.hpp"
+#include "game/features/features.hpp"
 #include "crafting.h"
 
 #include "imgui.h"
 #include "core/threading/script.hpp"
-#include "game/settings.hpp"
 
 #include "game/patches.hpp"
 
@@ -12,9 +13,9 @@ namespace big
 	{
 		ImGui::BeginGroup();
 
-		ImGui::Checkbox("Ignore Material", &g_settings->crafting.ignore_material);
+		features::checkbox("Ignore Material", features::_ignore_material);
 
-		ImGui::Checkbox("Unlock Equipment", &g_settings->crafting.unlock_equipment);
+		features::checkbox("Unlock Equipment", features::_unlock_equipment);
 
 		ImGui::EndGroup();
 	}
