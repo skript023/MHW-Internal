@@ -16,9 +16,6 @@ namespace big
 	    m_resolution(new iVector2(1920, 1080)),
 	    m_base_address(memory::module(nullptr).begin().as<uint64_t>())
 	{
-		if (!this->get_swapchain())
-			LOG(WARNING) << "Failed get swapchain";
-
 		/*main_batch.add("Screen Resolution", "48 8D 05 ? ? ? ? 4C 89 74 24 ? 48 89 44 24 ? 0F 57 D2 48 8D 05", [this](memory::handle ptr)
 		{
 			m_resolution = ptr.as<iVector2*>();
@@ -432,12 +429,7 @@ namespace big
 			m_bow_gun_effect_apply = ptr.add(14).rip().add(19).rip().as<decltype(m_bow_gun_effect_apply)>();
 		});
 
-		steam_batch.add("Game Overlay", "48 8B ? ? ? ? ? 48 89 ? ? ? 48 8B ? ? ? ? ? 48 89 ? ? ? 89", [this](memory::handle ptr) {
-			m_swapchain = ptr.add(3).rip().add(0x20).as<IDXGISwapChain**>();
-		});
-
 		main_batch.run(memory::module(nullptr));
-		steam_batch.run(memory::module("gameoverlayrenderer64.dll"));
 
 		this->m_hwnd = FindWindowA(WINDOW_CLASS, WINDOW_NAME);
 		if (!this->m_hwnd)
@@ -452,172 +444,8 @@ namespace big
 	void pointers::update()
 	{
 		main_batch.update();
-		steam_batch.update();
 	}
 
-	bool pointers::get_swapchain()
-	{
-		WNDCLASSEX windowClass = {};
-		windowClass.cbSize = sizeof(WNDCLASSEX);
-		windowClass.style = CS_HREDRAW | CS_VREDRAW;
-		windowClass.lpfnWndProc = DefWindowProc;
-		windowClass.hInstance = GetModuleHandle(NULL);
-		windowClass.lpszClassName = "EllohimDummyWindow";
-
-		::RegisterClassEx(&windowClass);
-
-		HWND dummy_window = ::CreateWindow(
-		    windowClass.lpszClassName, "EllohimDummyWindow", WS_OVERLAPPEDWINDOW, 0, 0, 100, 100, NULL, NULL, windowClass.hInstance, NULL);
-
-		if (!dummy_window)
-		{
-			::UnregisterClass(windowClass.lpszClassName, windowClass.hInstance);
-			return false;
-		}
-
-		bool success = false;
-		HMODULE d3d12 = ::GetModuleHandleA("d3d12.dll");
-		HMODULE dxgi = ::GetModuleHandleA("dxgi.dll");
-		HMODULE d3d11 = ::GetModuleHandleA("d3d11.dll");
-
-		if (!dxgi)
-			dxgi = ::LoadLibraryA("dxgi.dll");
-
-		// Attempt DX12 dummy swapchain first if d3d12 is active
-		if (d3d12 && dxgi)
-		{
-			using CreateDXGIFactory1_t = HRESULT(WINAPI*)(const IID&, void**);
-			using D3D12CreateDevice_t = HRESULT(WINAPI*)(IUnknown*, D3D_FEATURE_LEVEL, const IID&, void**);
-
-			auto create_factory = reinterpret_cast<CreateDXGIFactory1_t>(::GetProcAddress(dxgi, "CreateDXGIFactory1"));
-			if (!create_factory)
-				create_factory = reinterpret_cast<CreateDXGIFactory1_t>(::GetProcAddress(dxgi, "CreateDXGIFactory"));
-			auto create_device = reinterpret_cast<D3D12CreateDevice_t>(::GetProcAddress(d3d12, "D3D12CreateDevice"));
-
-			if (create_factory && create_device)
-			{
-				IDXGIFactory4* factory = nullptr;
-				if (SUCCEEDED(create_factory(__uuidof(IDXGIFactory4), reinterpret_cast<void**>(&factory)))
-				    || SUCCEEDED(create_factory(__uuidof(IDXGIFactory), reinterpret_cast<void**>(&factory))))
-				{
-					IDXGIAdapter* adapter = nullptr;
-					if (factory->EnumAdapters(0, &adapter) != DXGI_ERROR_NOT_FOUND)
-					{
-						ID3D12Device* device = nullptr;
-						if (SUCCEEDED(create_device(adapter, D3D_FEATURE_LEVEL_11_0, __uuidof(ID3D12Device), reinterpret_cast<void**>(&device))))
-						{
-							D3D12_COMMAND_QUEUE_DESC queue_desc = {};
-							queue_desc.Type = D3D12_COMMAND_LIST_TYPE_DIRECT;
-							queue_desc.Priority = 0;
-							queue_desc.Flags = D3D12_COMMAND_QUEUE_FLAG_NONE;
-
-							ID3D12CommandQueue* command_queue = nullptr;
-							if (SUCCEEDED(device->CreateCommandQueue(&queue_desc, __uuidof(ID3D12CommandQueue), reinterpret_cast<void**>(&command_queue))))
-							{
-								DXGI_SWAP_CHAIN_DESC swap_chain_desc = {};
-								swap_chain_desc.BufferCount = 2;
-								swap_chain_desc.BufferDesc.Width = 100;
-								swap_chain_desc.BufferDesc.Height = 100;
-								swap_chain_desc.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
-								swap_chain_desc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
-								swap_chain_desc.OutputWindow = dummy_window;
-								swap_chain_desc.SampleDesc.Count = 1;
-								swap_chain_desc.Windowed = TRUE;
-								swap_chain_desc.SwapEffect = DXGI_SWAP_EFFECT_FLIP_DISCARD;
-
-								IDXGISwapChain* dummy_swapchain = nullptr;
-								if (SUCCEEDED(factory->CreateSwapChain(command_queue, &swap_chain_desc, &dummy_swapchain)))
-								{
-									::memcpy(this->m_swapchain_methods, *(void***)dummy_swapchain, sizeof(m_swapchain_methods));
-									this->m_command_queue_execute_command_lists = (*(void***)command_queue)[10];
-									this->m_is_dx12 = true;
-									success = true;
-
-									LOG(INFO) << "Created DX12 dummy swapchain successfully.";
-									dummy_swapchain->Release();
-								}
-								command_queue->Release();
-							}
-							device->Release();
-						}
-						adapter->Release();
-					}
-					factory->Release();
-				}
-			}
-		}
-
-		// Fallback to DX11 if DX12 was not present or failed
-		if (!success)
-		{
-			if (!d3d11)
-				d3d11 = ::GetModuleHandleA("d3d11.dll");
-			if (!d3d11)
-				d3d11 = ::LoadLibraryA("d3d11.dll");
-
-			if (d3d11)
-			{
-				auto create_device_and_swapchain = reinterpret_cast<functions::create_d3d11_device_and_swapchain_t>(
-				    ::GetProcAddress(d3d11, "D3D11CreateDeviceAndSwapChain"));
-
-				if (create_device_and_swapchain)
-				{
-					D3D_FEATURE_LEVEL featureLevel;
-					const D3D_FEATURE_LEVEL featureLevels[] = {
-					    D3D_FEATURE_LEVEL_11_0,
-					    D3D_FEATURE_LEVEL_10_1,
-					};
-
-					DXGI_SWAP_CHAIN_DESC swapChainDesc = {};
-					swapChainDesc.BufferCount = 1;
-					swapChainDesc.BufferDesc.Width = 100;
-					swapChainDesc.BufferDesc.Height = 100;
-					swapChainDesc.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
-					swapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
-					swapChainDesc.OutputWindow = dummy_window;
-					swapChainDesc.SampleDesc.Count = 1;
-					swapChainDesc.Windowed = TRUE;
-					swapChainDesc.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
-
-					IDXGISwapChain* dummy_swapchain = nullptr;
-					ID3D11Device* dummy_device = nullptr;
-					ID3D11DeviceContext* dummy_context = nullptr;
-
-					HRESULT hr = create_device_and_swapchain(
-					    NULL,
-					    D3D_DRIVER_TYPE_HARDWARE,
-					    NULL,
-					    0,
-					    featureLevels,
-					    2,
-					    D3D11_SDK_VERSION,
-					    &swapChainDesc,
-					    &dummy_swapchain,
-					    &dummy_device,
-					    &featureLevel,
-					    &dummy_context);
-
-					if (SUCCEEDED(hr) && dummy_swapchain)
-					{
-						::memcpy(this->m_swapchain_methods, *(void***)dummy_swapchain, sizeof(m_swapchain_methods));
-						this->m_is_dx12 = false;
-						success = true;
-
-						LOG(INFO) << "Created DX11 dummy swapchain successfully.";
-
-						dummy_swapchain->Release();
-						if (dummy_device) dummy_device->Release();
-						if (dummy_context) dummy_context->Release();
-					}
-				}
-			}
-		}
-
-		::DestroyWindow(dummy_window);
-		::UnregisterClass(windowClass.lpszClassName, windowClass.hInstance);
-
-		return success;
-	}
 	HWND pointers::window_focus()
 	{
 		bool window_focus = false;

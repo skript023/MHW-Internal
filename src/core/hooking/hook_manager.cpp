@@ -1,6 +1,7 @@
 #include "core/common.hpp"
 #include "core/hooking/hook_manager.hpp"
 #include "core/memory/module.hpp"
+#include "core/ui/graphic/graphic_manager.hpp"
 #include "core/ui/renderer.hpp"
 
 #include <astra/host/canvas.hpp>
@@ -21,6 +22,25 @@ namespace big
 			}
 		});
 
+		// Present/ResizeBuffers come from the framework's own dummy swapchain, so
+		// no game pointer table entry is involved.
+		if (graphic_manager::get_swapchain() == eInitializationStatus::SUCCESS)
+		{
+			detour_hook::add<hooks::swapchain_present>("SwapChainPresent",
+			                                           graphic_manager::get_method_table(graphic_manager::swapchain_present_index));
+			detour_hook::add<hooks::swapchain_resizebuffers>("SwapChainResizeBuffers",
+			                                                 graphic_manager::get_method_table(graphic_manager::swapchain_resizebuffers_index));
+		}
+		else
+		{
+			LOG(WARNING) << "No swapchain method table; presentation hooks are skipped.";
+		}
+
+		if (auto execute_command_lists = graphic_manager::get_execute_command_lists())
+		{
+			detour_hook::add<hooks::execute_command_lists>("ExecuteCommandLists", execute_command_lists);
+		}
+
 		detour_hook::add<hooks::set_cursor_pos>("SetCursorPos", memory::module("user32.dll").get_export("SetCursorPos").as<void*>());
 		detour_hook::add<hooks::convert_thread_to_fiber>(
 		    "ConvertThreadToFiber", memory::module("kernel32.dll").get_export("ConvertThreadToFiber").as<void*>());
@@ -36,23 +56,6 @@ namespace big
 		delete_disabled_hooks();
 
 		g_hook_manager = nullptr;
-	}
-
-	void hook_manager::install_swapchain_hooks(void** swapchain_methods, void* execute_command_lists_target)
-	{
-		if (!swapchain_methods)
-		{
-			LOG(WARNING) << "No swapchain method table; presentation hooks are skipped.";
-			return;
-		}
-
-		detour_hook::add<hooks::swapchain_present>("SwapChainPresent", swapchain_methods[hooks::swapchain_present_index]);
-		detour_hook::add<hooks::swapchain_resizebuffers>("SwapChainResizeBuffers", swapchain_methods[hooks::swapchain_resizebuffers_index]);
-
-		if (execute_command_lists_target)
-		{
-			detour_hook::add<hooks::execute_command_lists>("ExecuteCommandLists", execute_command_lists_target);
-		}
 	}
 
 	void hook_manager::delete_disabled_hooks()

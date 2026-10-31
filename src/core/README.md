@@ -10,6 +10,7 @@ Engine-agnostic and game-agnostic. Nothing in this directory may include
 - `threading/` — fiber pool, thread pool, coroutine scripts, `script_mgr`
 - `config/` — file and folder path management (`file_manager`)
 - `commands/` — command objects and the command registry
-- `ui/` — ImGui renderer, Astra menu host, fonts, shared menu base types
+- `ui/` — ImGui renderer, DX11/DX12 detection + dummy swapchain (`graphic/`),
+  Astra menu host, fonts, shared menu base types
 - `net/` — websocket/auth client (optional, started with `PRODUCTION`)
 - `utility/` — math types, hashing, HWID, subprocess, containers

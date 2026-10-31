@@ -38,10 +38,6 @@ namespace big
 
 	public:
 		HWND m_hwnd{};
-		void* m_swapchain_methods[19]{};
-		void* m_command_queue_execute_command_lists{};
-		bool m_is_dx12{false};
-		IDXGISwapChain** m_swapchain;
 
 	public:
 		iVector2* m_resolution{};
@@ -141,13 +137,8 @@ namespace big
 
 	private:
 		memory::pattern_batch main_batch{"pattern_cache"};
-		memory::pattern_batch steam_batch{"steam_overlay"};
-		functions::create_d3d11_device_and_swapchain_t create_device_and_swapchain{};
-		bool get_swapchain();
 		HWND window_focus();
-		bool swapchain_found = false;
 		HWND m_window;
-		IDXGISwapChain* m_dummy_swapchain = nullptr;
 		ID3D11Device* m_d3d_device = nullptr;
 		ID3D11DeviceContext* m_d3d_context = nullptr;
 		DWORD m_process_id;

@@ -1,6 +1,7 @@
 #pragma once
 #include "core/common.hpp"
 #include "core/hooking/detour_hook.hpp"
+#include "core/ui/graphic/graphic_manager.hpp"
 
 namespace big
 {
@@ -10,11 +11,6 @@ namespace big
 	struct hooks
 	{
 		static void* convert_thread_to_fiber(void* param);
-
-		static constexpr auto swapchain_num_funcs           = 19;
-		static constexpr auto swapchain_present_index       = 8;
-		static constexpr auto swapchain_draw_indexed_index  = 12;
-		static constexpr auto swapchain_resizebuffers_index = 13;
 
 		static HRESULT APIENTRY swapchain_present(IDXGISwapChain* this_, UINT sync_interval, UINT flags);
 		static HRESULT APIENTRY swapchain_resizebuffers(IDXGISwapChain* this_, UINT buffer_count, UINT width, UINT height, DXGI_FORMAT new_format, UINT swapchain_flags);
@@ -36,10 +32,6 @@ namespace big
 		void enable();
 		void disable();
 		void delete_disabled_hooks();
-
-		// The game layer owns the pointer table, so it hands the framework the
-		// addresses the framework has to hook.
-		void install_swapchain_hooks(void** swapchain_methods, void* execute_command_lists_target);
 
 		// Register any detour owned by a game or engine module. The callback must
 		// be a function pointer with a matching signature and has to call

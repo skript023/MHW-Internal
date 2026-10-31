@@ -5,7 +5,9 @@ know about the game's pointer table, offsets, features and menus.
 
 - `game.cpp` — `game::initialize()` / `game::enable()` / `game::disable()` /
   `game::shutdown()`, the single entry point the app calls
-- `pointers.{hpp,cpp}` — pattern-scanned pointer table
+- `pointers.{hpp,cpp}` — pattern-scanned pointer table (no swapchain: the
+  framework's `core/ui/graphic/graphic_manager` owns the dummy device and the
+  IDXGISwapChain / ID3D12CommandQueue method tables)
 - `patches.{hpp,cpp}` — game byte patches (`g_patches`)
 - `settings.hpp` — menu cosmetics and key bindings only (`g_settings`), an Astra
   `state_serializer` component named `menu`

@@ -42,14 +42,6 @@ namespace game
 		install_hooks();
 		LOG(INFO) << "Game hooks registered.";
 
-		// The framework owns the presentation hooks but the game owns the
-		// pointer table, so hand the addresses over here.
-		if (g_hook_manager)
-		{
-			g_hook_manager->install_swapchain_hooks(g_pointer_table->m_swapchain_methods,
-			                                        g_pointer_table->m_command_queue_execute_command_lists);
-		}
-
 		view::register_submenu();
 		LOG(INFO) << "Astra submenus registered.";
 
