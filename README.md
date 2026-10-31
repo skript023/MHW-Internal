@@ -72,22 +72,41 @@ An internal C++23 DLL trainer and HUD overlay for **Monster Hunter: World** (Dir
 
 ```
 src/
-├── commands/           # Looped, bool, int, float, and vector commands
-├── features/           # Game mechanic implementations (player, weapon)
-├── hooks/              # Native engine function detours and ASM shellcode
-├── memory/             # Pattern scanning, module handle wrappers, memory ranges
-├── menu/               # ImGui & Astra UI menu pages, submenus, and overlays
-├── services/           # Meyer's Singleton services
-│   ├── character/      # Hunter state, stats, buffs, coordinates, mantles
-│   ├── monster/        # Monster world entities, HP, parts, ailments
-│   ├── damage/         # Party damage accounting, DPS, hunt timer
-│   ├── drop/           # Dropped shinies, despawn timers, distance tracking
-│   ├── equipment/      # Weapon and armour memory structures
-│   ├── meal/           # Canteen food stats and skill definitions
-│   ├── world/          # Weather and day/night cycle state
-│   └── notification/   # In-game notification queue
-└── main.cpp            # DLL entry point, thread initialization, lifecycle
+├── app/                # DLL entry point only (window wait, bring-up, main loop)
+├── core/               # Engine- and game-agnostic framework layer
+│   ├── commands/       # Looped, bool, int, float, and vector commands
+│   ├── config/         # file_manager, project files/folders
+│   ├── hooking/        # hook_manager, detours, byte patches, mid/swap hooks
+│   ├── logging/        # Logger, exception handler, stack traces
+│   ├── memory/         # module_mgr, module/handle, pattern scanning, ranges
+│   ├── net/            # Websocket/auth client (PRODUCTION builds)
+│   ├── threading/      # Fiber pool, thread pool, scripts, task_mgr
+│   ├── ui/             # ImGui renderer, Astra host, fonts, menu base types
+│   └── utility/        # Math types, hashing, HWID, subprocess, containers
+├── engine/             # Reserved for engine abstractions (none needed for MHW)
+└── game/               # Everything MHW-specific
+    ├── classes/        # In-memory game classes (fwddec.hpp)
+    ├── hooks/          # Game detours, ellohim mid hooks, ASM shellcode, install.cpp
+    ├── features/       # Game mechanic implementations (player, weapon)
+    ├── menu/           # ImGui & Astra UI menu pages, submenus, overlays
+    ├── events/         # Tick scripts bound to features/services
+    ├── mhw/            # Meyer's Singleton services
+    │   ├── character/  # Hunter state, stats, buffs, coordinates, mantles
+    │   ├── monster/    # Monster world entities, HP, parts, ailments
+    │   ├── damage/     # Party damage accounting, DPS, hunt timer
+    │   ├── drop/       # Dropped shinies, despawn timers, distance tracking
+    │   ├── equipment/  # Weapon and armour memory structures
+    │   ├── meal/       # Canteen food stats and skill definitions
+    │   ├── world/      # Weather and day/night cycle state
+    │   └── notification/ # In-game notification queue
+    ├── pointers.*      # Pattern-scanned game pointer table
+    ├── patches.*       # Game byte patches
+    ├── settings.hpp    # Trainer settings (JSON)
+    └── game.cpp        # game::initialize / enable / disable / shutdown
 ```
+
+Layer contract: `app` and `game` may include `core`; `core` never includes
+`game` (verified with `grep -rn '#include "game/' src/core`).
 
 All services implement the **Meyer's Singleton** design:
 - Thread-safe lazy initialization via internal `static &get()`.
