@@ -1,0 +1,22 @@
+#include "game/hooks/hooks.hpp"
+#include "core/hooking/hook_manager.hpp"
+#include "game/pointers.hpp"
+
+#include "game/mhw/equipment/armour_service.hpp"
+
+namespace big
+{
+	int __fastcall game_hooks::highlighted_armour(__int64 a1, __int64 a2, char a3, signed int* a4)
+	{
+		auto v6 = *(uint32_t*)(a2 + 32);
+		auto v9 = *(uint32_t*)(a2 + 36);
+		Equipment* v10 = g_pointers->m_select_armour(v6, v9);
+
+		if (v10)
+		{
+			armour_service::init(v10);
+		}
+
+		return base_hook::get_original<game_hooks::highlighted_armour>()(a1, a2, a3, a4);
+	}
+}

@@ -15,16 +15,16 @@ find_package(OpenSSL REQUIRED)
 
 # Fetch modules
 message("\nFetching modules")
-include(scripts/ellohim_hook.cmake)
-include(scripts/json.cmake)
-include(scripts/g3log.cmake)
+include(cmake/ellohim_hook.cmake)
+include(cmake/json.cmake)
+include(cmake/g3log.cmake)
 
 message("\nFetching custom modules")
-include(scripts/imgui.cmake)
-include(scripts/asio.cmake)
-include(scripts/websocket.cmake)
-include(scripts/quickjs.cmake)
-include(scripts/stbi.cmake)
+include(cmake/imgui.cmake)
+include(cmake/asio.cmake)
+include(cmake/websocket.cmake)
+include(cmake/quickjs.cmake)
+include(cmake/stbi.cmake)
 
 set(ASTRA_SOURCE_DIR "L:/Coding/Experiment/astra" CACHE PATH "Local Astra source directory")
 set(ASTRA_BACKENDS "" CACHE STRING "Use the host's existing ImGui backends")
@@ -33,7 +33,7 @@ target_include_directories(astra PUBLIC "${imgui_SOURCE_DIR}")
 
 # MHW
 message(STATUS "MHW")
-file(GLOB_RECURSE SRC_MAIN
+file(GLOB_RECURSE SRC_MAIN CONFIGURE_DEPENDS
     "${SRC_DIR}/**.hpp"
     "${SRC_DIR}/**.h"
     "${SRC_DIR}/**.cpp"
@@ -50,6 +50,7 @@ add_library(MHW MODULE "${SRC_MAIN}")
 
 target_sources(MHW PRIVATE
     "${ASTRA_SOURCE_DIR}/host/canvas.cpp"
+    "${ASTRA_SOURCE_DIR}/host/input_service.cpp"
     "${ASTRA_SOURCE_DIR}/host/notification.cpp"
     "${ASTRA_SOURCE_DIR}/host/settings.cpp"
     "${ASTRA_SOURCE_DIR}/host/hotkeys.cpp"
@@ -60,11 +61,16 @@ set_property(TARGET MHW PROPERTY CXX_STANDARD 23)
 
 source_group(TREE ${SRC_DIR} PREFIX "src" FILES ${SRC_MAIN})
 
+# Layer contract: app -> core | game -> core. Included roots mirror the layout so
+# headers can be included as "core/..." / "game/...".
 target_include_directories(MHW PRIVATE 
     "${SRC_DIR}"
-    "${SRC_DIR}/hooking"
-    "${SRC_DIR}/services"
-    "${SRC_DIR}/server"
+    "${SRC_DIR}/core"
+    "${SRC_DIR}/core/ui"
+    "${SRC_DIR}/core/config"
+    "${SRC_DIR}/core/threading"
+    "${SRC_DIR}/core/compat"
+    "${SRC_DIR}/game"
     "${ellohim_hook_SOURCE_DIR}/src/hooking/core/hde"
     "${ellohim_hook_SOURCE_DIR}/include"
     "${json_SOURCE_DIR}/single_include"
@@ -75,7 +81,7 @@ target_include_directories(MHW PRIVATE
     "${stbi_SOURCE_DIR}"
 )
 
-target_precompile_headers(MHW PRIVATE "${SRC_DIR}/common.hpp")
+target_precompile_headers(MHW PRIVATE "${SRC_DIR}/core/common.hpp")
 target_link_libraries(MHW PRIVATE quickjs EllohimHook imgui astra::ui astra::banners AsyncLogger dbghelp websocket winhttp iphlpapi d3d11 d3d12 dxgi ${ZLIB_LIBRARIES} OpenSSL::SSL OpenSSL::Crypto Crypt32)
 
 # Warnings as errors

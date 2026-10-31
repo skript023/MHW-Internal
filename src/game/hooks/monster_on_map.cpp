@@ -1,0 +1,28 @@
+#include "game/hooks/hooks.hpp"
+#include "game/settings.hpp"
+#include "core/hooking/hook_manager.hpp"
+
+namespace big
+{
+	__int64 game_hooks::monster_on_map(__int64 a1, int a2, int a3)
+	{
+		if (g_settings->player.reveal_monster)
+		{
+			auto v3 = *(DWORD*)(a1 + 264);
+			auto v4 = v3 ? *(uintptr_t*)(a1 + 280) : 0ui64;
+			auto v5 = v3 ? v4 + 8 * v3 : 0ui64;
+			auto v6 = v3 ? *(uintptr_t*)(a1 + 280) + 8 * v3 : 0ull;
+
+			if (v4 != v6 && v4 != 0)
+			{
+				auto v7 = *(uintptr_t*)v4;
+
+				*(float*)(v7 + 40) = 100.f;
+			}
+
+			return 3;
+		}
+
+		return base_hook::get_original<game_hooks::monster_on_map>()(a1, a2, a3);
+	}
+}
